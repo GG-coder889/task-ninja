@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Task Ninja Pro</string>
+    <string name="no_tasks">None</string>
+    <string name="plan_tomorrow_ticker">Task Ninja Pro</string>
+    <string name="plan_tomorrow_ticker_sub">Plan tomorrow\'s tasks</string>
+</resources>
