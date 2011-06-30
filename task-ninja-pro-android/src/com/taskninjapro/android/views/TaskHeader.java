@@ -173,14 +173,14 @@ public class TaskHeader extends CustomLayout
 			onMore();
 			break;
 			
-//		case R.id.subsImageButton:
-//			mSubsShown = (!mSubsShown);
-//			mTaskView.setSubtasksShown(mSubsShown);
-//			if (mSubsShown){
-//				mTask.put(KEY_COMPLETED, false);
-//				onCompleted(mTask.getAsBoolean(KEY_COMPLETED));
-//			}
-//			break;
+		case R.id.subsImageButton:
+			mSubsShown = (!mSubsShown);
+			mTaskView.setSubtasksShown(mSubsShown);
+			if (mSubsShown){
+				mTask.put(KEY_COMPLETED, false);
+				onCompleted(mTask.getAsBoolean(KEY_COMPLETED));
+			}
+			break;
 			
 		default:
 			mTaskView.onClick(v);
