@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/settings"
-    	android:title="Settings"
-          android:icon="@android:drawable/ic_menu_preferences"/>
-          
-    <item android:id="@+id/queue"
-    	android:title="Task Queue"
-          android:icon="@android:drawable/ic_menu_today"/>
-          
-    <item android:id="@+id/master"
+    
+    <item 
+    	android:id="@+id/master"
     	android:title="Master List"
     	android:icon="@android:drawable/ic_menu_agenda"/>
     	
     <item 
+    	android:id="@+id/queue"
+    	android:title="Task Queue"
+        android:icon="@android:drawable/ic_menu_today"/>
+        
+    <item 
+    	android:id="@+id/settings"
+    	android:title="Settings"
+        android:icon="@android:drawable/ic_menu_preferences"/>   
+        
+    <item 
   		android:id="@+id/selector"
     	android:title="Queue Selector"
         android:icon="@android:drawable/ic_menu_search"/>
-        
+
     <item 
   		android:id="@+id/info"
-    	android:title="Info"/>
+    	android:title="Info"
+    	android:icon="@android:drawable/ic_menu_info_details"/>
         
 </menu>
