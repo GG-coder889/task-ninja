@@ -115,6 +115,24 @@ public class TaskDatabase implements Constants {
 		}
 		return queue;
 	}
+	
+	public void setQueue(LinkedHashSet<Integer> queue) {
+		StringBuilder queueString = new StringBuilder();
+
+		for (Integer id : queue) {
+			Task task = getTask(id);
+			if (task != null)
+				queueString.append(',').append(task.getId());
+		}
+		queueString.replace(0, 1, "");
+		
+		mSettings.edit().putString(QUEUE, queueString.toString()).commit();
+		
+		// Update current task widget
+		Intent intent = new Intent(App.getContext(), CurrentTaskWidget.class);
+		intent.putExtra(CurrentTaskWidget.WHAT, CurrentTaskWidget.UPDATE);
+		mContext.sendBroadcast(intent);
+	}
 
 	boolean mWriting = false;
 	
@@ -169,23 +187,7 @@ public class TaskDatabase implements Constants {
 		return tasks;
 	}
 
-	public void setQueue(LinkedHashSet<Integer> queue) {
-		StringBuilder queueString = new StringBuilder();
 
-		for (Integer id : queue) {
-			Task task = getTask(id);
-			if (task != null)
-				queueString.append(',').append(task.getId());
-		}
-		queueString.replace(0, 1, "");
-		
-		mSettings.edit().putString(QUEUE, queueString.toString()).commit();
-		
-		// Update current task widget
-		Intent intent = new Intent(App.getContext(), CurrentTaskWidget.class);
-		intent.putExtra(CurrentTaskWidget.WHAT, CurrentTaskWidget.UPDATE);
-		mContext.sendBroadcast(intent);
-	}
 	
 //	public void setQueue(LinkedHashSet<Task> queue) {
 //		StringBuilder queueString = new StringBuilder();

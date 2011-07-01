@@ -5,10 +5,13 @@ import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.taskninjapro.android.app.Constants;
 
 public class Alarm implements Constants {
+	
+	private static final String TAG = "Alarm";
 	
 	ContentValues mValues;
 	Context mContext;
@@ -88,10 +91,16 @@ public class Alarm implements Constants {
 	}
 
 	public void set() {
+		Log.d(TAG, "set");
+		
 		Intent i = null;
+		
 		if (getAsBoolean(KEY_QUEUING)){
+			Log.d(TAG, "set queuing");
 			i = new Intent(mContext, QueuingService.class);
+			
 		} else if (getAsBoolean(KEY_NOTIFICATION)) {
+			Log.d(TAG, "set notifiaction");
 			i = new Intent(mContext, NotificationService.class);
 		}
 		

@@ -16,6 +16,8 @@ import com.taskninjapro.android.app.Constants;
 
 public class AlarmDatabase extends SQLiteOpenHelper implements Constants {
 	
+	private static final String TAG = "AlarmDatabase";
+	
 	public static HashMap<Integer, Alarm> mAlarms;
 	public static List<Integer> mIds;
 	public static AlarmDatabase mAlarmDatabase;

@@ -1,11 +1,14 @@
 package com.taskninjapro.android.TaskSettings;
 
+import java.sql.Time;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,6 +27,8 @@ import com.taskninjapro.android.app.Constants;
 import com.taskninjapro.android.app.LifeCycleListener;
 
 public class QueuingView extends LinearLayout implements OnClickListener, LifeCycleListener, Constants, OnCheckedChangeListener {
+	
+	private static final String TAG = "QueuingView";
 	
 	Task mTask;
 	Activity mActivity;
@@ -309,6 +314,7 @@ public class QueuingView extends LinearLayout implements OnClickListener, LifeCy
 	}
 	
 	private void setAlarm(long when, long recurring) {
+		Log.d(TAG, "setAlarm: "+new Date(when).toString()+" recurring: "+recurring);
 		when = when - when % DateUtils.MINUTE_IN_MILLIS;
 		
 		if (when < System.currentTimeMillis()){
