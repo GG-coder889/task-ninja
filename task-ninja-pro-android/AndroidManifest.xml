@@ -80,10 +80,10 @@
                		android:resource="@xml/widget_provider" />
 		</receiver>
 		
-		<receiver android:name=".alarms.BootCompletedReceiver">
-			<intent-filter>
+		<receiver android:name=".alarms.BootCompletedReciever">
+			<Intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
-			</intent-filter>
+			</Intent-filter>
 		</receiver>
 		
     </application>

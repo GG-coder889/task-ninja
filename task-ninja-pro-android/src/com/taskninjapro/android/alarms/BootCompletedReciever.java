@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.taskninjapro.android.app.App;
 import com.taskninjapro.android.app.Constants;
 
 public class BootCompletedReciever extends BroadcastReceiver implements Constants {
@@ -18,6 +19,13 @@ public class BootCompletedReciever extends BroadcastReceiver implements Constant
 		for (Alarm alarm: alarms){
 			alarm.set();
 //			am.set(AlarmManager.RTC_WAKEUP, alarm.getAsLong(KEY_WHEN), alarm.getPendingIntent());
+			
+			
+			
+		// Update queue task widget
+		Intent i = new Intent(App.getContext(), CurrentTaskWidget.class);
+		i.putExtra(CurrentTaskWidget.WHAT, CurrentTaskWidget.UPDATE);
+		context.sendBroadcast(i);
 		}
 	}
 
