@@ -16,6 +16,13 @@ public class TaskListView extends CustomLayout {
 		
 	}
 	
+	public void updatePositions(){
+		for (int i = 0 ; i < getChildCount(); i++){
+			((TaskView) getChildAt(i)).setPosition(i+1);
+		}
+	
+	}
+	
 	
 	public void moveUp(TaskView view){
 		int currentIndex = indexOfChild(view);

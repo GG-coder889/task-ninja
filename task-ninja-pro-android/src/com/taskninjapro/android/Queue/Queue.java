@@ -139,7 +139,7 @@ public class Queue extends BaseActivity implements Constants {
 			Task task = new Task(what, App.getContext());
 			LocalTaskView taskView = new LocalTaskView(mTaskList, task);
 			mTaskList.addView(taskView, 0);
-
+			mTaskList.updatePositions();
 			// Reset the editText to blank
 			mNewTaskEditText.setText("");
 		}
