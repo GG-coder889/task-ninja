@@ -81,9 +81,9 @@
 		</receiver>
 		
 		<receiver android:name=".alarms.BootCompletedReciever">
-			<Intent-filter>
+			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
-			</Intent-filter>
+			</intent-filter>
 		</receiver>
 		
     </application>
