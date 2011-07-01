@@ -13,7 +13,8 @@
   		android:layout_width="1dp"
   		android:id="@+id/deleteButton"
   		android:layout_weight="1"
-  		android:background="@drawable/button_background"/>
+  		android:background="@drawable/button_background"
+  		android:layout_margin="2dp"/>
 
 	<ImageButton
   		android:src="@drawable/ic_up_button"
@@ -21,7 +22,8 @@
   		android:layout_width="1dp"
   		android:id="@+id/upButton"
   		android:layout_weight="1"
-  		android:background="@drawable/button_background"/>
+  		android:background="@drawable/button_background"
+  		android:layout_margin="2dp"/>
 	  	
   	<ImageButton
   		android:src="@drawable/ic_down_button"
@@ -29,7 +31,8 @@
   		android:layout_width="1dp"
   		android:id="@+id/downButton"
   		android:layout_weight="1"
-  		android:background="@drawable/button_background"/>
+  		android:background="@drawable/button_background"
+  		android:layout_margin="2dp"/>
   		
   	<ImageButton	
   		android:src="@drawable/ic_more"
@@ -37,7 +40,8 @@
  		android:layout_width="1dp"
  		android:id="@+id/moreButton"
  		android:layout_weight="1"
- 		android:background="@drawable/button_background"/>
+ 		android:background="@drawable/button_background"
+ 		android:layout_margin="2dp"/>
  		
     <ImageButton
   		android:src="@drawable/ic_toggle_subs_off"
@@ -45,7 +49,8 @@
   		android:layout_width="1dp"
   		android:id="@+id/subsImageButton"
   		android:layout_weight="1"
-  		android:background="@drawable/button_background"/>
+  		android:background="@drawable/button_background"
+  		android:layout_margin="2dp"/>
 	  		
 </LinearLayout>
 
