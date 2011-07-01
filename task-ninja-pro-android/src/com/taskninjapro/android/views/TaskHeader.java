@@ -90,7 +90,7 @@ public class TaskHeader extends CustomLayout
 		mMoreButton = (ImageButton) findViewById(R.id.moreButton);
 		mMoreButton.setOnClickListener(this);
 		
-		mSubsImageButton = (ImageButton) findViewById(R.id.moreButton);
+		mSubsImageButton = (ImageButton) findViewById(R.id.subsImageButton);
 		mSubsImageButton.setOnClickListener(this);
 		if (!mTask.getAsBoolean(KEY_TASKS)){
 			mSubsImageButton.setVisibility(GONE);
@@ -131,13 +131,6 @@ public class TaskHeader extends CustomLayout
 
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		switch(buttonView.getId()){
-//		case R.id.subsToggleButton:
-//			mTaskView.setSubtasksShown(isChecked);
-//			if (isChecked){
-//				mTask.put(KEY_COMPLETED, false);
-//				onCompleted(mTask.getAsBoolean(KEY_COMPLETED));
-//			}
-//			break;
 		case R.id.taskToggleButton:
 			setMenuShown(isChecked);
 			break;

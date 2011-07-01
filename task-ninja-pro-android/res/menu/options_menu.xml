@@ -18,4 +18,8 @@
     	android:title="Queue Selector"
         android:icon="@android:drawable/ic_menu_search"/>
         
+    <item 
+  		android:id="@+id/info"
+    	android:title="Info"/>
+        
 </menu>

@@ -46,4 +46,5 @@ public class SubtaskingView extends LinearLayout implements LifeCycleListener, C
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		this.setSelected(isChecked);
 	}
+	
 }

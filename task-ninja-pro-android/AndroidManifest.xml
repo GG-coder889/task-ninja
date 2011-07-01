@@ -58,6 +58,12 @@
 			android:launchMode="singleInstance"
 			android:theme="@android:style/Theme.Wallpaper.NoTitleBar"/>
 		
+		<activity 
+			android:name=".info.Info" 
+			android:label="@string/app_name" 
+			android:launchMode="singleInstance"
+			android:theme="@android:style/Theme.Wallpaper.NoTitleBar"/>
+		
 		<service android:name=".alarms.NotificationService"/>
 		
 		<service android:name="alarms.QueuingService"/>
