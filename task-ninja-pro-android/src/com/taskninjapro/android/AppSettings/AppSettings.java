@@ -16,10 +16,11 @@ import com.taskninjapro.android.R;
 import com.taskninjapro.android.MasterList.MasterList;
 import com.taskninjapro.android.Queue.Queue;
 import com.taskninjapro.android.QueueSelector.QueueSelector;
+import com.taskninjapro.android.app.BaseActivity;
 import com.taskninjapro.android.app.Constants;
 import com.taskninjapro.android.app.LifeCycleListener;
 
-public class AppSettings extends Activity implements Constants {
+public class AppSettings extends BaseActivity implements Constants {
 	
 	List<LifeCycleListener> mOnPauseListeners = new LinkedList<LifeCycleListener>();
 	
@@ -114,32 +115,32 @@ public class AppSettings extends Activity implements Constants {
 		}
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.options_menu, menu);
-		menu.removeItem(R.id.settings);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.settings:
-			startActivity(new Intent(this, AppSettings.class));
-			return true;
-		case R.id.selector:
-			startActivity(new Intent(this, QueueSelector.class));
-			return true;
-		case R.id.master:
-			startActivity(new Intent(this, MasterList.class));
-			return true;
-		case R.id.queue:
-			startActivity(new Intent(this, Queue.class));
-			return true;
-		default:
-			return true;
-		}
-	}
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		MenuInflater inflater = getMenuInflater();
+//		inflater.inflate(R.menu.options_menu, menu);
+//		menu.removeItem(R.id.settings);
+//		return true;
+//	}
+//
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		switch (item.getItemId()) {
+//		case R.id.settings:
+//			startActivity(new Intent(this, AppSettings.class));
+//			return true;
+//		case R.id.selector:
+//			startActivity(new Intent(this, QueueSelector.class));
+//			return true;
+//		case R.id.master:
+//			startActivity(new Intent(this, MasterList.class));
+//			return true;
+//		case R.id.queue:
+//			startActivity(new Intent(this, Queue.class));
+//			return true;
+//		default:
+//			return true;
+//		}
+//	}
 
 }

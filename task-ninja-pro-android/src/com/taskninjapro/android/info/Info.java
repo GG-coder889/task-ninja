@@ -1,19 +1,25 @@
 package com.taskninjapro.android.info;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
-import android.app.Activity;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.taskninjapro.android.R;
 import com.taskninjapro.android.app.BaseActivity;
 
-public class Info extends BaseActivity {
-	
+public class Info extends BaseActivity implements OnClickListener {
+	ScrollView mScrollView;
 	LinearLayout mLinearLayout;
 	Stack<PanelInfo> mInfoStack = new Stack<PanelInfo>();
+	Set<OnClickListener> mListeners = new HashSet<OnClickListener>();
 
 	/** Called when the activity is first created. */
 	@Override
@@ -22,9 +28,15 @@ public class Info extends BaseActivity {
 		
 		setContentView(R.layout.app_settings);
 		
+		mScrollView = (ScrollView) findViewById(R.id.scrollView);
 		mLinearLayout = (LinearLayout) findViewById(R.id.linearLayout);
+				
+		new PanelInfo(R.string.info_queue_title, R.string.info_queue);
+		new PanelInfo(R.string.info_queue_selector_title, R.string.info_queue_selector);
+		new PanelInfo(R.string.info_queue_widget_title, R.string.info_queue_widget);
+		new PanelInfo(R.string.info_queuing_title, R.string.info_queuing);
 		
-		mInfoStack.push(new PanelInfo("hello panel","some text"));
+
 		
 		for (PanelInfo p: mInfoStack){
 			new AsyncInfoPanelView().execute(this);
@@ -35,9 +47,21 @@ public class Info extends BaseActivity {
 		String mTitle;
 		String mInfo;
 		
+		public PanelInfo(int title, int info){
+			Resources r = getResources();
+			mTitle = r.getString(title);
+			mInfo = r.getString(info);
+			if (!mInfoStack.contains(this)){
+				mInfoStack.add(this);
+			}
+		}
+		
 		public PanelInfo(String title, String info){
 			mTitle = title;
 			mInfo = info;
+			if (!mInfoStack.contains(this)){
+				mInfoStack.add(this);
+			}
 		}
 		
 		public String getTitle(){
@@ -49,10 +73,10 @@ public class Info extends BaseActivity {
 		}
 	}
 	
-	private class AsyncInfoPanelView extends AsyncTask<Activity, Void, InfoPanelView> {
+	private class AsyncInfoPanelView extends AsyncTask<Info, Void, InfoPanelView> {
 		@Override
-		protected InfoPanelView doInBackground(Activity... activity) {
-			return new InfoPanelView(activity[0]);
+		protected InfoPanelView doInBackground(Info... Info) {
+			return new InfoPanelView(Info[0], Info[0]);
 		}
 
 		@Override
@@ -61,10 +85,21 @@ public class Info extends BaseActivity {
 				PanelInfo panelInfo = mInfoStack.pop();
 				view.setInfo(panelInfo.getTitle(), panelInfo.getInfo());
 				view.setSelected(true);
+				mListeners.add(view);
 				mLinearLayout.addView(view);
 			}
 			
 		}
+	}
+
+	public void onClick(View v) {
+		for (OnClickListener listener: mListeners){
+			if (!listener.equals(v)){
+				listener.onClick(v);
+			}
+		}
+
+		
 	}
 
 }

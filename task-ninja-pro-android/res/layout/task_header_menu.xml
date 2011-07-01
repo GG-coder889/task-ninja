@@ -4,7 +4,8 @@
   android:layout_width="fill_parent"
   android:layout_height="fill_parent"
   android:orientation="horizontal"
-  android:id="@+id/menuLinearLayout">
+  android:id="@+id/menuLinearLayout"
+  android:visibility="gone">
   
   <ImageButton
   		android:src="@drawable/ic_delete_button"
