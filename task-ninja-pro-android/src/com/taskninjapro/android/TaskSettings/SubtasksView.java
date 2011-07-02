@@ -176,6 +176,12 @@ public class SubtasksView extends LinearLayout implements LifeCycleListener, Con
 			}
 			
 		}
+		
+		@Override
+		protected void onDelete() {
+			super.onDelete();
+			mTaskList.updatePositions();
+		}
 
 	}
 	

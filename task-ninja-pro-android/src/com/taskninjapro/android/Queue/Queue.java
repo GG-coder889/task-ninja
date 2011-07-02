@@ -183,7 +183,8 @@ public class Queue extends BaseActivity implements Constants {
 		
 		@Override
 		protected void onDelete() {
-			this.mTaskList.removeView(this);		
+			this.mTaskList.removeView(this);
+			mTaskList.updatePositions();
 		}
 	}
 		
