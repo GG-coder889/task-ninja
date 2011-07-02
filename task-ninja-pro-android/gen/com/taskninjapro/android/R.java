@@ -46,7 +46,6 @@ public final class R {
         public static final int window_header_background=0x7f02001c;
     }
     public static final class id {
-        public static final int LinearLayout01=0x7f080031;
         public static final int backRecurringToggleButton=0x7f08002d;
         public static final int backSingleToggleButton=0x7f08002a;
         public static final int button=0x7f080024;
@@ -58,10 +57,10 @@ public final class R {
         public static final int fridayToggleButton=0x7f080021;
         public static final int frontRecurringToggleButton=0x7f08002c;
         public static final int frontSingleToggleButton=0x7f080029;
-        public static final int info=0x7f080038;
+        public static final int info=0x7f080035;
         public static final int infoLinearLayout=0x7f080002;
         public static final int linearLayout=0x7f080001;
-        public static final int master=0x7f080034;
+        public static final int master=0x7f080031;
         public static final int masterButton=0x7f08000c;
         public static final int menuLinearLayout=0x7f080011;
         public static final int mondayToggleButton=0x7f08001d;
@@ -73,7 +72,7 @@ public final class R {
         public static final int p3ToggleButton=0x7f080027;
         public static final int parentTextView=0x7f080004;
         public static final int priorityTextView=0x7f080003;
-        public static final int queue=0x7f080035;
+        public static final int queue=0x7f080032;
         public static final int queueButton=0x7f08000b;
         public static final int recurringAlertButton=0x7f08001c;
         public static final int recurringLinearLayout=0x7f08001b;
@@ -81,8 +80,8 @@ public final class R {
         public static final int recurringToggleButton=0x7f080018;
         public static final int saturdayToggleButton=0x7f080022;
         public static final int scrollView=0x7f080000;
-        public static final int selector=0x7f080037;
-        public static final int settings=0x7f080036;
+        public static final int selector=0x7f080034;
+        public static final int settings=0x7f080033;
         public static final int settingsButton=0x7f08000d;
         public static final int singleAlertButton=0x7f08001a;
         public static final int singleDateButton=0x7f080028;
@@ -101,8 +100,6 @@ public final class R {
         public static final int upButton=0x7f080013;
         public static final int wednesdayToggleButton=0x7f08001f;
         public static final int whatEditText=0x7f08002f;
-        public static final int widget_button=0x7f080033;
-        public static final int widget_textview=0x7f080032;
     }
     public static final class layout {
         public static final int app_settings=0x7f030000;
@@ -124,7 +121,6 @@ public final class R {
         public static final int task_settings_subtasks=0x7f030010;
         public static final int task_settings_what=0x7f030011;
         public static final int toggle_view=0x7f030012;
-        public static final int widget=0x7f030013;
     }
     public static final class menu {
         public static final int options_menu=0x7f070000;
