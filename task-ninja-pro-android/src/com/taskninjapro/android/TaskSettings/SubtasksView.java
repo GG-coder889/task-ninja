@@ -167,12 +167,14 @@ public class SubtasksView extends LinearLayout implements LifeCycleListener, Con
 			
 			mTaskHeader.mMoreButton.setVisibility(GONE);
 			mTaskHeader.mSubsImageButton.setVisibility(GONE);
+			
 			if (mTask.getParent() != null){
 				TextView parentView = (TextView) findViewById(R.id.parentTextView);
 				if (parentView!=null){
-					parentView.setVisibility(VISIBLE);
+					parentView.setVisibility(GONE);
 				}
-			} 
+			}
+			
 		}
 
 	}
