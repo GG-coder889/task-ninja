@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical"
+  android:background="@drawable/film_dark"
+  android:layout_margin="10dp"
+  android:padding="5dp">
+  
+  	 <ToggleButton
+	 	android:id="@+id/toggleButton"
+	      android:layout_width="fill_parent"
+	      android:layout_height="wrap_content"
+	      android:textSize="24sp"
+	      android:padding="10dp"
+	      android:textColor="@color/button_text"
+	      android:background="@drawable/button_background"
+	      android:gravity="center"/>
+	      
+	 <TextView
+	 android:id="@+id/textView"
+	 	android:visibility="gone"
+	 		android:layout_width="fill_parent"
+	      android:layout_height="wrap_content"
+	      	      android:textSize="18sp"
+	      android:padding="10dp"
+	      android:textColor="@color/button_text"/>
+  
+</LinearLayout>

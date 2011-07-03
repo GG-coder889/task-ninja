@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical"
+  android:layout_margin="5dp"
+  android:background="@drawable/film_dark_o50_tl_tr_bl_br"
+  android:padding="2dp">
+  
+  	<TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Alert"
+        android:paddingLeft="5dp"
+        android:gravity="center_vertical"
+        android:textColor="@color/window_header_text"/>
+        
+     
+    <LinearLayout
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal"
+    	android:padding="0dp"
+    	android:layout_margin="0dp">
+    	
+    	<ToggleButton
+    		android:id="@+id/singleToggleButton"
+    		android:layout_width="1dp"
+    		android:layout_height="wrap_content"
+    		android:layout_weight="1"
+    		android:textOn="Single"
+    		android:textOff="Single"
+    		android:textSize="24sp"
+    		android:padding="5dp"
+    		android:background="@drawable/button_background"
+    		android:textColor="@color/button_text"
+    		android:layout_margin="2dp"/>
+    	
+    	<ToggleButton
+    		android:id="@+id/recurringToggleButton"
+    		android:layout_width="1dp"
+    		android:layout_height="wrap_content"
+    		android:layout_weight="1"
+    		android:textOn="Recurring"
+    		android:textOff="Recurring"
+    		android:textSize="24sp"
+    		android:padding="5dp"
+			android:layout_margin="2dp"
+    		android:background="@drawable/button_background"
+    		android:textColor="@color/button_text"/>
+		   	
+	</LinearLayout>
+	
+	<!-- Toggle menu for single alert -->
+	<LinearLayout
+		android:id="@+id/singleLinearLayout"
+		android:visibility="gone"
+		android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:padding="0dp"
+    	android:layout_margin="0dp">
+    	
+		<Button
+	     	android:id="@+id/singleAlertButton"
+	     	android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:paddingRight="5dp"
+	        android:paddingLeft="5dp"
+	        android:paddingTop="15dp"
+	        android:paddingBottom="15dp"
+	        android:layout_margin="2dp"
+	        android:background="@drawable/button_background"
+	        android:layout_marginTop="5dp"
+	        android:text="Set Date"
+	        android:textSize="24sp"
+	        android:textColor="@color/button_text"/>
+	        
+    </LinearLayout>
+    
+    <!-- Toggle menu for recurring alert -->
+    <LinearLayout
+		android:id="@+id/recurringLinearLayout"
+		android:visibility="gone"
+		android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="vertical"
+    	android:padding="0dp"
+    	android:layout_margin="0dp">
+    	
+    	<!-- Time Picker Button -->
+    	<Button
+	     	android:id="@+id/recurringAlertButton"
+	     	android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:paddingRight="5dp"
+	        android:paddingLeft="5dp"
+	        android:paddingTop="15dp"
+	        android:paddingBottom="15dp"
+	        android:layout_margin="2dp"
+	        android:background="@drawable/button_background"
+	        android:layout_marginTop="5dp"
+	        android:text="Set Time"
+	        android:textSize="24sp"
+	        android:textColor="@color/button_text"/>
+	     
+	     <!-- Days of the week toggle buttons -->
+	     <LinearLayout
+			android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+    		android:orientation="horizontal"
+    		android:padding="0dp"
+    		android:layout_margin="0dp">
+    		
+    		<ToggleButton
+    			android:id="@+id/mondayToggleButton"
+	    		android:layout_width="1dp"
+	    		android:layout_height="wrap_content"
+	    		android:layout_weight="1"
+	    		android:textOn="M"
+	    		android:textOff="M"
+	    		android:textSize="24sp"
+	    		android:padding="5dp"
+	    		android:layout_margin="2dp"
+	    		android:background="@drawable/button_background"
+	    		android:textColor="@color/button_text"/>
+	    	
+	    	<ToggleButton
+	    		android:id="@+id/tuesdayToggleButton"
+	    		android:layout_width="1dp"
+	    		android:layout_height="wrap_content"
+	    		android:layout_weight="1"
+	    		android:textOn="Tu"
+	    		android:textOff="Tu"
+	    		android:textSize="24sp"
+	    		android:padding="5dp"
+	    		android:layout_margin="2dp"
+	    		android:background="@drawable/button_background"
+	    		android:textColor="@color/button_text"/>
+	    	
+	    	<ToggleButton
+	    		android:id="@+id/wednesdayToggleButton"
+	    		android:layout_width="1dp"
+	    		android:layout_height="wrap_content"
+	    		android:layout_weight="1"
+	    		android:textOn="W"
+	    		android:textOff="W"
+	    		android:textSize="24sp"
+	    		android:padding="5dp"
+	    		android:layout_margin="2dp"
+	    		android:background="@drawable/button_background"
+	    		android:textColor="@color/button_text"/>
+	    	
+	    	<ToggleButton
+	    		android:id="@+id/thursdayToggleButton"
+	    		android:layout_width="1dp"
+	    		android:layout_height="wrap_content"
+	    		android:layout_weight="1"
+	    		android:textOn="Th"
+	    		android:textOff="Th"
+	    		android:textSize="24sp"
+	    		android:padding="5dp"
+	    		android:layout_margin="2dp"
+	    		android:background="@drawable/button_background"
+	    		android:textColor="@color/button_text"/>
+	    	
+	    	<ToggleButton
+	    		android:id="@+id/fridayToggleButton"
+	    		android:layout_width="1dp"
+	    		android:layout_height="wrap_content"
+	    		android:layout_weight="1"
+	    		android:textOn="F"
+	    		android:textOff="F"
+	    		android:textSize="24sp"
+	    		android:padding="5dp"
+	    		android:layout_margin="2dp"
+	    		android:background="@drawable/button_background"
+	    		android:textColor="@color/button_text"/>
+    		
+	     </LinearLayout>
+	    
+	    <LinearLayout
+			android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+    		android:orientation="horizontal"
+    		android:padding="0dp"
+    		android:layout_margin="0dp">
+	    	
+	    	<ToggleButton
+	    		android:id="@+id/saturdayToggleButton"
+	    		android:layout_width="1dp"
+	    		android:layout_height="wrap_content"
+	    		android:layout_weight="1"
+	    		android:textOn="Sa"
+	    		android:textOff="Sa"
+	    		android:textSize="24sp"
+	    		android:padding="5dp"
+	    		android:layout_margin="2dp"
+	    		android:background="@drawable/button_background"
+	    		android:textColor="@color/button_text"/>
+	    	
+	    	<ToggleButton
+	    		android:id="@+id/sundayToggleButton"
+	    		android:layout_width="1dp"
+	    		android:layout_height="wrap_content"
+	    		android:layout_weight="1"
+	    		android:textOn="Su"
+	    		android:textOff="Su"
+	    		android:textSize="24sp"
+	    		android:padding="5dp"
+	    		android:layout_margin="2dp"
+	    		android:background="@drawable/button_background"
+	    		android:textColor="@color/button_text"/>
+    	
+    		
+	     </LinearLayout>
+    		
+    
+    </LinearLayout>
+        
+</LinearLayout>

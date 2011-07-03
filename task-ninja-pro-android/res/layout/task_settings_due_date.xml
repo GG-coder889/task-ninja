@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:orientation="vertical"
+  android:layout_margin="5dp"
+  android:padding="2dp"
+  android:background="@drawable/film_dark_o50_tl_tr_bl_br">
+  
+  <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Due Date"
+        android:paddingLeft="5dp"
+        android:textColor="@color/window_header_text"
+        android:gravity="center_vertical"/>
+		       
+     
+   <Button
+     	android:id="@+id/button"
+     	android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_margin="2dp"
+        android:background="@drawable/button_background"
+        android:text="Set Date"
+        android:textSize="24sp"
+        android:textColor="@color/button_text"/>
+  
+  
+  
+</LinearLayout>

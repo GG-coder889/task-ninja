@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:orientation="vertical"
+  android:padding="2dp"
+  android:layout_margin="5dp"
+  android:background="@drawable/film_dark_o50_tl_tr_bl_br">
+
+  	<TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="What"
+        android:paddingLeft="5dp"
+        android:textColor="@color/window_header_text"
+        android:gravity="center_vertical"/>
+      
+      <!-- put the EditText inside a linear layout so I can change background -->
+      <LinearLayout
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"
+	    	android:orientation="vertical"
+	    	android:padding="2dp"
+	    	android:layout_margin="2dp"
+	    	android:background="@drawable/film_dark_o50_tl_tr_bl_br"
+	    	android:gravity="center"
+	    	android:layout_gravity="center">
+	    	
+			<EditText 
+			   	android:layout_width="fill_parent" 
+			   	android:layout_height="wrap_content" 
+			   	android:hint="What"
+			   	android:id="@+id/whatEditText"
+			   	android:textSize="25sp"
+			   	android:layout_margin="2dp"/>
+			   	
+		</LinearLayout>
+		
+		<LinearLayout
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"
+	    	android:orientation="vertical"
+	    	android:padding="2dp"
+	    	android:layout_margin="2dp"
+	    	android:background="@drawable/film_dark_o50_tl_tr_bl_br"
+	    	android:gravity="center"
+	    	android:layout_gravity="center">
+			   	
+			<EditText 
+			   	android:layout_width="fill_parent" 
+			   	android:layout_height="wrap_content" 
+			   	android:hint="Notes"
+			   	android:id="@+id/notesEditText"
+			   	android:textSize="20sp"
+			   	android:minHeight="100dp"
+			   	android:layout_margin="2dp"
+			   	android:gravity="left|top"/>
+			   	
+		</LinearLayout>
+		
+</LinearLayout>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical"
+  android:id="@+id/linearLayout"
+  android:padding="2dp"
+  android:layout_marginBottom="2dp"
+  android:background="@drawable/film_dark_o50_tl_tr_bl_br">
+  
+  
+  <TextView
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:text="Sub Tasks"
+       android:paddingLeft="5dp"
+       android:textColor="@color/window_header_text"
+       android:gravity="center_vertical"/>
+    
+    <!-- put the EditText inside a linear layout so I can change background -->
+     <LinearLayout
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:background="@drawable/film_dark_o50_tl_tr_bl_br"
+    	android:padding="2dp"
+ 		android:layout_margin="2dp">
+    	
+		<EditText 
+		   	android:layout_width="fill_parent" 
+		   	android:layout_height="wrap_content" 
+		   	android:hint="New Subtask"
+		   	android:id="@+id/editText"
+		   	android:textSize="20sp"
+		   	android:layout_margin="2dp"/>
+		   	
+	</LinearLayout>
+    
+		        
+</LinearLayout>
