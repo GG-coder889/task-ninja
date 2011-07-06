@@ -21,25 +21,15 @@ version 1.0
 - Info
 
 version 1.1
-- Sort by priority
-- Sort by due Date
+- mirror google tasks data structure
+- improve main menu
+- improve info
+- remove priority
 
 version 1.2
-- Improved main menu
-- Improved info
+- sync with google tasks
 
-version 1.3
-- Close issue #11 : auto-scrolling
-
-version 1.3
-- Multiple task lists, 'Master List' -> 'Lists'
-
---------------------------------------------------------------------------------------------------------------
-
-Possible Feature:
-- Sync with google tasks
-- Sync with a taskninjapro.com website
-- Comment button
+Done! until further notice
 
 --------------------------------------------------------------------------------------------------------------
 
