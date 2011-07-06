@@ -4,7 +4,7 @@ README: Task Ninja Pro
 
 --------------------------------------------------------------------------------------------------------------
 
-version-1-0
+version 1.0
 - Queue
 - Queue selector
 - Master list
@@ -20,17 +20,19 @@ version-1-0
 - Main menu
 - Info
 
-version-1-1
-- Multiple task lists, 'Master List' -> 'Lists'
-
-version-1-2
+version 1.1
 - Sort by priority
 - Sort by due Date
 
-version-1-3
+version 1.2
 - Improved main menu
 - Improved info
 
+version 1.3
+- Close issue #11 : auto-scrolling
+
+version 1.3
+- Multiple task lists, 'Master List' -> 'Lists'
 
 --------------------------------------------------------------------------------------------------------------
 
