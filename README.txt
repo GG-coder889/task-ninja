@@ -4,7 +4,7 @@ README: Task Ninja Pro
 
 --------------------------------------------------------------------------------------------------------------
 
-version 1.0
+version-1-0
 - Queue
 - Queue selector
 - Master list
@@ -20,16 +20,40 @@ version 1.0
 - Main menu
 - Info
 
-version 1.1
-- mirror google tasks data structure
-- improve main menu
-- improve info
+version-1-1
+- improve automated testing
+- remove main menu
 - remove priority
+- remove queue selector
+- add "put on queue" button to master list
+- improve info
+- change "alerts" to "notifications"
 
-version 1.2
+version 1-2
+- incorporate DbModel
+- mirror google tasks data structure
+
+version-1-3
+- update UX to new data structure
+     - List
+     - Lists
+
+version-1-4
 - sync with google tasks
 
-Done! until further notice
+version-1-5
+- add InteliScrollView
+- add ButtonLayout
+- due date alarms
+- add ToggleImageButton
+
+
+parked features:
+- some way to change the opacity and shade of windows to make them
+readable and appealing based on the appearance (color, darkness, pattern) of the background wall paper.
+- automated testing for time based features such as notification and queuing.
+
+
 
 --------------------------------------------------------------------------------------------------------------
 
