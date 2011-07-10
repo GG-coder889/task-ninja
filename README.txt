@@ -26,32 +26,43 @@ version-1-1
 - remove priority
 - remove queue selector
 - add "put on queue" button to master list
-- improve info
-- change "alerts" to "notifications"
+- incorporate DbModel
+
 
 version 1-2
-- incorporate DbModel
+- improve info
+- change "alerts" to "notifications"
 - mirror google tasks data structure
 
 version-1-3
 - update UX to new data structure
-     - List
-     - Lists
+    - List
+    - Lists
+    - All tasks
 
 version-1-4
 - sync with google tasks
 
 version-1-5
-- add InteliScrollView
+- add IntelligentScrollView
+   - scrolls intelligently when child view changes size
+   - scrolls when child view moves around within the scroll view
 - add ButtonLayout
 - due date alarms
-- add ToggleImageButton
 
 
 parked features:
 - some way to change the opacity and shade of windows to make them
 readable and appealing based on the appearance (color, darkness, pattern) of the background wall paper.
 - automated testing for time based features such as notification and queuing.
+- custom edit text
+- db model listeners, i.e., 
+    - tells ModelViews when data changes 
+    - tells connected models when data changes.
+- add ToggleImageButton
+- custom menu icons
+- handle sub tasks on the queue better
+- show notes in standard task views
 
 
 
