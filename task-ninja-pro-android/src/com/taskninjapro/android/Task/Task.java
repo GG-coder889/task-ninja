@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.text.GetChars;
 
 import com.taskninjapro.android.app.App;
 import com.taskninjapro.android.dbmodel.DbController;
@@ -19,6 +20,10 @@ public class Task extends DbModel<Task, TaskInteger, TaskLong, TaskString, TaskI
 	
 	@Override
 	protected DbController <Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> getController() {
+		return controller();
+	}
+	
+	private static DbController <Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> controller() {
 		if (mController == null){
 			try {
 				mController = new LocalController(Task.class, App.getContext(), 1);
@@ -47,7 +52,7 @@ public class Task extends DbModel<Task, TaskInteger, TaskLong, TaskString, TaskI
 	}
 
 	public static Task get(int id){
-		return mController.get(id);
+		return controller().get(id);
 	}
 	
 	private static class LocalController extends DbController<Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> {
@@ -94,12 +99,17 @@ public class Task extends DbModel<Task, TaskInteger, TaskLong, TaskString, TaskI
 
 	public static LinkedHashSet<Task> getAll() {
 		LinkedHashSet<Task> tasks = new LinkedHashSet<Task>();
-		for (Task task: mController.getAll()) {
+		for (Task task: controller().getAll()) {
 			tasks.add(task);
 		}
 		return tasks;
 	}
 
+	
+	
+	// ---------------------------------------------------------------------------------
+	// Parent-Child
+	// ---------------------------------------------------------------------------------
 	public Task getParent() {
 		Integer id = getInteger(TaskInteger.KEY_PARENT);
 		if (id != null){
@@ -112,27 +122,40 @@ public class Task extends DbModel<Task, TaskInteger, TaskLong, TaskString, TaskI
 	
 	public void setParent(Task task){
 		
-		Task parent = getParent();
-		if (parent != null){
-			parent.removeChild(this);
+		if (!hasParent(task)){
+			
+			Task parent = getParent();
+			if (parent != null){
+				parent.removeChild(this);
+			}
+			
+			put(TaskInteger.KEY_PARENT, task.getId());
 		}
 		
-		task.addChild(this);
-		put(TaskInteger.KEY_PARENT, task.getId());
-		
+		if (!task.hasChild(this)) {
+			task.addChild(this);
+		}
 	}
 	
-	private void removeChild(Task task) {
-		LinkedHashSet<Task> children = getChildren();
-		children.remove(task);
+	public boolean hasParent(Task task) {
+		return task.equals(getParent());
 	}
 
-	public void addChild(Task task){
+	public void removeChild(Task task) {
 		LinkedHashSet<Task> children = getChildren();
-		children.add(task);
-		if (!this.equals(task.getParent())){
-			task.setParent(this);
+		if (children.remove(task))
+			setChildren(children);
+	}
+
+	public void addChild(Task child){
+		LinkedHashSet<Task> children = getChildren();
+		if (children.add(child)){
+			setChildren(children);
 		}
+		if (!child.hasParent(this)){
+			child.setParent(this);
+		}
+		
 	}
 	
 	public void setChildren(LinkedHashSet<Task> tasks) {
@@ -144,15 +167,22 @@ public class Task extends DbModel<Task, TaskInteger, TaskLong, TaskString, TaskI
 		put(TaskIntegerList.KEY_TASKS, list);
 	}
 	
+	public boolean hasChild(Task child){
+		return getChildren().contains(child);
+	}
+	
 	public LinkedHashSet<Task> getChildren() {
-		LinkedHashSet<Task> children = getChildren();
+		LinkedHashSet<Task> children = new LinkedHashSet<Task>();
 		List<Integer> list = getIntegerList(TaskIntegerList.KEY_TASKS);
 		for (int id: list){
 			children.add(get(id));
 		}
 		return children;
 	}
-
+	// ---------------------------------------------------------------------------------
+	
+	
+	
 	public CharSequence getWhat() {
 		return getString(TaskString.KEY_WHAT);
 	}
