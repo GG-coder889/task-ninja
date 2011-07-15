@@ -5,32 +5,21 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.taskninjapro.android.R;
-import com.taskninjapro.android.AppSettings.AppSettings;
-import com.taskninjapro.android.MasterList.MasterList;
-import com.taskninjapro.android.Queue.Queue;
-import com.taskninjapro.android.QueueSelector.QueueSelector;
-import com.taskninjapro.android.Task.Task;
-import com.taskninjapro.android.Task.TaskDatabase;
-import com.taskninjapro.android.app.App;
 import com.taskninjapro.android.app.BaseActivity;
 import com.taskninjapro.android.app.Constants;
 import com.taskninjapro.android.app.LifeCycleListener;
+import com.taskninjapro.android.task.Task;
 
 public class TaskSettings extends BaseActivity implements Constants {
 	
-	TaskDatabase mDatabseHelper;
 	public Task mTask;
 	
 	private SharedPreferences mSettings;
@@ -51,15 +40,14 @@ public class TaskSettings extends BaseActivity implements Constants {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		mDatabseHelper = TaskDatabase.getInstance(App.getContext());
 		mSettings = getSharedPreferences(PREFS, 0);
 		
 		int id = getIntent().getIntExtra(_ID, -1);
-		Task task = mDatabseHelper.getTask(id);
+		Task task = Task.get(id);
 		if (task != null){
 			mTask = task;
 		} else {
-			mTask = new Task("", getApplicationContext());
+			mTask = new Task("");
 		}
 		
 		setContentView(R.layout.task_settings);

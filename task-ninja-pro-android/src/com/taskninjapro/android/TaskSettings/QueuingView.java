@@ -1,6 +1,5 @@
 package com.taskninjapro.android.TaskSettings;
 
-import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -21,10 +20,13 @@ import android.widget.TimePicker;
 import android.widget.ToggleButton;
 
 import com.taskninjapro.android.R;
-import com.taskninjapro.android.Task.Task;
-import com.taskninjapro.android.alarms.Alarm;
+import com.taskninjapro.android.alarm.Alarm;
+import com.taskninjapro.android.alarm.AlarmBool;
 import com.taskninjapro.android.app.Constants;
 import com.taskninjapro.android.app.LifeCycleListener;
+import com.taskninjapro.android.task.Task;
+import com.taskninjapro.android.task.TaskBool;
+import com.taskninjapro.android.task.TaskLong;
 
 public class QueuingView extends LinearLayout implements OnClickListener, LifeCycleListener, Constants, OnCheckedChangeListener {
 	
@@ -77,7 +79,7 @@ public class QueuingView extends LinearLayout implements OnClickListener, LifeCy
 		mSingleToggleButton.setOnCheckedChangeListener(this);
 		mSingleToggleButton.setOnClickListener(this);
 		mSingleLinearLayout = (LinearLayout) findViewById(R.id.singleLinearLayout);
-		if (mTask.getAsBoolean(KEY_SINGLE_QUEUING)) {
+		if (mTask.getBool(TaskBool.KEY_SINGLE_QUEUING)) {
 			mSingleToggleButton.setChecked(true);
 			mSingleLinearLayout.setVisibility(VISIBLE);
 		}
@@ -85,8 +87,8 @@ public class QueuingView extends LinearLayout implements OnClickListener, LifeCy
 		mSingleDateButton.setOnClickListener(this);
 		mSingleDateButton.setSelected(true);
 		
-		if (mTask.getAsLong(KEY_SINGLE_QUEUING_TIME) > 0){
-			mSingleDate.setTimeInMillis(mTask.getAsLong(KEY_SINGLE_QUEUING_TIME));
+		if (mTask.getLong(TaskLong.KEY_SINGLE_QUEUING_TIME) > 0){
+			mSingleDate.setTimeInMillis(mTask.getLong(TaskLong.KEY_SINGLE_QUEUING_TIME));
 		}
 		mSingleDateButton.setText(getSingleText());
 		
@@ -96,7 +98,7 @@ public class QueuingView extends LinearLayout implements OnClickListener, LifeCy
 		mBackSingleToggleButton = (ToggleButton) findViewById(R.id.backSingleToggleButton);
 		mBackSingleToggleButton.setOnCheckedChangeListener(this);
 		mBackSingleToggleButton.setOnClickListener(this);
-		if (mTask.getAsBoolean(KEY_SINGLE_QUEUEING_FRONT)){
+		if (mTask.getBool(TaskBool.KEY_SINGLE_QUEUEING_FRONT)){
 			mFrontSingleToggleButton.setChecked(true);
 		} else {
 			mBackSingleToggleButton.setChecked(true);
@@ -107,7 +109,7 @@ public class QueuingView extends LinearLayout implements OnClickListener, LifeCy
 		mRecurringToggleButton.setOnCheckedChangeListener(this);
 		mRecurringToggleButton.setOnClickListener(this);
 		mRecurringLinearLayout = (LinearLayout) findViewById(R.id.recurringLinearLayout);
-		if (mTask.getAsBoolean(KEY_RECURRING_QUEUING)){
+		if (mTask.getBool(TaskBool.KEY_RECURRING_QUEUING)){
 			mRecurringToggleButton.setChecked(true);
 			mRecurringLinearLayout.setVisibility(View.VISIBLE);
 		}
@@ -115,39 +117,39 @@ public class QueuingView extends LinearLayout implements OnClickListener, LifeCy
 		mRecurringTimeButton.setSelected(true);
 		mRecurringTimeButton.setOnClickListener(this);
 		
-		if (mTask.getAsLong(KEY_RECURRING_QUEUING_TIME) > 0){
-			mRecurringDate.setTimeInMillis(mTask.getAsLong(KEY_RECURRING_QUEUING_TIME));
+		if (mTask.getLong(TaskLong.KEY_RECURRING_QUEUING_TIME) > 0){
+			mRecurringDate.setTimeInMillis(mTask.getLong(TaskLong.KEY_RECURRING_QUEUING_TIME));
 		}
 		mRecurringTimeButton.setText(getRecurringText());
 		
 		// Recurring Queuing Day Toggle Buttons
 		mMondayToggleButton = (ToggleButton) findViewById(R.id.mondayToggleButton);
 		mMondayToggleButton.setOnCheckedChangeListener(this);
-		mMondayToggleButton.setChecked(mTask.getAsBoolean(KEY_RECURRING_QUEUING_MONDAY));
+		mMondayToggleButton.setChecked(mTask.getBool(TaskBool.KEY_RECURRING_QUEUING_MONDAY));
 		
 		mTuesdayToggleButton = (ToggleButton) findViewById(R.id.tuesdayToggleButton);
 		mTuesdayToggleButton.setOnCheckedChangeListener(this);
-		mTuesdayToggleButton.setChecked(mTask.getAsBoolean(KEY_RECURRING_QUEUING_TUESDAY));
+		mTuesdayToggleButton.setChecked(mTask.getBool(TaskBool.KEY_RECURRING_QUEUING_TUESDAY));
 		
 		mWednesdayToggleButton = (ToggleButton) findViewById(R.id.wednesdayToggleButton);
 		mWednesdayToggleButton.setOnCheckedChangeListener(this);
-		mWednesdayToggleButton.setChecked(mTask.getAsBoolean(KEY_RECURRING_QUEUING_WEDNESDAY));
+		mWednesdayToggleButton.setChecked(mTask.getBool(TaskBool.KEY_RECURRING_QUEUING_WEDNESDAY));
 		
 		mThursdayToggleButton = (ToggleButton) findViewById(R.id.thursdayToggleButton);
 		mThursdayToggleButton.setOnCheckedChangeListener(this);
-		mThursdayToggleButton.setChecked(mTask.getAsBoolean(KEY_RECURRING_QUEUING_THURSDAY));
+		mThursdayToggleButton.setChecked(mTask.getBool(TaskBool.KEY_RECURRING_QUEUING_THURSDAY));
 		
 		mFridayToggleButton = (ToggleButton) findViewById(R.id.fridayToggleButton);
 		mFridayToggleButton.setOnCheckedChangeListener(this);
-		mFridayToggleButton.setChecked(mTask.getAsBoolean(KEY_RECURRING_QUEUING_FRIDAY));
+		mFridayToggleButton.setChecked(mTask.getBool(TaskBool.KEY_RECURRING_QUEUING_FRIDAY));
 		
 		mSaturdayToggleButton = (ToggleButton) findViewById(R.id.saturdayToggleButton);
 		mSaturdayToggleButton.setOnCheckedChangeListener(this);
-		mSaturdayToggleButton.setChecked(mTask.getAsBoolean(KEY_RECURRING_QUEUING_SATURDAY));
+		mSaturdayToggleButton.setChecked(mTask.getBool(TaskBool.KEY_RECURRING_QUEUING_SATURDAY));
 		
 		mSundayToggleButton = (ToggleButton) findViewById(R.id.sundayToggleButton);
 		mSundayToggleButton.setOnCheckedChangeListener(this);
-		mSundayToggleButton.setChecked(mTask.getAsBoolean(KEY_RECURRING_QUEUING_SUNDAY));
+		mSundayToggleButton.setChecked(mTask.getBool(TaskBool.KEY_RECURRING_QUEUING_SUNDAY));
 		
 		// Recurring Front/Back toggle buttons
 		mFrontRecurringToggleButton = (ToggleButton) findViewById(R.id.frontRecurringToggleButton);
@@ -156,7 +158,7 @@ public class QueuingView extends LinearLayout implements OnClickListener, LifeCy
 		mBackRecurringToggleButton = (ToggleButton) findViewById(R.id.backRecurringToggleButton);
 		mBackRecurringToggleButton.setOnCheckedChangeListener(this);
 		mBackRecurringToggleButton.setOnClickListener(this);
-		if (mTask.getAsBoolean(KEY_RECURRING_QUEUING_FRONT)){
+		if (mTask.getBool(TaskBool.KEY_RECURRING_QUEUING_FRONT)){
 			mFrontRecurringToggleButton.setChecked(true);
 		} else {
 			mBackRecurringToggleButton.setChecked(true);
@@ -284,28 +286,28 @@ public class QueuingView extends LinearLayout implements OnClickListener, LifeCy
 
 	public void onPause() {
 		if (mSingleDateHasChanged){
-			mTask.put(KEY_SINGLE_QUEUING_TIME, mSingleDate.getTimeInMillis());
+			mTask.put(TaskLong.KEY_SINGLE_QUEUING_TIME, mSingleDate.getTimeInMillis());
 			if (mSingleToggleButton.isChecked()){
 				setAlarm(mSingleDate.getTimeInMillis(), 0);
 			}
 		}
-		mTask.put(KEY_SINGLE_QUEUING, mSingleToggleButton.isChecked());
-		mTask.put(KEY_SINGLE_QUEUEING_FRONT, mFrontSingleToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_SINGLE_QUEUING, mSingleToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_SINGLE_QUEUEING_FRONT, mFrontSingleToggleButton.isChecked());
 		
 
 		
-		mTask.put(KEY_RECURRING_QUEUING, mRecurringToggleButton.isChecked());
-		mTask.put(KEY_RECURRING_QUEUING_MONDAY, mMondayToggleButton.isChecked());
-		mTask.put(KEY_RECURRING_QUEUING_TUESDAY, mTuesdayToggleButton.isChecked());
-		mTask.put(KEY_RECURRING_QUEUING_WEDNESDAY, mWednesdayToggleButton.isChecked());
-		mTask.put(KEY_RECURRING_QUEUING_THURSDAY, mThursdayToggleButton.isChecked());
-		mTask.put(KEY_RECURRING_QUEUING_FRIDAY, mFridayToggleButton.isChecked());
-		mTask.put(KEY_RECURRING_QUEUING_SATURDAY, mSaturdayToggleButton.isChecked());
-		mTask.put(KEY_RECURRING_QUEUING_SUNDAY, mSundayToggleButton.isChecked());
-		mTask.put(KEY_RECURRING_QUEUING_FRONT, mFrontRecurringToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_RECURRING_QUEUING, mRecurringToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_RECURRING_QUEUING_MONDAY, mMondayToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_RECURRING_QUEUING_TUESDAY, mTuesdayToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_RECURRING_QUEUING_WEDNESDAY, mWednesdayToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_RECURRING_QUEUING_THURSDAY, mThursdayToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_RECURRING_QUEUING_FRIDAY, mFridayToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_RECURRING_QUEUING_SATURDAY, mSaturdayToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_RECURRING_QUEUING_SUNDAY, mSundayToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_RECURRING_QUEUING_FRONT, mFrontRecurringToggleButton.isChecked());
 		
 		if (mmRecurringDateHasChanged){
-			mTask.put(KEY_RECURRING_QUEUING_TIME, mRecurringDate.getTimeInMillis());
+			mTask.put(TaskLong.KEY_RECURRING_QUEUING_TIME, mRecurringDate.getTimeInMillis());
 			if (mRecurringToggleButton.isChecked()){
 				setRecurringAlarms();
 			}
@@ -322,9 +324,9 @@ public class QueuingView extends LinearLayout implements OnClickListener, LifeCy
 		}
 		
 		if (when > System.currentTimeMillis()){
-			int taskId = mTask.getAsInteger(_ID);
-			Alarm alarm = new Alarm(taskId, when, recurring, mActivity);
-			alarm.put(KEY_QUEUING, true);
+			int taskId = mTask.getId();
+			Alarm alarm = new Alarm(taskId, when, recurring);
+			alarm.put(AlarmBool.KEY_QUEUING, true);
 			alarm.set();
 		}
 		

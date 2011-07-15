@@ -9,9 +9,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.taskninjapro.android.R;
-import com.taskninjapro.android.Task.Task;
 import com.taskninjapro.android.app.Constants;
 import com.taskninjapro.android.app.LifeCycleListener;
+import com.taskninjapro.android.task.Task;
+import com.taskninjapro.android.task.TaskString;
 
 public class WhatView extends LinearLayout implements OnClickListener, LifeCycleListener, Constants{
 	
@@ -32,11 +33,11 @@ public class WhatView extends LinearLayout implements OnClickListener, LifeCycle
 		
 		mWhatEditText = (EditText) findViewById(R.id.whatEditText);
 		mWhatEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-		mWhatEditText.setText(mTask.getAsString(KEY_WHAT));
+		mWhatEditText.setText(mTask.getWhat());
 		
 		mNotesEditText = (EditText) findViewById(R.id.notesEditText);
 		mNotesEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-		mNotesEditText.setText(mTask.getAsString(KEY_NOTES));
+		mNotesEditText.setText(mTask.getString(TaskString.KEY_NOTES));
 		
 	}
 
@@ -46,8 +47,8 @@ public class WhatView extends LinearLayout implements OnClickListener, LifeCycle
 	}
 	
 	public void onPause() {
-		mTask.put(KEY_WHAT, mWhatEditText.getText().toString());
-		mTask.put(KEY_NOTES, mNotesEditText.getText().toString());
+		mTask.put(TaskString.KEY_WHAT, mWhatEditText.getText().toString());
+		mTask.put(TaskString.KEY_NOTES, mNotesEditText.getText().toString());
 		
 	}
 	

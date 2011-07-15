@@ -14,9 +14,10 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 
 import com.taskninjapro.android.R;
-import com.taskninjapro.android.Task.Task;
 import com.taskninjapro.android.app.Constants;
 import com.taskninjapro.android.app.LifeCycleListener;
+import com.taskninjapro.android.task.Task;
+import com.taskninjapro.android.task.TaskLong;
 
 public class DueDateView extends LinearLayout implements OnClickListener, LifeCycleListener, Constants {
 	
@@ -41,8 +42,8 @@ public class DueDateView extends LinearLayout implements OnClickListener, LifeCy
 		mButton.setOnClickListener(this);
 		mButton.setSelected(true);
 		
-		if (mTask.getAsLong(KEY_DUE_DATE) > 0){
-			long millis = mTask.getAsLong(KEY_DUE_DATE);
+		if (mTask.getLong(TaskLong.KEY_DUE_DATE) > 0){
+			long millis = mTask.getLong(TaskLong.KEY_DUE_DATE);
 			mCalendar.setTimeInMillis(millis);
 			mButton.setText(getDateText());
 		} 
@@ -79,7 +80,7 @@ public class DueDateView extends LinearLayout implements OnClickListener, LifeCy
 
 	public void onPause() {
 		if (mDueDateHasChanged)
-			mTask.put(KEY_DUE_DATE, mCalendar.getTimeInMillis());
+			mTask.put(TaskLong.KEY_DUE_DATE, mCalendar.getTimeInMillis());
 		
 	}
 

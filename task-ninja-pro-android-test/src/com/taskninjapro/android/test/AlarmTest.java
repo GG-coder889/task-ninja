@@ -3,9 +3,9 @@ package com.taskninjapro.android.test;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import com.taskninjapro.android.Task.Task;
-import com.taskninjapro.android.Task.TaskDatabase;
-import com.taskninjapro.android.Task.TaskSQLiteHelper;
+import com.taskninjapro.android.TaskOld.Task;
+import com.taskninjapro.android.TaskOld.TaskDatabase;
+import com.taskninjapro.android.TaskOld.TaskSQLiteHelper;
 import com.taskninjapro.android.alarms.Alarm;
 import com.taskninjapro.android.alarms.AlarmDatabase;
 import com.taskninjapro.android.app.Constants;

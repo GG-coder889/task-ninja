@@ -4,9 +4,7 @@ import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.NotificationManager;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +18,14 @@ import android.widget.TimePicker;
 import android.widget.ToggleButton;
 
 import com.taskninjapro.android.R;
-import com.taskninjapro.android.Task.Task;
-import com.taskninjapro.android.alarms.Alarm;
+import com.taskninjapro.android.alarm.Alarm;
+import com.taskninjapro.android.alarm.AlarmBool;
 import com.taskninjapro.android.app.Constants;
 import com.taskninjapro.android.app.LifeCycleListener;
+import com.taskninjapro.android.task.Task;
+import com.taskninjapro.android.task.TaskBool;
+import com.taskninjapro.android.task.TaskInteger;
+import com.taskninjapro.android.task.TaskLong;
 
 public class AlertsView extends LinearLayout implements OnClickListener, LifeCycleListener, Constants, OnCheckedChangeListener {
 	
@@ -67,7 +69,7 @@ public class AlertsView extends LinearLayout implements OnClickListener, LifeCyc
 		mSingleToggleButton.setOnCheckedChangeListener(this);
 		mSingleToggleButton.setOnClickListener(this);
 		mSingleLinearLayout = (LinearLayout) findViewById(R.id.singleLinearLayout);
-		if (mTask.getAsBoolean(KEY_SINGLE_ALERT)) {
+		if (mTask.getBool(TaskBool.KEY_SINGLE_ALERT)) {
 			mSingleToggleButton.setChecked(true);
 			mSingleLinearLayout.setVisibility(VISIBLE);
 		} else {
@@ -78,8 +80,8 @@ public class AlertsView extends LinearLayout implements OnClickListener, LifeCyc
 		mSingleAlertButton.setOnClickListener(this);
 		mSingleAlertButton.setSelected(true);
 		
-		if (mTask.getAsLong(KEY_SINGLE_ALERT_TIME) > 0){
-			mSingleDate.setTimeInMillis(mTask.getAsLong(KEY_SINGLE_ALERT_TIME));
+		if (mTask.getLong(TaskLong.KEY_SINGLE_ALERT_TIME) > 0){
+			mSingleDate.setTimeInMillis(mTask.getLong(TaskLong.KEY_SINGLE_ALERT_TIME));
 		}
 		
 		mSingleAlertButton.setText(getSingleText());
@@ -91,7 +93,7 @@ public class AlertsView extends LinearLayout implements OnClickListener, LifeCyc
 		mRecurringToggleButton.setOnCheckedChangeListener(this);
 		mRecurringToggleButton.setOnClickListener(this);
 		mRecurringLinearLayout = (LinearLayout) findViewById(R.id.recurringLinearLayout);
-		if (mTask.getAsBoolean(KEY_RECURRING_ALERT)){
+		if (mTask.getBool(TaskBool.KEY_RECURRING_ALERT)){
 			mRecurringToggleButton.setChecked(true);
 			mRecurringLinearLayout.setVisibility(VISIBLE);
 		} else {
@@ -102,39 +104,39 @@ public class AlertsView extends LinearLayout implements OnClickListener, LifeCyc
 		mRecurringAlertButton.setSelected(true);
 		mRecurringAlertButton.setOnClickListener(this);
 		
-		if (mTask.getAsLong(KEY_RECURRING_ALERT_TIME) > 0){
-			mRecurringDate.setTimeInMillis(mTask.getAsLong(KEY_RECURRING_ALERT_TIME));
+		if (mTask.getLong(TaskLong.KEY_RECURRING_ALERT_TIME) > 0){
+			mRecurringDate.setTimeInMillis(mTask.getLong(TaskLong.KEY_RECURRING_ALERT_TIME));
 		}
 		mRecurringAlertButton.setText(getRecurringText());
 		
 		// Recurring Alert Day Toggle Buttons
 		mMondayToggleButton = (ToggleButton) findViewById(R.id.mondayToggleButton);
 		mMondayToggleButton.setOnCheckedChangeListener(this);
-		mMondayToggleButton.setChecked(mTask.getAsBoolean(KEY_RECURRING_ALERT_MONDAY));
+		mMondayToggleButton.setChecked(mTask.getBool(TaskBool.KEY_RECURRING_ALERT_MONDAY));
 		
 		mTuesdayToggleButton = (ToggleButton) findViewById(R.id.tuesdayToggleButton);
 		mTuesdayToggleButton.setOnCheckedChangeListener(this);
-		mTuesdayToggleButton.setChecked(mTask.getAsBoolean(KEY_RECURRING_ALERT_TUESDAY));
+		mTuesdayToggleButton.setChecked(mTask.getBool(TaskBool.KEY_RECURRING_ALERT_TUESDAY));
 		
 		mWednesdayToggleButton = (ToggleButton) findViewById(R.id.wednesdayToggleButton);
 		mWednesdayToggleButton.setOnCheckedChangeListener(this);
-		mWednesdayToggleButton.setChecked(mTask.getAsBoolean(KEY_RECURRING_ALERT_WEDNESDAY));
+		mWednesdayToggleButton.setChecked(mTask.getBool(TaskBool.KEY_RECURRING_ALERT_WEDNESDAY));
 		
 		mThursdayToggleButton = (ToggleButton) findViewById(R.id.thursdayToggleButton);
 		mThursdayToggleButton.setOnCheckedChangeListener(this);
-		mThursdayToggleButton.setChecked(mTask.getAsBoolean(KEY_RECURRING_ALERT_THURSDAY));
+		mThursdayToggleButton.setChecked(mTask.getBool(TaskBool.KEY_RECURRING_ALERT_THURSDAY));
 		
 		mFridayToggleButton = (ToggleButton) findViewById(R.id.fridayToggleButton);
 		mFridayToggleButton.setOnCheckedChangeListener(this);
-		mFridayToggleButton.setChecked(mTask.getAsBoolean(KEY_RECURRING_ALERT_FRIDAY));
+		mFridayToggleButton.setChecked(mTask.getBool(TaskBool.KEY_RECURRING_ALERT_FRIDAY));
 		
 		mSaturdayToggleButton = (ToggleButton) findViewById(R.id.saturdayToggleButton);
 		mSaturdayToggleButton.setOnCheckedChangeListener(this);
-		mSaturdayToggleButton.setChecked(mTask.getAsBoolean(KEY_RECURRING_ALERT_SATURDAY));
+		mSaturdayToggleButton.setChecked(mTask.getBool(TaskBool.KEY_RECURRING_ALERT_SATURDAY));
 		
 		mSundayToggleButton = (ToggleButton) findViewById(R.id.sundayToggleButton);
 		mSundayToggleButton.setOnCheckedChangeListener(this);
-		mSundayToggleButton.setChecked(mTask.getAsBoolean(KEY_RECURRING_ALERT_SUNDAY));
+		mSundayToggleButton.setChecked(mTask.getBool(TaskBool.KEY_RECURRING_ALERT_SUNDAY));
 		
 		
 	}
@@ -239,25 +241,25 @@ public class AlertsView extends LinearLayout implements OnClickListener, LifeCyc
 
 	public void onPause() {
 		if (mSingleDateHasChanged){
-			mTask.put(KEY_SINGLE_ALERT_TIME, mSingleDate.getTimeInMillis());
+			mTask.put(TaskLong.KEY_SINGLE_ALERT_TIME, mSingleDate.getTimeInMillis());
 			if (mSingleToggleButton.isChecked()){
 				setAlarm(mSingleDate.getTimeInMillis(), 0);
 			}
 		}
 		
-		mTask.put(KEY_SINGLE_ALERT, mSingleToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_SINGLE_ALERT, mSingleToggleButton.isChecked());
 
-		mTask.put(KEY_RECURRING_ALERT, mRecurringToggleButton.isChecked());
-		mTask.put(KEY_RECURRING_ALERT_MONDAY, mMondayToggleButton.isChecked());
-		mTask.put(KEY_RECURRING_ALERT_TUESDAY, mTuesdayToggleButton.isChecked());
-		mTask.put(KEY_RECURRING_ALERT_WEDNESDAY, mWednesdayToggleButton.isChecked());
-		mTask.put(KEY_RECURRING_ALERT_THURSDAY, mThursdayToggleButton.isChecked());
-		mTask.put(KEY_RECURRING_ALERT_FRIDAY, mFridayToggleButton.isChecked());
-		mTask.put(KEY_RECURRING_ALERT_SATURDAY, mSaturdayToggleButton.isChecked());
-		mTask.put(KEY_RECURRING_ALERT_SUNDAY, mSundayToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_RECURRING_ALERT, mRecurringToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_RECURRING_ALERT_MONDAY, mMondayToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_RECURRING_ALERT_TUESDAY, mTuesdayToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_RECURRING_ALERT_WEDNESDAY, mWednesdayToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_RECURRING_ALERT_THURSDAY, mThursdayToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_RECURRING_ALERT_FRIDAY, mFridayToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_RECURRING_ALERT_SATURDAY, mSaturdayToggleButton.isChecked());
+		mTask.put(TaskBool.KEY_RECURRING_ALERT_SUNDAY, mSundayToggleButton.isChecked());
 		
 		if (mmRecurringDateHasChanged){
-			mTask.put(KEY_RECURRING_ALERT_TIME, mRecurringDate.getTimeInMillis());;
+			mTask.put(TaskLong.KEY_RECURRING_ALERT_TIME, mRecurringDate.getTimeInMillis());;
 			if (mRecurringToggleButton.isChecked()){
 				setRecurringAlarms();
 			}
@@ -273,9 +275,9 @@ public class AlertsView extends LinearLayout implements OnClickListener, LifeCyc
 		}
 		
 		if (when > System.currentTimeMillis()){
-			int taskId = mTask.getAsInteger(_ID);
-			Alarm alarm = new Alarm(taskId, when, recurring, mActivity);
-			alarm.put(KEY_NOTIFICATION, true);
+			int taskId = mTask.getId();
+			Alarm alarm = new Alarm(taskId, when, recurring);
+			alarm.put(AlarmBool.KEY_NOTIFICATION, true);
 			alarm.set();
 		}
 		

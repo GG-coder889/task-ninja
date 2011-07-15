@@ -1,6 +1,7 @@
 package com.taskninjapro.android.views;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
@@ -10,16 +11,16 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 
 import com.taskninjapro.android.R;
-import com.taskninjapro.android.Task.Task;
-import com.taskninjapro.android.Task.TaskDatabase;
 import com.taskninjapro.android.app.Constants;
+import com.taskninjapro.android.task.Task;
+import com.taskninjapro.android.task.TaskIntegerList;
+import com.taskninjapro.android.task.TaskLong;
 
 public class TaskView extends LinearLayout implements OnClickListener, Constants {
 	
 	private static final String TAG = "TaskView";
 	public Task mTask;
 	protected TaskListView mTaskList;
-	private TaskDatabase mTaskDatabase;
 	
 	public TaskHeader mTaskHeader;
 	public TaskListView mSubtaskList;
@@ -31,20 +32,18 @@ public class TaskView extends LinearLayout implements OnClickListener, Constants
 		mTask = task;
 		mTaskList = taskList;
 		
-		mTaskDatabase = TaskDatabase.getInstance(getContext());
-		
 		setOrientation(VERTICAL);
 		setPadding(10, 5, 10, 5);
 		
 		mTaskHeader = new TaskHeader(this);
 		addView(mTaskHeader);
 		
-		setSelected(!mTask.getAsBoolean(KEY_COMPLETED));
+		setSelected(!mTask.completed());
 	}
 	
 	@Override
 	public void setSelected(boolean selected) {
-		if (mTask.getAsBoolean(KEY_COMPLETED)) {
+		if (mTask.completed()) {
 			super.setSelected(false);
 		} else {
 			super.setSelected(selected);
@@ -131,7 +130,7 @@ public class TaskView extends LinearLayout implements OnClickListener, Constants
 				addView(mSubtaskList, layoutParams);
 				mSubtaskList.setVisibility(VISIBLE);
 				
-				mTempSubtaskIds = mTask.getSubtaskIds();
+				mTempSubtaskIds = mTask.getIntegerList(TaskIntegerList.KEY_TASKS);
 				new AsyncSubtaskView().execute((Void[])null);
 				
 			} else if (mSubtaskList.getChildCount() != 0){
@@ -151,14 +150,14 @@ public class TaskView extends LinearLayout implements OnClickListener, Constants
 		
 	}
 	
-	protected LinkedHashSet<Integer> mTempSubtaskIds;
+	protected List<Integer> mTempSubtaskIds;
 	private class AsyncSubtaskView extends AsyncTask<Void, Void, TaskView> {
 		
 		@Override
 		protected TaskView doInBackground(Void ... voids) {
 			
 			for (Integer id: mTempSubtaskIds){
-				Task task = mTaskDatabase.getTask(id);
+				Task task = Task.get(id);
 				if (task != null){
 					mTempSubtaskIds.remove(id);
 					return getSubtaskView(mSubtaskList, task);

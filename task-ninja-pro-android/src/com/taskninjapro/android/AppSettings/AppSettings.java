@@ -14,11 +14,11 @@ import android.widget.LinearLayout;
 
 import com.taskninjapro.android.R;
 import com.taskninjapro.android.MasterList.MasterList;
-import com.taskninjapro.android.Queue.Queue;
 import com.taskninjapro.android.QueueSelector.QueueSelector;
 import com.taskninjapro.android.app.BaseActivity;
 import com.taskninjapro.android.app.Constants;
 import com.taskninjapro.android.app.LifeCycleListener;
+import com.taskninjapro.android.queue.QueueActivity;
 
 public class AppSettings extends BaseActivity implements Constants {
 	

@@ -14,11 +14,11 @@ import android.widget.Button;
 import com.taskninjapro.android.R;
 import com.taskninjapro.android.AppSettings.AppSettings;
 import com.taskninjapro.android.MasterList.MasterList;
-import com.taskninjapro.android.Queue.Queue;
 import com.taskninjapro.android.QueueSelector.QueueSelector;
 import com.taskninjapro.android.app.App;
 import com.taskninjapro.android.app.BaseActivity;
 import com.taskninjapro.android.app.Constants;
+import com.taskninjapro.android.queue.QueueActivity;
 
 public class MainMenu extends BaseActivity implements Constants, OnClickListener {
 
@@ -66,7 +66,7 @@ public class MainMenu extends BaseActivity implements Constants, OnClickListener
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.queueButton:
-			startActivity(new Intent(App.getContext(), Queue.class));
+			startActivity(new Intent(App.getContext(), QueueActivity.class));
 			break;
 		case R.id.masterButton:
 			startActivity(new Intent(App.getContext(), MasterList.class));

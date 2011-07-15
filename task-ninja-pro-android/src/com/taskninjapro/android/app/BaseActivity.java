@@ -3,9 +3,9 @@ package com.taskninjapro.android.app;
 import com.taskninjapro.android.R;
 import com.taskninjapro.android.AppSettings.AppSettings;
 import com.taskninjapro.android.MasterList.MasterList;
-import com.taskninjapro.android.Queue.Queue;
 import com.taskninjapro.android.QueueSelector.QueueSelector;
 import com.taskninjapro.android.info.Info;
+import com.taskninjapro.android.queue.QueueActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -37,7 +37,7 @@ public abstract class BaseActivity extends Activity {
 			startActivity(new Intent(this, MasterList.class));
 			return true;
 		case R.id.queue:
-			startActivity(new Intent(this, Queue.class));
+			startActivity(new Intent(this, QueueActivity.class));
 			return true;
 		case R.id.info:
 			startActivity(new Intent(this, Info.class));

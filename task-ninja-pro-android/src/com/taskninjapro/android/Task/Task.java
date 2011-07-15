@@ -1,314 +1,168 @@
-package com.taskninjapro.android.Task;
+package com.taskninjapro.android.task;
 
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
 
+import com.aldenjole.dbmodel.DbController;
+import com.aldenjole.dbmodel.DbModel;
 import com.taskninjapro.android.app.App;
-import com.taskninjapro.android.app.Constants;
 
-public class Task implements Constants {
 
-	private static final String TAG = "Task";
+public class Task extends DbModel<Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> {
 
-	ContentValues mValues;
-
-	boolean mNeedsUpdate = false;
-	boolean mNeedsDelete = false;
-
-	private TaskDatabase mTaskDatabase;
-
+	private static final DbController<Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> mController 
+	= new LocalController(Task.class, App.getContext(), 1);
 	
-	public Task(CharSequence what, Context context) {
-		mTaskDatabase = TaskDatabase.getInstance(App.getContext());
-		mValues = new ContentValues();
-		
-		mValues.put(_ID, mTaskDatabase.getNewID());
-		mValues.put(KEY_WHAT, what.toString());
-		
-		onChange();
-	}
-
-	public Task(ContentValues values, Context context) {
-		mTaskDatabase = TaskDatabase.getInstance(App.getContext());
-		mValues = values;
-	}
-
-	// ###############################################################
-	//		What
-	// ###############################################################
-	public CharSequence getWhat() {
-		return mValues.getAsString(KEY_WHAT);
-	}
-	// ###############################################################
-
-	
-	// ###############################################################
-	//		ID
-	// ###############################################################
-	public int getId() {
-		Integer id = mValues.getAsInteger(_ID);
-		if (id == null)
-			return 0;
-		else
-			return id;
-	}
-	// ###############################################################
-
-	
-	
-	// ###############################################################
-	//		Values
-	// ###############################################################
-	public ContentValues getValues() {
-		return mValues;
-	}
-	// ###############################################################
-
-	
-	
-	// ###############################################################
-	// 		Database Status
-	// ###############################################################
-	public boolean needsUpdate() {
-		return mNeedsUpdate;
-	}
-
-	public void setNeedsUpdate(boolean b) {
-		mNeedsUpdate = b;
-		mTaskDatabase.add(this);
-	}
-
-	private void onChange() {
-		mNeedsUpdate = true;
-		mTaskDatabase.add(this);
-	}
-
-	public boolean needsDelete() {
-		return mNeedsDelete;
+	@Override
+	protected DbController <Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> getController() {
+		return mController;
 	}
 	
-	public void delete() {
-		mNeedsDelete = true;
-		if (getParent() != null) {
-			if (getParent().getSubtaskIds().contains(this)){
-				getParent().removeSubtask(this);
-			}	
-			setParent(null);
-		}
-		
-		LinkedHashSet<Integer> subtaskIds = getSubtaskIds();
-		for (Integer id : subtaskIds) {
-			Task subtask = mTaskDatabase.getTask(id);
-			if (subtask != null){
-				if (subtask.getParent() != null) {
-					subtask.setParent(null);
-				}
-				
-				if (!subtask.needsDelete()) {
-					subtask.delete();
-				}
-			}
-		}
-		onChange();
+	private Task(ContentValues values){
+		super(values);
 	}
-	// ###############################################################
+	
+	public Task(CharSequence what) {
+		put(TaskString.KEY_WHAT, what.toString());
+	}
 
+	public static Task get(int id){
+		return mController.get(id);
+	}
 	
-	
-	// ###############################################################
-	//		Subtasks
-	// ###############################################################
-	public void addSubtask(Task subtask) {
-		if (subtask != null) {
-			if (subtask.getParent() != this) {
-				subtask.put(KEY_PARENT, getId());
-				onChange();
-			}
+	private static class LocalController extends DbController<Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> {
 			
-			LinkedHashSet<Integer> subtaskIds = getSubtaskIds();
-			if (!subtaskIds.contains(subtask.getId())){
-				subtaskIds.add(subtask.getId());
-				setSubtaskIds(subtaskIds);
-				onChange();
-			}
+		protected LocalController(Class<Task> dbModel, Context context, int version) {
+			super(dbModel, context, version);
 		}
-	}
 
-	public void setSubtaskIds(LinkedHashSet<Integer> subtaskIds) {
-		StringBuilder sb = new StringBuilder();
-		for (Integer id : subtaskIds) {
-			Task subtask = mTaskDatabase.getTask(id);
-			if (subtask != null){
-				if (subtask.getParent() != this) {
-					subtask.put(KEY_PARENT, getId());
-				}
-				sb.append(',').append(subtask.getId());
-			}
+		@Override
+		protected TaskIntegerList[] getIntegerListValues() {
+			return TaskIntegerList.values();
 		}
-		sb.replace(0, 1, "");
-		mValues.put(KEY_TASKS, sb.toString());
-		onChange();
-	}
 
-	public void removeSubtask(Task subtask) {
-		if (subtask != null) {
-			LinkedHashSet<Integer> subtaskIds = getSubtaskIds();
-			if (subtaskIds.contains(subtask.getId())){
-				subtaskIds.remove(subtask.getId());
-				setSubtaskIds(subtaskIds);
-				if (subtask.getParent() == this){
-					subtask.put(KEY_PARENT, 0);
-				}
-				onChange();
-			}
+		@Override
+		protected TaskInteger[] getIntegerValues() {
+			return TaskInteger.values();
 		}
-	}
 
-	public LinkedHashSet<Integer> getSubtaskIds() {
-		LinkedHashSet<Integer> subtaskIds = new LinkedHashSet<Integer>();
-		String string = this.getAsString(KEY_TASKS);
-		
-		if (string.length() != 0) {
-			
-			String[] strings = string.split(",");
-			for (String s : strings) {
-				
-				try {
-					int id = Integer.valueOf(s);
-					Task subtask = mTaskDatabase.getTask(id);
-					
-					if (subtask != null){
-						subtaskIds.add(subtask.getId());
-						if (subtask.getParent() != this){
-							subtask.setParent(this);
-						}
-							
-					}
-					
-				} catch (NumberFormatException e) {
-					e.printStackTrace();
-				}
-			}
+		@Override
+		protected TaskLong[] getLongValues() {
+			return TaskLong.values();
 		}
-		
-		return subtaskIds;
-	}
-	// ###############################################################
+
+		@Override
+		protected Task getNewInstance(ContentValues arg0) {
+			return new Task(arg0);
+		}
+
+		@Override
+		protected TaskString[] getStringValues() {
+			return TaskString.values();
+		}
+
+		@Override
+		protected TaskBool[] getBoolValues() {
+			return TaskBool.values();
+		}
+
 
 	
-	
-	// ###############################################################
-	//		Parent
-	// ###############################################################
-	public void setParent(Task task) {
-		if (getParent() != task){
-			if (task != null){
-				put(KEY_PARENT, task.getId());
-				task.addSubtask(this);
-			} else {
-				put(KEY_PARENT, 0);
-			}
+	}
+
+	public static LinkedHashSet<Task> getAll() {
+		LinkedHashSet<Task> tasks = new LinkedHashSet<Task>();
+		for (Task task: mController.getAll()) {
+			tasks.add(task);
 		}
-		
-//		if (getParent() != task  || !(task == null && getParent() == null)){
-//			if (getParent() != null){
-//				getParent().removeSubtask(this);
-//			}
-//			if (task == null){
-//				mValues.put(KEY_PARENT, 0);
-//			} else {
-//				mValues.put(KEY_PARENT, task.getId());
-//				task.addSubtask(this);
-//			}
-//			onChange();
-//		}
+		return tasks;
 	}
 
 	public Task getParent() {
-		Integer id = mValues.getAsInteger(KEY_PARENT);
-		if (id == null || id < 1) {
+		Integer id = getInteger(TaskInteger.KEY_PARENT);
+		if (id != null){
+			return get(id); 
+		} else {
 			return null;
-		} else {
-			return mTaskDatabase.getTask(id);
 		}
-
-	}
-	// ###############################################################
-
-
-
-	public void put(String key, int value) {
-		mValues.put(key, value);
-		onChange();
+		
 	}
 	
-	public void put(String key, String value) {
-		mValues.put(key, value);
-		onChange();
+	public void setParent(Task task){
+		
+		Task parent = getParent();
+		if (parent != null){
+			parent.removeChild(this);
+		}
+		
+		task.addChild(this);
+		put(TaskInteger.KEY_PARENT, task.getId());
+		
 	}
 	
-	public void put(String key, boolean value) {
-		if (value)
-			mValues.put(key, 1);
-		else
-			mValues.put(key, 0);
-		onChange();
+	private void removeChild(Task task) {
+		LinkedHashSet<Task> children = getChildren();
+		children.remove(task);
 	}
-	
-	public void put(String key, long value) {
-		mValues.put(key, value);
-		onChange();
-	}
-	
-	public boolean getAsBoolean(String key){
-		Integer i = mValues.getAsInteger(key);
-		if (i == null) {
-			String s = mValues.getAsString(key);
-			if (s == null || s.length() == 0){
-				return false;
-			} else {
-				return true;
-			}
-		} else if (i < 1){
-			return false;
-		} else {
-			return true;
+
+	public void addChild(Task task){
+		LinkedHashSet<Task> children = getChildren();
+		children.add(task);
+		if (!this.equals(task.getParent())){
+			task.setParent(this);
 		}
 	}
 	
-	public long getAsLong(String key){
-		Long l = mValues.getAsLong(key);
-		if (l == null){
-			return 0;
-		} else {
-			return l;
+	public void setChildren(LinkedHashSet<Task> tasks) {
+		List<Integer> list = new LinkedList<Integer>();
+		for (Task task: tasks){
+			if (!list.contains(task.getId()))
+			list.add(task.getId());
 		}
+		put(TaskIntegerList.KEY_TASKS, list);
 	}
 	
-	public String getAsString(String key){
-		String value = mValues.getAsString(key);
-		if (value == null){
-			return "";
-		} else {
-			return value;
+	public LinkedHashSet<Task> getChildren() {
+		LinkedHashSet<Task> children = getChildren();
+		List<Integer> list = getIntegerList(TaskIntegerList.KEY_TASKS);
+		for (int id: list){
+			children.add(get(id));
 		}
+		return children;
+	}
+
+	public CharSequence getWhat() {
+		return getString(TaskString.KEY_WHAT);
 	}
 	
-	public int getAsInteger(String key){
-		Integer value = mValues.getAsInteger(key);
-		if (value == null){
-			return 0;
-		} else {
-			return value;
-		}
+	public boolean completed(){
+		return getBool(TaskBool.KEY_COMPLETED);
 	}
-
-	public Task getTask() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public void completed(boolean completed){
+		put(TaskBool.KEY_COMPLETED, completed);
 	}
-
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

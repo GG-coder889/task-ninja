@@ -5,6 +5,7 @@ import android.content.Context;
 
 public class App extends Application {
 
+	public static final String PREFS = "TaskNinjaPrefs";
 	private static App mApp;
 
 	@Override

@@ -48,7 +48,7 @@
 			android:theme="@android:style/Theme.Wallpaper.NoTitleBar"/>
 		
 		<activity 
-			android:name=".Queue.Queue" 
+			android:name=".queue.QueueActivity" 
 			android:label="@string/app_name" 
 			android:windowSoftInputMode="stateUnchanged"
 			android:launchMode="singleInstance"
@@ -68,10 +68,10 @@
 		
 		<service android:name=".alarms.NotificationService"/>
 		
-		<service android:name=".alarms.QueuingService"/>
+		<service android:name="alarms.QueuingService"/>
 		
 		<receiver 
-			android:name=".alarms.CurrentTaskWidget" >
+			android:name=".Queue.CurrentTaskWidget" >
 			
     		<intent-filter>
         		<action 

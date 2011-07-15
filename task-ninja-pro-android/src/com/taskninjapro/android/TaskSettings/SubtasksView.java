@@ -1,6 +1,7 @@
 package com.taskninjapro.android.TaskSettings;
 
-import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,12 +16,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.taskninjapro.android.R;
-import com.taskninjapro.android.Task.Task;
-import com.taskninjapro.android.Task.TaskDatabase;
-import com.taskninjapro.android.alarms.CurrentTaskWidget;
 import com.taskninjapro.android.app.App;
 import com.taskninjapro.android.app.Constants;
 import com.taskninjapro.android.app.LifeCycleListener;
+import com.taskninjapro.android.queue.CurrentTaskWidget;
+import com.taskninjapro.android.task.Task;
+import com.taskninjapro.android.task.TaskInteger;
+import com.taskninjapro.android.task.TaskIntegerList;
 import com.taskninjapro.android.views.TaskListView;
 import com.taskninjapro.android.views.TaskView;
 
@@ -29,9 +31,7 @@ public class SubtasksView extends LinearLayout implements LifeCycleListener, Con
 	Task mTask;
 	Activity mActivity;
 	
-	private TaskDatabase mTaskDatabase;
-	
-	private LinkedHashSet<Integer> mTempTaskIds;
+	private List<Integer> mTempTaskIds;
 	
 	private EditText mEditText;
 	private TaskListView mTaskList;
@@ -42,8 +42,6 @@ public class SubtasksView extends LinearLayout implements LifeCycleListener, Con
 		mTask = task;
 		mActivity = activity;
 		
-		mTaskDatabase = TaskDatabase.getInstance(getContext());
-		
 		LayoutInflater inflator = mActivity.getLayoutInflater();
 		inflator.inflate(R.layout.task_settings_subtasks, this);
 		setOrientation(VERTICAL);
@@ -53,7 +51,7 @@ public class SubtasksView extends LinearLayout implements LifeCycleListener, Con
 		mTaskList = new TaskListView(mActivity);
 		addView(mTaskList);
 		
-		mTempTaskIds = mTask.getSubtaskIds();
+		mTempTaskIds = mTask.getIntegerList(TaskIntegerList.KEY_TASKS);
 		new AsyncLocalTaskView().execute((Void[]) null);
 		
 		mEditText = (EditText) findViewById(R.id.editText);
@@ -96,8 +94,8 @@ public class SubtasksView extends LinearLayout implements LifeCycleListener, Con
 			CharSequence what = mEditText.getText();
 
 			// Each task comes in at the front of the list
-			Task subtask = new Task(what, App.getContext());
-			subtask.put(KEY_PARENT, mTask.getAsInteger(_ID));
+			Task subtask = new Task(what);
+			subtask.put(TaskInteger.KEY_PARENT, mTask.getId());
 			LocalTaskView taskView = new LocalTaskView(mTaskList, subtask);
 			mTaskList.addView(taskView, 0);
 			updatePositions();
@@ -115,18 +113,16 @@ public class SubtasksView extends LinearLayout implements LifeCycleListener, Con
 
 	public void onPause() {
 		// Make a string of task ids in taskString separated by ','
+		List<Integer> list = new LinkedList<Integer>();
+		
 		int taskCount = mTaskList.getChildCount();
-		StringBuilder tasksString = new StringBuilder();
 		for (int i = 0; i < taskCount; i++) {
-			if (i != 0) {
-				tasksString.append(',');
-			}
 			Task task = ((LocalTaskView) mTaskList.getChildAt(i)).mTask;
-			tasksString.append(task.getId());
+			list.add(task.getId());
 		}
 
 		// Put and commit tasks string to the parent task
-		mTask.put(KEY_TASKS, tasksString.toString());
+		mTask.put(TaskIntegerList.KEY_TASKS, list);
 
 		// Update current task widget
 		Intent intent = new Intent(App.getContext(), CurrentTaskWidget.class);
@@ -139,7 +135,7 @@ public class SubtasksView extends LinearLayout implements LifeCycleListener, Con
 		@Override
 		protected TaskView doInBackground(Void ... voids) {
 			for (Integer id: mTempTaskIds){
-				Task task = mTaskDatabase.getTask(id);
+				Task task = Task.get(id);
 				if (task != null){
 					mTempTaskIds.remove(id);
 					return new LocalTaskView(mTaskList, task);

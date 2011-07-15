@@ -14,9 +14,13 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.taskninjapro.android.R;
-import com.taskninjapro.android.Task.Task;
 import com.taskninjapro.android.TaskSettings.TaskSettings;
 import com.taskninjapro.android.app.Constants;
+import com.taskninjapro.android.task.Task;
+import com.taskninjapro.android.task.TaskInteger;
+import com.taskninjapro.android.task.TaskIntegerList;
+import com.taskninjapro.android.task.TaskLong;
+import com.taskninjapro.android.task.TaskString;
 
 public class TaskHeader extends CustomLayout 
 		implements OnClickListener, OnCheckedChangeListener, Constants {
@@ -68,10 +72,10 @@ public class TaskHeader extends CustomLayout
 		mTaskToggleButton.setOnCheckedChangeListener(this);
 		mCompletedFlags = mTaskToggleButton.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG;
 		mIncompleteFlags = mTaskToggleButton.getPaintFlags();
-		mTaskToggleButton.setTextOn(mTask.getAsString(KEY_WHAT));
-		mTaskToggleButton.setTextOff(mTask.getAsString(KEY_WHAT));
-		mTaskToggleButton.setText(mTask.getAsString(KEY_WHAT));
-		if (mTask.getAsBoolean(KEY_COMPLETED)){
+		mTaskToggleButton.setTextOn(mTask.getString(TaskString.KEY_WHAT));
+		mTaskToggleButton.setTextOff(mTask.getString(TaskString.KEY_WHAT));
+		mTaskToggleButton.setText(mTask.getString(TaskString.KEY_WHAT));
+		if (mTask.completed()){
 			mTaskToggleButton.setPaintFlags(mCompletedFlags);
 		}
 		
@@ -92,7 +96,7 @@ public class TaskHeader extends CustomLayout
 		
 		mSubsImageButton = (ImageButton) findViewById(R.id.subsImageButton);
 		mSubsImageButton.setOnClickListener(this);
-		if (!mTask.getAsBoolean(KEY_TASKS)){
+		if (!(mTask.getIntegerList(TaskIntegerList.KEY_TASKS).size() > 0)){
 			mSubsImageButton.setVisibility(GONE);
 		}
 		
@@ -101,28 +105,10 @@ public class TaskHeader extends CustomLayout
 			mParentTextView.setText(mTask.getParent().getWhat());
 		}
 		
-		mPriorityTextView = (TextView) findViewById(R.id.priorityTextView);
-		switch (mTask.getAsInteger(KEY_PRIORITY)) {
-		case 1:
-			mPriorityTextView.setText("!  ");
-			mInfoLinearLayout.setVisibility(VISIBLE);
-			break;
-		case 2:
-			mPriorityTextView.setText("!! ");
-			mInfoLinearLayout.setVisibility(VISIBLE);
-			break;
-		case 3:
-			mPriorityTextView.setText("!!!");
-			mInfoLinearLayout.setVisibility(VISIBLE);
-			break;
-		default:
-			mPriorityTextView.setText("   ");
-			break;
-		}
-		
 		mDueDateTextView = (TextView) findViewById(R.id.dueDateTextView);
-		if (mTask.getAsLong(KEY_DUE_DATE) > 0){
-			mDueDateTextView.setText(DateUtils.formatDateTime(getContext(), mTask.getAsLong(KEY_DUE_DATE), 
+		Long dueDate = mTask.getLong(TaskLong.KEY_DUE_DATE);
+		if (dueDate != null && dueDate > 0){
+			mDueDateTextView.setText(DateUtils.formatDateTime(getContext(), dueDate, 
 					DateUtils.FORMAT_SHOW_YEAR ));
 			mInfoLinearLayout.setVisibility(VISIBLE);
 		} 
@@ -158,8 +144,14 @@ public class TaskHeader extends CustomLayout
 			break;
 	
 		case R.id.completeButton:
-			mTask.put(KEY_COMPLETED, !mTask.getAsBoolean(KEY_COMPLETED));
-			onCompleted(mTask.getAsBoolean(KEY_COMPLETED));
+			boolean completed = mTask.completed();
+			if (completed){
+				mTask.put(TaskLong.KEY_COMPLETED, 0l);
+			} else {
+				mTask.put(TaskLong.KEY_COMPLETED, System.currentTimeMillis());
+			}
+			onCompleted(!completed);
+			
 			break;
 			
 		case R.id.moreButton:
@@ -170,8 +162,8 @@ public class TaskHeader extends CustomLayout
 			mSubsShown = (!mSubsShown);
 			mTaskView.setSubtasksShown(mSubsShown);
 			if (mSubsShown){
-				mTask.put(KEY_COMPLETED, false);
-				onCompleted(mTask.getAsBoolean(KEY_COMPLETED));
+				mTask.put(TaskLong.KEY_COMPLETED, 0l);
+				onCompleted(false);
 			}
 			break;
 			
@@ -217,7 +209,7 @@ public class TaskHeader extends CustomLayout
 	
 	private void onMore() {
 		Intent intent = new Intent(mTaskView.getActivity(), TaskSettings.class);
-		intent.putExtra(_ID, mTask.getAsInteger(_ID));
+		intent.putExtra("_ID", mTask.getId());
 		mTaskView.getActivity().startActivity(intent);
 	}
 }

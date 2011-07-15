@@ -3,25 +3,20 @@ package com.taskninjapro.android.QueueSelector;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ScrollView;
 
 import com.taskninjapro.android.R;
-import com.taskninjapro.android.AppSettings.AppSettings;
-import com.taskninjapro.android.MasterList.MasterList;
-import com.taskninjapro.android.Queue.Queue;
-import com.taskninjapro.android.Task.Task;
-import com.taskninjapro.android.Task.TaskDatabase;
-import com.taskninjapro.android.app.App;
 import com.taskninjapro.android.app.BaseActivity;
 import com.taskninjapro.android.app.Constants;
+import com.taskninjapro.android.queue.QueueManager;
+import com.taskninjapro.android.task.Task;
+import com.taskninjapro.android.task.TaskBool;
+import com.taskninjapro.android.task.TaskIntegerList;
+import com.taskninjapro.android.task.TaskLong;
 import com.taskninjapro.android.views.TaskListView;
 import com.taskninjapro.android.views.TaskView;
 
@@ -31,11 +26,9 @@ public class QueueSelector extends BaseActivity implements Constants {
 	// Static
 	private static final String TAG = "QueueSelector";
 
-	// Data Helpers/Interfaces
-	private TaskDatabase mDatabaseInterface;
 	private SharedPreferences mSettings;
 	
-	LinkedHashSet<Integer> mQueue;
+	LinkedHashSet<Task> mQueue;
 	
 	// Views
 	private TaskListView mTaskList ;
@@ -47,8 +40,6 @@ public class QueueSelector extends BaseActivity implements Constants {
 		
 		setContentView(R.layout.queue_selector);
 
-		// Initialize Data Helpers/Interfaces
-		mDatabaseInterface = TaskDatabase.getInstance(App.getContext());
 		mSettings = getSharedPreferences(PREFS, 0);
 		
 		// Setup The linear layout of the task scroll view
@@ -62,13 +53,13 @@ public class QueueSelector extends BaseActivity implements Constants {
 	public void onResume() {
 		super.onResume();
 
-		mQueue = mDatabaseInterface.getQueue();
+		mQueue = QueueManager.getQueue();
 		
 		mTaskList.removeAllViews();
 
-		List<Task> tasks = mDatabaseInterface.getTasks();
+		LinkedHashSet<Task> tasks = Task.getAll();
 		for (Task task : tasks) {
-			if (!task.getAsBoolean(KEY_COMPLETED) && task.getParent() == null) {
+			if (!task.getBool(TaskBool.KEY_COMPLETED) && task.getParent() == null) {
 				new AsyncTaskView().execute(task);
 			}
 		}
@@ -87,14 +78,14 @@ public class QueueSelector extends BaseActivity implements Constants {
 			Task task = taskView.mTask;
 			
 			if (taskView.isSelected()){
-				LinkedHashSet<Integer> subtaskIds = task.getSubtaskIds();
+				List<Integer> subtaskIds = task.getIntegerList(TaskIntegerList.KEY_TASKS);
 				for (int id: subtaskIds){
-					Task subtask = mDatabaseInterface.getTask(id);
+					Task subtask = Task.get(id);
 					if (subtask != null){
-						mQueue.add(subtask.getId());
+						mQueue.add(subtask);
 					}
 				}
-				mQueue.add(task.getId());
+				mQueue.add(task);
 			} else {
 				mQueue.remove(task.getId());
 				
@@ -103,7 +94,7 @@ public class QueueSelector extends BaseActivity implements Constants {
 						TaskView subtaskView = (TaskView) taskView.mSubtaskList.getChildAt(subtaskIndex);
 						Task subtask = subtaskView.mTask;
 						if (subtaskView.isSelected()){
-							mQueue.add(subtask.getId());
+							mQueue.add(subtask);
 						} else {
 							mQueue.remove(subtask.getId());
 						}
@@ -112,7 +103,7 @@ public class QueueSelector extends BaseActivity implements Constants {
 			}
 		}
 		
-		mDatabaseInterface.setQueue(mQueue);
+		QueueManager.setQueue(mQueue);
 		
 	}
 
@@ -137,7 +128,7 @@ public class QueueSelector extends BaseActivity implements Constants {
 			this.mTaskHeader.mCompleteButton.setVisibility(GONE);
 			this.mTaskHeader.mTaskToggleButton.setOnCheckedChangeListener(null); 
 			this.mTaskHeader.mTaskToggleButton.setOnClickListener(this);
-			if (this.mTask.getSubtaskIds().size() != 0){
+			if (this.mTask.getIntegerList(TaskIntegerList.KEY_TASKS).size() != 0){
 				this.setSubtasksShown(true);
 			}
 			
@@ -147,7 +138,7 @@ public class QueueSelector extends BaseActivity implements Constants {
 		
 		@Override
 		protected TaskView getSubtaskView(TaskListView taskList, Task t) {
-			if (t.getAsBoolean(KEY_COMPLETED)){
+			if (t.getBool(TaskBool.KEY_COMPLETED)){
 				return null;
 			}
 			return new LocalTaskView(taskList, t);

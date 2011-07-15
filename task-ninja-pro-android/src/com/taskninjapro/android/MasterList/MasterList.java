@@ -1,5 +1,7 @@
 package com.taskninjapro.android.MasterList;
 
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Intent;
@@ -17,13 +19,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.taskninjapro.android.R;
-import com.taskninjapro.android.Task.Task;
-import com.taskninjapro.android.Task.TaskDatabase;
-import com.taskninjapro.android.Task.TaskSorter;
-import com.taskninjapro.android.alarms.CurrentTaskWidget;
 import com.taskninjapro.android.app.App;
 import com.taskninjapro.android.app.BaseActivity;
 import com.taskninjapro.android.app.Constants;
+import com.taskninjapro.android.queue.CurrentTaskWidget;
+import com.taskninjapro.android.task.Task;
+import com.taskninjapro.android.task.TaskBool;
+import com.taskninjapro.android.task.TaskLong;
 import com.taskninjapro.android.views.TaskListView;
 import com.taskninjapro.android.views.TaskView;
 
@@ -32,14 +34,13 @@ public class MasterList extends BaseActivity implements Constants {
 	// ----------------------------------------------------------------------------------------------------
 	// Members
 	// ----------------------------------------------------------------------------------------------------
-	private TaskDatabase mDatabaseInterface;
 	private SharedPreferences mSetting;
 	
 	private EditText mNewTaskEditText;
 	private ScrollView mScrollView;
 	private TaskListView mTaskList;
 	
-	private List<Task> mTempTasks;
+	private LinkedHashSet<Task> mTempTasks;
 
 	// ----------------------------------------------------------------------------------------------------
 
@@ -51,7 +52,6 @@ public class MasterList extends BaseActivity implements Constants {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.master_list);
 
-		mDatabaseInterface = TaskDatabase.getInstance(App.getContext());
 		mSetting = getSharedPreferences(PREFS, PREFS_MODE);
 		
 		mScrollView = (ScrollView) findViewById(R.id.scrollView);
@@ -105,9 +105,13 @@ public class MasterList extends BaseActivity implements Constants {
 		
 		mTaskList.removeAllViews();
 		
-		mTempTasks = mDatabaseInterface.getTasks();
-		mTempTasks = TaskSorter.sortByCompleted(mTempTasks);
-		new AsyncLocalTaskView().execute((Void[]) null);
+		mTempTasks = Task.getAll();
+		for (Task task: mTempTasks){
+			new AsyncLocalTaskView().execute(task);
+			mTempTasks.remove(task);
+			break;
+		}
+		
 	}
 
 	@Override
@@ -127,7 +131,7 @@ public class MasterList extends BaseActivity implements Constants {
 		if (mNewTaskEditText.getText().length() != 0) {
 			CharSequence what = mNewTaskEditText.getText();
 			// Each task comes in at the front of the list
-			Task task = new Task(what, App.getContext());
+			Task task = new Task(what);
 			LocalTaskView taskView = new LocalTaskView(mTaskList, task);
 			mTaskList.addView(taskView, 0);
 			// Reset the editText to blank
@@ -135,21 +139,28 @@ public class MasterList extends BaseActivity implements Constants {
 		}
 	}
 	
-	private class AsyncLocalTaskView extends AsyncTask<Void, Void, TaskView> {	
+	private class AsyncLocalTaskView extends AsyncTask<Task, Void, List<TaskView>> {	
 		@Override
-		protected TaskView doInBackground(Void ... voids) {
-			if (mTempTasks.size() != 0){
-				return new LocalTaskView(mTaskList, mTempTasks.remove(0));
-			} else {
-				return null;
+		protected List<TaskView> doInBackground(Task ... tasks) {
+			List<TaskView> views = new LinkedList<TaskView>();
+			for (Task task: tasks){
+				views.add(new LocalTaskView(mTaskList, task));
 			}
+			return views;
 		}
 		@Override
-		protected void onPostExecute(TaskView view) {
-			if (view != null){
+		protected void onPostExecute(List<TaskView> views) {
+			
+			for (TaskView view: views) {
 				mTaskList.addView(view);
-				new AsyncLocalTaskView().execute((Void[]) null);
 			}
+			
+			for (Task task: mTempTasks){
+				new AsyncLocalTaskView().execute(task);
+				mTempTasks.remove(task);
+				break;
+			}
+			
 			
 		}
 	}
@@ -198,8 +209,14 @@ public class MasterList extends BaseActivity implements Constants {
 				switch (v.getId()){
 				case R.id.taskToggleButton:
 					
-					this.mTask.put(KEY_COMPLETED, !mTask.getAsBoolean(KEY_COMPLETED));
-					this.mTaskHeader.onCompleted(mTask.getAsBoolean(KEY_COMPLETED));
+					boolean completed = mTask.getBool(TaskBool.KEY_COMPLETED);
+					if (completed){
+						this.mTask.put(TaskLong.KEY_COMPLETED, 0L);
+					} else {
+						this.mTask.put(TaskLong.KEY_COMPLETED, System.currentTimeMillis());
+					}
+					
+					this.mTaskHeader.onCompleted(mTask.getBool(TaskBool.KEY_COMPLETED));
 					
 //					v.setId(R.id.completeButton);
 //					this.mTaskHeader.onClick(v);

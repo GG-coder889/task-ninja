@@ -10,9 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
 import com.taskninjapro.android.R;
-import com.taskninjapro.android.Task.Task;
 import com.taskninjapro.android.app.Constants;
 import com.taskninjapro.android.app.LifeCycleListener;
+import com.taskninjapro.android.task.Task;
+import com.taskninjapro.android.task.TaskInteger;
 
 public class PriorityView extends LinearLayout implements OnClickListener, Constants, LifeCycleListener, OnCheckedChangeListener  {
 	
@@ -45,7 +46,7 @@ public class PriorityView extends LinearLayout implements OnClickListener, Const
 		mP3ToggleButton.setOnCheckedChangeListener(this);
 		mP3ToggleButton.setOnClickListener(this);
 		
-		switch (mTask.getAsInteger(KEY_PRIORITY)){
+		switch (mTask.getInteger(TaskInteger.KEY_PRIORITY)){
 		case 1:
 			mP1ToggleButton.setChecked(true);
 			break;
@@ -86,11 +87,11 @@ public class PriorityView extends LinearLayout implements OnClickListener, Const
 
 	public void onPause() {
 		if (mP1ToggleButton.isChecked())
-			mTask.put(KEY_PRIORITY, 1);
+			mTask.put(TaskInteger.KEY_PRIORITY, 1);
 		else if (mP2ToggleButton.isChecked())
-			mTask.put(KEY_PRIORITY, 2);
+			mTask.put(TaskInteger.KEY_PRIORITY, 2);
 		else if (mP3ToggleButton.isChecked())
-			mTask.put(KEY_PRIORITY, 3);
+			mTask.put(TaskInteger.KEY_PRIORITY, 3);
 		
 	}
 
