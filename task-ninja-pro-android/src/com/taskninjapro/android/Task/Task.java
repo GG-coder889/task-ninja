@@ -14,28 +14,12 @@ import com.taskninjapro.android.app.App;
 
 public class Task extends DbModel<Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> {
 
-	private static Context mContext;
-	private static DbController<Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> mController;
+	private static final DbController<Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> mController 
+	= new LocalController(Task.class, App.getContext(), 1);
 	
 	@Override
 	protected DbController <Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> getController() {
-		if (mController == null){
-			try {
-				mController = new LocalController(Task.class, App.getContext(), 1);
-			} catch (Exception e){
-				try {
-					mController = new LocalController(Task.class, mContext, 1);
-				} catch (Exception e2){
-					e2.printStackTrace();
-					return null;
-				}
-			}
-		}
 		return mController;
-	}
-	
-	public static void setContext(Context context){
-		mContext = context;
 	}
 	
 	private Task(ContentValues values){

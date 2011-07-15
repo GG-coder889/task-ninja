@@ -6,7 +6,6 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.gesture.GestureOverlayView.OnGestureListener;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
@@ -31,7 +30,6 @@ public class CurrentTaskWidget extends AppWidgetProvider implements Constants {
 			int[] appWidgetIds) {
 		Log.d(TAG, "onUpdate");
 		update(context);
-
 	}
 
 	public void update(Context context){
@@ -82,6 +80,20 @@ public class CurrentTaskWidget extends AppWidgetProvider implements Constants {
 				views.setTextViewText(R.id.parentTextView, "");
 			}
 			
+			switch (task.getInteger(TaskInteger.KEY_PRIORITY)) {
+			case 1:
+				views.setTextViewText(R.id.priorityTextView, "!");
+				break;
+			case 2:
+				views.setTextViewText(R.id.priorityTextView, "!!");
+				break;
+			case 3:
+				views.setTextViewText(R.id.priorityTextView, "!!!");
+				break;
+			default:
+				views.setTextViewText(R.id.priorityTextView, "");
+			}
+			
 			if (task.getLong(TaskLong.KEY_DUE_DATE) > 0){
 				views.setTextViewText(R.id.dueDateTextView, 
 						DateUtils.formatDateTime(context, task.getLong(TaskLong.KEY_DUE_DATE), 
@@ -91,7 +103,8 @@ public class CurrentTaskWidget extends AppWidgetProvider implements Constants {
 			}
 			
 			if (task.getLong(TaskLong.KEY_DUE_DATE) > 0
-					|| task.getParent() != null) {
+					|| task.getParent() != null
+					|| task.getInteger(TaskInteger.KEY_PRIORITY) == (1|2|3) ) {
 				views.setViewVisibility(R.id.infoLinearLayout, View.VISIBLE);
 			} else {
 				views.setViewVisibility(R.id.infoLinearLayout, View.GONE);
