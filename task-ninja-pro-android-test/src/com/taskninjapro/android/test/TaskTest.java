@@ -11,28 +11,11 @@ import com.taskninjapro.android.task.Task;
 public class TaskTest extends AndroidTestCase implements Constants {
 	
 	private static final String TAG = "TaskTest";
-	
-//	private TaskSQLiteHelper mTaskSQLiteHelper;
-//	TaskDatabase mTaskDatabase;
-	
-	SharedPreferences mSettings;
 
 	
 	@Override
     protected void setUp() throws Exception {
     	 super.setUp();
-    	 
-//    	 mTaskSQLiteHelper = TaskSQLiteHelper.getInstance(getContext());
-//    	 SQLiteDatabase db = mTaskSQLiteHelper.getWritableDatabase();
-//    	 db.delete(TASKS_TABLE, null, null);
-//    	 db.close();
-//
-//    	 mTaskDatabase = TaskDatabase.getInstance(getContext());
-//    	 TaskDatabase.mTasks = new HashMap<Integer, Task>();
-//    	 TaskDatabase.mIds = new LinkedList<Integer>();	 
-//    	 
-//    	 mSettings = mContext.getSharedPreferences(PREFS, PREFS_MODE);
-//    	 mSettings.edit().clear().commit();
     	 Task.setContext(mContext);
     }
 	
