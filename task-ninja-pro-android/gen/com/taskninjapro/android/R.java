@@ -57,7 +57,7 @@ public final class R {
         public static final int fridayToggleButton=0x7f080021;
         public static final int frontRecurringToggleButton=0x7f08002c;
         public static final int frontSingleToggleButton=0x7f080029;
-        public static final int info=0x7f080035;
+        public static final int info=0x7f080034;
         public static final int infoLinearLayout=0x7f080002;
         public static final int linearLayout=0x7f080001;
         public static final int master=0x7f080031;
@@ -80,7 +80,6 @@ public final class R {
         public static final int recurringToggleButton=0x7f080018;
         public static final int saturdayToggleButton=0x7f080022;
         public static final int scrollView=0x7f080000;
-        public static final int selector=0x7f080034;
         public static final int settings=0x7f080033;
         public static final int settingsButton=0x7f08000d;
         public static final int singleAlertButton=0x7f08001a;
@@ -108,19 +107,18 @@ public final class R {
         public static final int main_menu=0x7f030003;
         public static final int master_list=0x7f030004;
         public static final int queue=0x7f030005;
-        public static final int queue_selector=0x7f030006;
-        public static final int task_header_buttons=0x7f030007;
-        public static final int task_header_info=0x7f030008;
-        public static final int task_header_menu=0x7f030009;
-        public static final int task_list=0x7f03000a;
-        public static final int task_settings=0x7f03000b;
-        public static final int task_settings_alert=0x7f03000c;
-        public static final int task_settings_due_date=0x7f03000d;
-        public static final int task_settings_priority=0x7f03000e;
-        public static final int task_settings_queuing=0x7f03000f;
-        public static final int task_settings_subtasks=0x7f030010;
-        public static final int task_settings_what=0x7f030011;
-        public static final int toggle_view=0x7f030012;
+        public static final int task_header_buttons=0x7f030006;
+        public static final int task_header_info=0x7f030007;
+        public static final int task_header_menu=0x7f030008;
+        public static final int task_list=0x7f030009;
+        public static final int task_settings=0x7f03000a;
+        public static final int task_settings_alert=0x7f03000b;
+        public static final int task_settings_due_date=0x7f03000c;
+        public static final int task_settings_priority=0x7f03000d;
+        public static final int task_settings_queuing=0x7f03000e;
+        public static final int task_settings_subtasks=0x7f03000f;
+        public static final int task_settings_what=0x7f030010;
+        public static final int toggle_view=0x7f030011;
     }
     public static final class menu {
         public static final int options_menu=0x7f070000;

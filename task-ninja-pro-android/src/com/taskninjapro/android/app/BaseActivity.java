@@ -1,17 +1,16 @@
 package com.taskninjapro.android.app;
 
-import com.taskninjapro.android.R;
-import com.taskninjapro.android.AppSettings.AppSettings;
-import com.taskninjapro.android.MasterList.MasterList;
-import com.taskninjapro.android.QueueSelector.QueueSelector;
-import com.taskninjapro.android.info.Info;
-import com.taskninjapro.android.queue.QueueActivity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import com.taskninjapro.android.R;
+import com.taskninjapro.android.AppSettings.AppSettings;
+import com.taskninjapro.android.MasterList.MasterList;
+import com.taskninjapro.android.info.Info;
+import com.taskninjapro.android.queue.QueueActivity;
 
 
 public abstract class BaseActivity extends Activity {
@@ -29,9 +28,6 @@ public abstract class BaseActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.settings:
 			startActivity(new Intent(this, AppSettings.class));
-			return true;
-		case R.id.selector:
-			startActivity(new Intent(this, QueueSelector.class));
 			return true;
 		case R.id.master:
 			startActivity(new Intent(this, MasterList.class));

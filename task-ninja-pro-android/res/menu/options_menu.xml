@@ -15,12 +15,7 @@
     <item 
     	android:id="@+id/settings"
     	android:title="Settings"
-        android:icon="@android:drawable/ic_menu_preferences"/>   
-        
-    <item 
-  		android:id="@+id/selector"
-    	android:title="Queue Selector"
-        android:icon="@android:drawable/ic_menu_search"/>
+        android:icon="@android:drawable/ic_menu_preferences"/> 
 
     <item 
   		android:id="@+id/info"

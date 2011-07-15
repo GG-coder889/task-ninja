@@ -4,21 +4,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import com.taskninjapro.android.R;
-import com.taskninjapro.android.MasterList.MasterList;
-import com.taskninjapro.android.QueueSelector.QueueSelector;
 import com.taskninjapro.android.app.BaseActivity;
 import com.taskninjapro.android.app.Constants;
 import com.taskninjapro.android.app.LifeCycleListener;
-import com.taskninjapro.android.queue.QueueActivity;
 
 public class AppSettings extends BaseActivity implements Constants {
 	
