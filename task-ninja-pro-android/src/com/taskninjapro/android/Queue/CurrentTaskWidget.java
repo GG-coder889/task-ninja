@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.gesture.GestureOverlayView.OnGestureListener;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +31,7 @@ public class CurrentTaskWidget extends AppWidgetProvider implements Constants {
 			int[] appWidgetIds) {
 		Log.d(TAG, "onUpdate");
 		update(context);
+
 	}
 
 	public void update(Context context){
