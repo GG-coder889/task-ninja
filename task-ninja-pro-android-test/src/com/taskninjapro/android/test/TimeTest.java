@@ -6,8 +6,6 @@ import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 
-import android.os.Environment;
-import android.os.SystemClock;
 import android.test.AndroidTestCase;
 import android.util.Log;
 

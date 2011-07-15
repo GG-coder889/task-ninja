@@ -10,10 +10,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.aldenjole.dbmodel.DbController;
-import com.aldenjole.dbmodel.DbModel;
-import com.aldenjole.dbmodel.TableBuilder.BuiltIn;
 import com.taskninjapro.android.app.App;
+import com.taskninjapro.android.dbmodel.DbController;
+import com.taskninjapro.android.dbmodel.DbModel;
+import com.taskninjapro.android.dbmodel.TableBuilder.BuiltIn;
 
 public class Alarm extends DbModel<Alarm, AlarmInteger, AlarmLong, AlarmString, AlarmIntegerList, AlarmBool> {
 	

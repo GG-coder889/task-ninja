@@ -50,14 +50,14 @@
 			android:theme="@android:style/Theme.Wallpaper.NoTitleBar"/>
 		
 		<activity 
-			android:name=".info.Info" 
+			android:name="info.Info" 
 			android:label="@string/app_name" 
 			android:launchMode="singleInstance"
 			android:theme="@android:style/Theme.Wallpaper.NoTitleBar"/>
 		
 		<service android:name=".alarm.NotificationService"/>
 		
-		<service android:name=".alarm.QueuingService"/>
+		<service android:name="alarm.QueuingService"/>
 		
 		<receiver 
 			android:name=".queue.CurrentTaskWidget" >
@@ -71,7 +71,7 @@
                		android:resource="@xml/widget_provider" />
 		</receiver>
 		
-		<receiver android:name=".alarm.BootCompletedReciever">
+		<receiver android:name="alarm.BootCompletedReciever">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 			</intent-filter>

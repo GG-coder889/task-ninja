@@ -7,19 +7,35 @@ import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 
-import com.aldenjole.dbmodel.DbController;
-import com.aldenjole.dbmodel.DbModel;
 import com.taskninjapro.android.app.App;
+import com.taskninjapro.android.dbmodel.DbController;
+import com.taskninjapro.android.dbmodel.DbModel;
 
 
 public class Task extends DbModel<Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> {
-
-	private static final DbController<Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> mController 
-	= new LocalController(Task.class, App.getContext(), 1);
+	
+	private static Context mContext;
+	private static DbController<Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> mController;
 	
 	@Override
 	protected DbController <Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> getController() {
+		if (mController == null){
+			try {
+				mController = new LocalController(Task.class, App.getContext(), 1);
+			} catch (Exception e1){
+				try {
+					mController = new LocalController(Task.class, mContext, 1);
+				}catch (Exception e2){
+					e2.printStackTrace();
+					return null;
+				}
+			}
+		}
 		return mController;
+	}
+	
+	public static void setContext(Context context){
+		LocalController.mContext = context;
 	}
 	
 	private Task(ContentValues values){
@@ -35,6 +51,8 @@ public class Task extends DbModel<Task, TaskInteger, TaskLong, TaskString, TaskI
 	}
 	
 	private static class LocalController extends DbController<Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> {
+		
+		public static Context mContext;
 			
 		protected LocalController(Class<Task> dbModel, Context context, int version) {
 			super(dbModel, context, version);
