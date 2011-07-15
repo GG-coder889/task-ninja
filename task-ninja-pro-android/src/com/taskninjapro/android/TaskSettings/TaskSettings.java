@@ -72,22 +72,6 @@ public class TaskSettings extends BaseActivity implements Constants {
 			new AsyncWhatView().execute(this);
 		}
 		
-		// PriorityView
-		view = mViews.get(PRIORITY);
-		on = mSettings.getBoolean(PRIORITY, PRIORITY_DEFAULT);
-		if (view !=null) {
-			if (on){
-				if (mLinearLayout.indexOfChild(view) == -1){
-					mLinearLayout.addView(view);
-				}
-			} else {
-				mLinearLayout.removeView(view);
-			}
-		} else {
-			if (on)
-				new AsyncPriorityView().execute(this);
-		}
-		
 		// DueDateView
 		view = mViews.get(DUE_DATE);
 		on = mSettings.getBoolean(DUE_DATE, DUE_DATE_DEFAULT);
@@ -165,20 +149,6 @@ public class TaskSettings extends BaseActivity implements Constants {
 		@Override
 		protected void onPostExecute(WhatView view) {
 			mViews.put(KEY_WHAT, view);
-			mOnPauseListeners.add(view);
-			mLinearLayout.addView(view);
-		}
-	}
-	
-	// PriorityView
-	private class AsyncPriorityView extends AsyncTask<Activity, Void, PriorityView> {
-		@Override
-		protected PriorityView doInBackground(Activity... activity) {
-			return new PriorityView(activity[0], mTask);
-		}
-		@Override
-		protected void onPostExecute(PriorityView view) {
-			mViews.put(PRIORITY, view);
 			mOnPauseListeners.add(view);
 			mLinearLayout.addView(view);
 		}
