@@ -12,7 +12,7 @@
     <application 
     	android:icon="@drawable/ic_launcher" 
     	android:label="@string/app_name" 
-    	android:name=".app.App">
+    	android:name="app.App">
     	
         <activity 
         	android:name=".MainMenu.MainMenu" 
@@ -61,7 +61,7 @@
 			android:theme="@android:style/Theme.Wallpaper.NoTitleBar"/>
 		
 		<activity 
-			android:name=".info.Info" 
+			android:name="info.Info" 
 			android:label="@string/app_name" 
 			android:launchMode="singleInstance"
 			android:theme="@android:style/Theme.Wallpaper.NoTitleBar"/>
@@ -82,7 +82,7 @@
                		android:resource="@xml/widget_provider" />
 		</receiver>
 		
-		<receiver android:name=".alarms.BootCompletedReciever">
+		<receiver android:name="alarms.BootCompletedReciever">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 			</intent-filter>
