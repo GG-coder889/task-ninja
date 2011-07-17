@@ -1,6 +1,16 @@
 package taskninja.core.dbmodel.task;
 
 public enum TaskString {
-	title
+	// Google
+	title,
+	id,
+	etag,
+	updated,
+	selfLink,
+	parent,
+	position,
+	notes,
+	due,
+	comleted,
 
 }

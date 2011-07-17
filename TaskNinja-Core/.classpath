@@ -4,5 +4,6 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="src" path="tests"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry exported="true" kind="lib" path="assets/google-api-services-tasks-v1-1.0.0-beta.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

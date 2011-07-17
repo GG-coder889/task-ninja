@@ -1,5 +1,7 @@
 package taskninja.core.dbmodel.task;
 
+import java.util.LinkedHashSet;
+
 import taskninja.core.app.App;
 import taskninja.core.dbmodel.DbController;
 import taskninja.core.dbmodel.DbModel;
@@ -9,11 +11,60 @@ import android.content.Context;
 
 public class Task extends DbModel<Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> {
 	
+	public Task(CharSequence title) {
+		put(TaskString.title, title.toString());
+	}
+	
+	public static Task get(int id){
+		return controller().get(id);
+	}
+
+	public static LinkedHashSet<Task> getAll() {
+		LinkedHashSet<Task> tasks = new LinkedHashSet<Task>();
+		for (Task task: controller().getAll()) {
+			tasks.add(task);
+		}
+		return tasks;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// ----------------------------------------------------------------------------------------------------
+	//  DbModel Interface Configuration
+	// ----------------------------------------------------------------------------------------------------
 	private static Context mContext;
 	private static DbController<Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> mController;
 	
 	@Override
 	protected DbController <Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> getController() {
+		return controller();
+	}
+	
+	private static DbController<Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> controller(){
 		if (mController == null){
 			try {
 				mController = new LocalController(Task.class, App.getContext(), 1);
@@ -36,14 +87,6 @@ public class Task extends DbModel<Task, TaskInteger, TaskLong, TaskString, TaskI
 	private Task(ContentValues values){
 		super(values);
 	}
-	
-	public Task(CharSequence title) {
-		put(TaskString.title, title.toString());
-	}
-
-//	public static Task get(int id){
-//		return controller().get(id);
-//	}
 	
 	private static class LocalController extends DbController<Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> {
 		
@@ -82,18 +125,11 @@ public class Task extends DbModel<Task, TaskInteger, TaskLong, TaskString, TaskI
 		protected TaskBool[] getBoolValues() {
 			return TaskBool.values();
 		}
-
-
 	
 	}
+	// ----------------------------------------------------------------------------------------------------
 
-//	public static LinkedHashSet<Task> getAll() {
-//		LinkedHashSet<Task> tasks = new LinkedHashSet<Task>();
-//		for (Task task: controller().getAll()) {
-//			tasks.add(task);
-//		}
-//		return tasks;
-//	}
+
 
 	
 	
