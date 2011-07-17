@@ -1,6 +1,5 @@
 package taskninja.core.app;
 
-import taskninja.core.dbmodel.task.Task;
 import android.app.Application;
 import android.content.Context;
 

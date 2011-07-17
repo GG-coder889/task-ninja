@@ -13,6 +13,36 @@ public class TaskGroup extends DbModel {
 		return controller().get(id);
 	}
 	
+	public static TaskGroup getInstance(){
+		return new TaskGroup();
+	}
+	
+	private TaskGroup() {
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	// ----------------------------------------------------------------------------------------------------
 	//  DbModel Interface Configuration
@@ -48,7 +78,7 @@ public class TaskGroup extends DbModel {
 	private TaskGroup(ContentValues values){
 		super(values);
 	}
-	
+
 	private static class LocalController extends DbController<TaskGroup, NullEnum, NullEnum, TaskGroupString, NullEnum, NullEnum> {
 		
 		public static Context mContext;

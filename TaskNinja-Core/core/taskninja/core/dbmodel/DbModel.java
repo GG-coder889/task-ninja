@@ -7,7 +7,6 @@ import taskninja.core.dbmodel.TableBuilder.BuiltIn;
 import taskninja.core.dbmodel.TableBuilder.Prefix;
 import android.content.ContentValues;
 import android.os.SystemClock;
-import android.text.GetChars;
 import android.util.Log;
 
 public abstract class DbModel<MODEL extends DbModel,

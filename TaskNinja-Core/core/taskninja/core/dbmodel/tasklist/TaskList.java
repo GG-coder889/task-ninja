@@ -6,12 +6,19 @@ import taskninja.core.app.App;
 import taskninja.core.dbmodel.DbController;
 import taskninja.core.dbmodel.DbModel;
 import taskninja.core.dbmodel.NullEnum;
-import taskninja.core.dbmodel.task.Task;
 import android.content.ContentValues;
 import android.content.Context;
 
 public class TaskList extends DbModel<TaskList, NullEnum, NullEnum, TaskListString, NullEnum, NullEnum> {
 
+	
+	public static TaskList getInstance(String title){
+		return new TaskList(title);
+	}
+	
+	private TaskList(String title){
+		
+	}
 	
 	public static TaskList get(int id){
 		return controller().get(id);

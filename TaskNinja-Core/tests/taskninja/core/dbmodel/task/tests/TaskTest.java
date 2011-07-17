@@ -9,19 +9,14 @@ public class TaskTest extends AndroidTestCase {
 	
 	private static final String TAG = "TaskTest";
 	
-	private static final String WHAT = "Hello what";
-	
 	@Override
     protected void setUp() throws Exception {
     	 super.setUp();
     	 Task.setContext(mContext);
     }
 	
-	public void testConstructor() {
-		Task.setContext(mContext);
-		String what = "Hello What";
-		Task task = new Task(what);
-//		assertEquals(what, task.getWhat());
+	public void testGetInstance() {
+		Task task = Task.getInstance("Title");
 	}
 	
 //	public void testParentChild(){

@@ -11,7 +11,11 @@ import android.content.Context;
 
 public class Task extends DbModel<Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> {
 	
-	public Task(CharSequence title) {
+	public static Task getInstance(CharSequence title) {
+		return new Task(title);
+	}
+	
+	private Task(CharSequence title) {
 		put(TaskString.title, title.toString());
 	}
 	
