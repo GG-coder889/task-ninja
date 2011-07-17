@@ -17,8 +17,19 @@ public class DbModelTest extends AndroidTestCase {
 	
 	private static Context mContext;
 	
+	@Override
 	public void setUp(){
 		mContext = getContext();
+	}
+	
+	@Override
+	public void tearDown(){ 
+		for (TestModel model: TestModel.mController.getAll()){
+			Integer[] i = {model.getId()};
+			TestModel.mController.delete(i);
+		}
+		
+//		assertEquals(0, TestModel.mController.getAll().size());
 	}
 	
 	public void testId() {
@@ -134,6 +145,40 @@ public class DbModelTest extends AndroidTestCase {
 		TestModel readModel = controller.get(id);
 		
 		assertEquals(value, readModel.getString(key));
+	}
+	
+	public void testDelete(){
+		
+		//  Test that get does not return a deleted model
+		TestModel model = new TestModel();
+		assertSame(model, TestModel.mController.get(model.getId()));
+		
+		model.delete();
+		assertTrue(model.isDeleted());
+		assertEquals(null, TestModel.mController.get(model.getId()));
+		
+		
+		// Test that DbController Delete deletes a model
+		model = new TestModel();
+		assertSame(model, TestModel.mController.get(model.getId()));
+		
+		Integer[] i = {model.getId()};
+		assertSame(0, TestModel.mController.delete(i).size());
+		DbController<TestModel, TestInteger, TestLong, TestString, TestIntegerList, TestBool> controller 
+		= new TestModel.TestController(TestModel.class, mContext, 1);
+		assertEquals(null, controller.get(model.getId()));
+		
+		
+		// Test that model.delete() deletes a model
+		model = new TestModel();
+		assertSame(model, TestModel.mController.get(model.getId()));
+		model.delete();
+		assertTrue(model.isDeleted());
+		assertEquals(null, TestModel.mController.get(model.getId()));
+		SystemClock.sleep(1000l);
+		controller = new TestModel.TestController(TestModel.class, mContext, 1);
+		assertEquals(null, controller.get(model.getId()));
+		
 	}
 	
 	private static class TestModel extends DbModel<TestModel, TestInteger, TestLong, TestString, TestIntegerList,TestBool> {

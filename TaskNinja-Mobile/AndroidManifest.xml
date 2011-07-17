@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       android:versionCode="1"
-      android:versionName="1.0" 
-      package="com.taskninjapro.android">
+      android:versionName="1.0" package="android.taskninja">
       
     <uses-sdk android:minSdkVersion="7" />
     
@@ -12,10 +11,10 @@
     <application 
     	android:icon="@drawable/ic_launcher" 
     	android:label="@string/app_name" 
-    	android:name=".app.App">
+    	android:name="android.taskninja.mobile.app.Apptaskninja.mobile.app.App">
         
         <activity 
-			android:name=".MasterList.MasterList" 
+			android:name="android.taskninja.mobile.MasterList.MasterList" 
 			android:windowSoftInputMode="stateUnchanged"
 			android:label="@string/app_name" 
 			android:launchMode="singleInstance"
@@ -28,7 +27,7 @@
         </activity>
         
         <activity 
-			android:name=".TaskSettings.TaskSettings" 
+			android:name="android.taskninja.mobile.TaskSettings.TaskSettings" 
 			android:label="@string/app_name" 
 			android:windowSoftInputMode="stateUnchanged"
 			android:launchMode="singleInstance"
@@ -37,30 +36,30 @@
 
 
 		<activity 
-			android:name=".AppSettings.AppSettings" 
+			android:name="android.taskninja.mobile.AppSettings.AppSettings" 
 			android:label="@string/app_name" 
 			android:launchMode="singleInstance"
 			android:theme="@android:style/Theme.Wallpaper.NoTitleBar"/>
 		
 		<activity 
-			android:name=".queue.QueueActivity" 
+			android:name="android.taskninja.mobile.queue.QueueActivity" 
 			android:label="@string/app_name" 
 			android:windowSoftInputMode="stateUnchanged"
 			android:launchMode="singleInstance"
 			android:theme="@android:style/Theme.Wallpaper.NoTitleBar"/>
 		
-		<activity 
-			android:name="info.Info" 
+		<actinfo.Info	
+			android:name="android.taskninja.mobile.info.Info" 
 			android:label="@string/app_name" 
 			android:launchMode="singleInstance"
 			android:theme="@android:style/Theme.Wallpaper.NoTitleBar"/>
 		
-		<service android:name=".alarm.NotificationService"/>
+		<service android:name="android.taskninja.mobile.alarm.NotificationService"/>
 		
-		<service android:name="alarm.QueuingService"/>
+		<service android:name="android.taskninja.mobile.alarm.QueuingService"/>
 		
 		<receiver 
-			android:name=".queue.CurrentTaskWidget" >
+			android:name="android.taskninja.mobile.queue.CurrentTaskWidget" >
 			
     		<intent-filter>
         		<action 
@@ -71,7 +70,7 @@
                		android:resource="@xml/widget_provider" />
 		</receiver>
 		
-		<receiver android:name="alarm.BootCompletedReciever">
+		<receiver android:name="android.taskninja.mobile.alarm.BootCompletedReciever">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 			</intent-filter>

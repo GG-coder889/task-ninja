@@ -48,6 +48,7 @@ public abstract class DbController <MODEL extends DbModel,
 	
 	protected DbController(Class<MODEL> dbModel, Context context, int version) {
 		String name = dbModel.getName().replace('.', '_');
+		name = name.replace('$', '_');
 		Log.d(TAG, "Name = "+name);
 		mDatabaseName = name+".db";
 		mTableName = Prefix.asTable(name);
@@ -175,7 +176,10 @@ public abstract class DbController <MODEL extends DbModel,
 		List<Integer> failedIds = new LinkedList<Integer>();
 		for (Integer id: ids){
 			try {
-				db.delete(mTableName, ID+"="+id, null);
+				String command = "DELETE FROM "+mTableName+" WHERE "+ID+"="+id+";";
+				Log.d(TAG, command);
+				db.execSQL(command);
+//				db.delete(mTableName, ID+"="+id, null);
 			} catch (Exception e) {
 				e.printStackTrace();
 				failedIds.add(id);
@@ -218,10 +222,7 @@ public abstract class DbController <MODEL extends DbModel,
 	public MODEL get(int id) {
 		Log.d(TAG, "get(): Getting model with id="+id);
 		MODEL model = mModelPool.get(id);
-		if (model != null) {
-			Log.d(TAG, "get(): Got the model from the pool");
-			return model;
-		} else {
+		if (model == null) {
 			Log.d(TAG, "get(): Did not find the model in the pool");
 			try {
 				SQLiteDatabase db = mSQLiteHelper.getWritableDatabase();
@@ -231,7 +232,6 @@ public abstract class DbController <MODEL extends DbModel,
 				if (cursor.moveToFirst()){
 					ContentValues values = readValues(cursor);
 					model = getNewInstance(values);
-					return model;
 				} else {
 					Log.d(TAG, "get(): cursor was null");
 				}
@@ -241,7 +241,12 @@ public abstract class DbController <MODEL extends DbModel,
 				e.printStackTrace();
 			}
 		}
-		return null;
+		if (model != null && !model.isDeleted()){
+			return model;
+		} else {
+			return null;
+		}
+		
 	}
 	
 	private ContentValues readValues(Cursor cursor) {
@@ -310,17 +315,21 @@ public abstract class DbController <MODEL extends DbModel,
 	}
 	
 	public void watch(MODEL model){
-		mModelPool.put(model.getId(), model);
+		if (!model.isDeleted()){
+			mModelPool.put(model.getId(), model);
+		} else {
+			register(model);
+		}
 	}
 	
 	public void register(DbModel model){
-		if (!mWriteQueue.contains(model))
-			mWriteQueue.add(model);
 		if (model.isDeleted()){
 			mDeleteQueue.add(model.getId());
 			mModelPool.remove(model.getId());
+		} else if (!mWriteQueue.contains(model)){
+			mWriteQueue.add(model);
+			checkForWrite();
 		}
-		checkForWrite();
 	}
 	
 	public LinkedHashSet<MODEL> getAll(){
