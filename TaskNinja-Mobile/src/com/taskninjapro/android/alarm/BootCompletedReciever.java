@@ -6,9 +6,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.taskninjapro.android.Queue.CurrentTaskWidget;
 import com.taskninjapro.android.app.App;
 import com.taskninjapro.android.app.Constants;
-import com.taskninjapro.android.queue.CurrentTaskWidget;
 
 public class BootCompletedReciever extends BroadcastReceiver implements Constants {
 

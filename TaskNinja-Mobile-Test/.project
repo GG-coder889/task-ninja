@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>TaskNinjaTest</name>
+	<name>TaskNinja-Mobile-Test</name>
 	<comment></comment>
 	<projects>
 		<project>task-ninja-pro</project>

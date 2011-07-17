@@ -7,13 +7,12 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.taskninjapro.android.Queue.QueueManager;
+import com.taskninjapro.android.Task.Task;
+import com.taskninjapro.android.Task.TaskBool;
+import com.taskninjapro.android.Task.TaskLong;
+import com.taskninjapro.android.Task.TaskString;
 import com.taskninjapro.android.app.Constants;
-import com.taskninjapro.android.queue.QueueManager;
-import com.taskninjapro.android.task.Task;
-import com.taskninjapro.android.task.TaskBool;
-import com.taskninjapro.android.task.TaskInteger;
-import com.taskninjapro.android.task.TaskLong;
-import com.taskninjapro.android.task.TaskString;
 
 public class QueuingService extends Service implements Constants {
 	

@@ -2,11 +2,10 @@ package com.taskninjapro.android.test;
 
 import java.util.LinkedHashSet;
 
-import android.content.SharedPreferences;
 import android.test.AndroidTestCase;
 
+import com.taskninjapro.android.Task.Task;
 import com.taskninjapro.android.app.Constants;
-import com.taskninjapro.android.task.Task;
 
 
 

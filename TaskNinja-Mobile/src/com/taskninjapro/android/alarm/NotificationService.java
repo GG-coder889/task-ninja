@@ -9,10 +9,10 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import com.taskninjapro.android.R;
+import com.taskninjapro.android.Task.Task;
+import com.taskninjapro.android.Task.TaskString;
 import com.taskninjapro.android.TaskSettings.TaskSettings;
 import com.taskninjapro.android.app.Constants;
-import com.taskninjapro.android.task.Task;
-import com.taskninjapro.android.task.TaskString;
 
 public class NotificationService extends Service implements Constants {
 
