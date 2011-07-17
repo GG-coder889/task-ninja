@@ -7,6 +7,7 @@ import taskninja.core.dbmodel.TableBuilder.BuiltIn;
 import taskninja.core.dbmodel.TableBuilder.Prefix;
 import android.content.ContentValues;
 import android.os.SystemClock;
+import android.text.GetChars;
 import android.util.Log;
 
 public abstract class DbModel<MODEL extends DbModel,
@@ -46,7 +47,6 @@ public abstract class DbModel<MODEL extends DbModel,
 		getController().register(this);
 	}
 	
-
 	// -----------------------------------------------------------------------------
 	// Delete
 	// -----------------------------------------------------------------------------
@@ -64,13 +64,6 @@ public abstract class DbModel<MODEL extends DbModel,
 		}
 	}
 	
-//	public void setDeleted(boolean deleted){
-//		if (deleted){
-//			mValues.put(BuiltIn.DELETED.name(), 1);
-//		} else {
-//			mValues.put(BuiltIn.DELETED.name(), 0);
-//		}
-//	}
 	// -----------------------------------------------------------------------------
 	
 	

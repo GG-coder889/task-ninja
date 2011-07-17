@@ -14,10 +14,6 @@ public class Task extends DbModel<Task, TaskInteger, TaskLong, TaskString, TaskI
 	
 	@Override
 	protected DbController <Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> getController() {
-		return controller();
-	}
-	
-	private static DbController <Task, TaskInteger, TaskLong, TaskString, TaskIntegerList, TaskBool> controller() {
 		if (mController == null){
 			try {
 				mController = new LocalController(Task.class, App.getContext(), 1);

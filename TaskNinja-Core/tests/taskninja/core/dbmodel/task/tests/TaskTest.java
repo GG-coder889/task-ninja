@@ -18,6 +18,7 @@ public class TaskTest extends AndroidTestCase {
     }
 	
 	public void testConstructor() {
+		Task.setContext(mContext);
 		String what = "Hello What";
 		Task task = new Task(what);
 //		assertEquals(what, task.getWhat());
