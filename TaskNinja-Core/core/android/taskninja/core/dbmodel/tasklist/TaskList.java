@@ -17,7 +17,8 @@ public class TaskList extends DbModel<TaskList, NullEnum, NullEnum, TaskListStri
 	}
 	
 	private TaskList(String title){
-		
+		super();
+		put(TaskListString.title, title);
 	}
 	
 	public static TaskList get(int id){
