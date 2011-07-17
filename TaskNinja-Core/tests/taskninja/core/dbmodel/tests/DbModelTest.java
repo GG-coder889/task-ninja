@@ -3,11 +3,11 @@ package taskninja.core.dbmodel.tests;
 import java.util.LinkedList;
 import java.util.List;
 
-import taskninja.core.dbmodel.DbController;
-import taskninja.core.dbmodel.DbModel;
 import android.content.ContentValues;
 import android.content.Context;
 import android.os.SystemClock;
+import android.taskninja.core.dbmodel.DbController;
+import android.taskninja.core.dbmodel.DbModel;
 import android.test.AndroidTestCase;
 import android.util.Log;
 

@@ -1,10 +1,10 @@
 package taskninja.core.dbmodel.tests;
 
-import taskninja.core.dbmodel.TableBuilder;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.taskninja.core.dbmodel.TableBuilder;
 import android.test.AndroidTestCase;
 import android.util.Log;
 

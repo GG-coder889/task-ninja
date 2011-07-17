@@ -16,7 +16,7 @@
         android:color="@android:color/white"
         android:state_selected="true"/>
     <item
-        android:color="@android:color/darker_gray"/>
+        android:color="@android:color/white"/>
 
 <!--         android:state_pressed=["true" | "false"]
         android:state_focused=["true" | "false"]

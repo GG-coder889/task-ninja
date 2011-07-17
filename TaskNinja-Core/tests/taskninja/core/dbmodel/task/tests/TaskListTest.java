@@ -1,7 +1,7 @@
 package taskninja.core.dbmodel.task.tests;
 
-import taskninja.core.dbmodel.task.Task;
-import taskninja.core.dbmodel.tasklist.TaskList;
+import android.taskninja.core.dbmodel.task.Task;
+import android.taskninja.core.dbmodel.tasklist.TaskList;
 import android.test.AndroidTestCase;
 
 public class TaskListTest extends AndroidTestCase {

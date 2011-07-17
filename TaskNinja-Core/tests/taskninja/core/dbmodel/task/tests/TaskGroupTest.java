@@ -1,6 +1,6 @@
 package taskninja.core.dbmodel.task.tests;
 
-import taskninja.core.dbmodel.taskgroup.TaskGroup;
+import android.taskninja.core.dbmodel.taskgroup.TaskGroup;
 import android.test.AndroidTestCase;
 
 public class TaskGroupTest extends AndroidTestCase {

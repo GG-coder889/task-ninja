@@ -3,23 +3,23 @@
 
     
     <item 
-    	android:id="@+id/master"
-    	android:title="Master List"
+    	android:id="@+id/tasks"
+    	android:title="Tasks"
     	android:icon="@android:drawable/ic_menu_agenda"/>
     	
     <item 
-    	android:id="@+id/queue"
-    	android:title="Task Queue"
+    	android:id="@+id/lists"
+    	android:title="Lists"
         android:icon="@android:drawable/ic_menu_today"/>
         
     <item 
     	android:id="@+id/settings"
     	android:title="Settings"
-        android:icon="@android:drawable/ic_menu_preferences"/> 
-
+        android:icon="@android:drawable/ic_menu_preferences"/>
+    
     <item 
-  		android:id="@+id/info"
-    	android:title="Info"
-    	android:icon="@android:drawable/ic_menu_info_details"/>
+    	android:id="@+id/queue"
+    	android:title="Queue"
+        android:icon="@android:drawable/ic_menu_preferences"/> 
         
 </menu>
