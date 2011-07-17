@@ -32,9 +32,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>src</name>
+			<name>core</name>
 			<type>2</type>
-			<location>/Users/alden/Desktop/db-model/src</location>
+			<location>/Users/alden/Desktop/task-ninja/TaskNinja-Core/core</location>
 		</link>
 	</linkedResources>
 </projectDescription>

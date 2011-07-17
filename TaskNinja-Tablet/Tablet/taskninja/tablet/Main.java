@@ -1,6 +1,6 @@
 package taskninja.tablet;
 
-import taskninja.models.task.Task;
+import taskninja.core.dbmodel.task.Task;
 import android.app.Activity;
 import android.os.Bundle;
 
