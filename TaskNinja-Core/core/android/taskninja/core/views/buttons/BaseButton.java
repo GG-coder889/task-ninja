@@ -10,7 +10,6 @@ public class BaseButton extends Button {
 		super(context);
 		setBackgroundResource(R.drawable.button_background);
 		setTextColor(R.color.button_text);
-//		setTextColor(android.R.color.white);
 		getBackground().setAlpha(100);
 	}
 

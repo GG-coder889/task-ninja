@@ -10,22 +10,38 @@ import android.taskninja.core.app.App;
 import android.taskninja.core.dbmodel.tasklist.TaskList;
 import android.taskninja.core.listeners.OnActionListener;
 import android.taskninja.core.settings.Background;
+import android.taskninja.core.views.buttons.AddButton;
+import android.taskninja.core.views.text.TitleText;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 public class TaskListsView extends ListView implements android.widget.AdapterView.OnItemClickListener {
 	
 	private LinkedHashSet<OnActionListener<TaskList>> mActionListeners = new LinkedHashSet<OnActionListener<TaskList>>();
 	private List<TaskList> mLists = new ArrayList<TaskList>();
+	ArrayAdapter<TaskList> mAdapter;
 	
 	public static TaskListsView getInstance(Context context){
+		
+//		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+//			     android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+//		layoutParams.setMargins(40, 0, 0, 0);
+		
 		return new TaskListsView(context);
 	}
 	
 	public TaskListsView(Context context) {
 		super(context);
+		setBackgroundDrawable(App.get(Background.Secondary, getContext()));
+		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+	     android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+		setLayoutParams(layoutParams);
+		
+		addHeaderView(TitleText.getInstance(getContext(), "Task Lists"));
 		
 		LinkedHashSet<TaskList> lists = TaskList.getAll();
 		if (lists.size() == 0){
@@ -37,12 +53,19 @@ public class TaskListsView extends ListView implements android.widget.AdapterVie
 			mLists.add(taskList);
 		}
 		
-		
-		
-		setAdapter(new ArrayAdapter<TaskList>(getContext(), R.layout.text_list_item, mLists));
+		mAdapter = new ArrayAdapter<TaskList>(getContext(), R.layout.text_list_item, mLists);
+		setAdapter(mAdapter);
 		setOnItemClickListener(this);
 		
-		setBackgroundDrawable(App.get(Background.Secondary, getContext()));
+		AddButton addButton = AddButton.getInstance(getContext());
+		addButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+				
+			}
+		});
+		addFooterView(addButton);
 	}
 
 	@Override

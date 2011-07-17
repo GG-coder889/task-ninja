@@ -13,6 +13,15 @@ public class TaskListTest extends AndroidTestCase {
     	 TaskList.setContext(mContext);
     }
 	
+	@Override
+	protected void tearDown() {
+
+		for (TaskList list: TaskList.getAll()){
+			list.delete();
+		}
+		
+	}
+	
 	public void testGetInsance() {
 		TaskList list = TaskList.getInstance("Title");
 	}

@@ -2,6 +2,7 @@ package android.taskninja.core.settings;
 
 import android.content.Context;
 import android.taskninja.core.app.App;
+import android.taskninja.core.views.text.TitleText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,9 +21,7 @@ public class SettingView extends LinearLayout {
 		
 		setBackgroundDrawable(App.get(Background.Primary, getContext()));
 		
-		TextView tv = new TextView(getContext());
-		tv.setText(mSetting.toString());
-		addView(tv);
+		addView(TitleText.getInstance(getContext(), mSetting.toString()));
 	}
 
 }
