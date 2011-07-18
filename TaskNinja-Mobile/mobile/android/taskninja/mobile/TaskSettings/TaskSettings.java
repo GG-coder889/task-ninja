@@ -8,7 +8,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.taskninja.mobile.app.BaseActivity;
+import android.taskninja.mobile.BaseActivity;
 import android.taskninja.mobile.app.Constants;
 import android.taskninja.mobile.app.LifeCycleListener;
 import android.taskninja.mobile.task.Task;

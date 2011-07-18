@@ -5,7 +5,7 @@ import java.util.LinkedHashSet;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.taskninja.mobile.app.BaseActivity;
+import android.taskninja.mobile.BaseActivity;
 import android.taskninja.mobile.app.Constants;
 import android.taskninja.mobile.task.Task;
 import android.taskninja.mobile.views.TaskListView;
