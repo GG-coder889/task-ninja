@@ -4,359 +4,281 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import android.content.ContentValues;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.os.AsyncTask;
-import android.taskninja.dbmodel.Db_TableBuilder.BuiltIn;
-import android.taskninja.dbmodel.Db_TableBuilder.Prefix;
 import android.util.Log;
 
-
-public abstract class Db_Controller <MODEL extends Db_Model,
+public abstract class Db_Controller
+	<MODEL extends Db_Model,
 	INTEGER extends Enum<INTEGER>,
 	LONG extends Enum<LONG>,
 	STRING extends Enum<STRING>,
-	INTEGER_LIST extends Enum<INTEGER_LIST>,
 	BOOL extends Enum<BOOL>
-	> {
+	>{
 	
-	private static final String TAG = "DbController";
+	private static final String TAG = "Db_Controller";
 	
-	protected final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
-	protected final HashMap<Integer, MODEL> mModelPool = new HashMap<Integer, MODEL>();
-	protected final Set<Integer> mIdPool = new HashSet<Integer>();
-	protected final Queue<Db_Model> mWriteQueue = new LinkedList<Db_Model>();
-	protected final Queue<Integer> mDeleteQueue = new LinkedList<Integer>();
+	protected abstract MODEL getInstance(JSONObject json);
 	
-	protected final String ID = BuiltIn.ID.name();
+	private String mLocalTag;
 	
-	protected  LocalSQLiteHelper mSQLiteHelper;
+	private SharedPreferences db;
+	private Context mContext;
+	private String mModelName;
 	
-	protected String mDatabaseName;
-	protected String mTableName;
-	
-	protected Db_Controller(Class<MODEL> dbModel, Context context, int version) {
-		String name = dbModel.getName().replace('.', '_');
-		name = name.replace('$', '_');
-		Log.d(TAG, "Name = "+name);
-		
-		mDatabaseName = name+".db";
-		mTableName = Prefix.asTable(name);
-		
-		mSQLiteHelper = new LocalSQLiteHelper(context, mDatabaseName, null, version);
-	}
-	
-	private class LocalSQLiteHelper extends SQLiteOpenHelper {
-
-		public LocalSQLiteHelper(Context context, String name, CursorFactory factory, int version) {
-			super(context, name, factory, version);
-		}
-
-		@Override
-		public void onCreate(SQLiteDatabase db) {
-			try {
-				db.execSQL(createTableCommand());
-			} catch (SQLException e){
-				Log.d(TAG, "Failed to create database");
-				e.printStackTrace();
-			}
-			
-		}
-
-		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			// TODO Auto-generated method stub
-		}
-		
-	}
-	
-	private boolean mWritting = false;
-	private class WriteTask extends AsyncTask<ContentValues, Void, List<ContentValues>> {
-		@Override
-		protected List<ContentValues> doInBackground(ContentValues... valueSets) {
-			Log.d(TAG, "new Write AsyncTask with valueSets="+valueSets);
-			return write(valueSets);
-		}
-
-		@Override
-		protected void onPostExecute(List<ContentValues> valueSets) {
-			for ( ContentValues valueSet: valueSets) {
-				register(Db_Controller.this.get(valueSet.getAsInteger(ID)));
-			}
-			checkForWrite();
-		}
-	}
-	
-	private class DeleteTask extends AsyncTask<Integer, Void, List<Integer>> {
-		@Override
-		protected List<Integer> doInBackground(Integer... ids) {
-			Log.d(TAG, "new DeleteTask with ids="+ids.toString());
-			return delete(ids);
-		}
-
-		@Override
-		protected void onPostExecute(List<Integer> ids) {
-			Log.d(TAG, "Delete task complete with failed ids="+ids.toString());
-			for ( int id : ids) {
-				mIdPool.remove(id);
-			}
-			checkForWrite();
-		}
-	}
-	
-	private String createTableCommand() {
-		Db_TableBuilder builder = new Db_TableBuilder(mTableName);
-		
-		for (INTEGER i: getIntegerValues()){
-			builder.addNum(Prefix.asInteger(i.name()));
-		}
-		
-		for (STRING s: getStringValues()){
-			builder.addText(Prefix.asString(s.name()));
-		}
-		
-		for (LONG l: getLongValues()){
-			builder.addNum(Prefix.asLong(l.name()));
-		}
-		
-		for (INTEGER_LIST iList: getIntegerListValues()){
-			builder.addText(Prefix.asIntegerList(iList.name()));
-		}
-		
-		for (BOOL iList: getBoolValues()){
-			builder.addText(Prefix.asBool(iList.name()));
-		}
-		
-		return builder.buildCommand();
-		
+	public Db_Controller (Class<MODEL> modelClass, Context context) {
+		mModelName = modelClass.getSimpleName();
+		mLocalTag = tagify(mModelName);
+		db = context.getSharedPreferences(mModelName, Context.MODE_MULTI_PROCESS);
+		loadIds();
 	}
 
-
-
-	public void checkForWrite() {
-		if (!mWritting){
-			if (mWriteQueue.size()!=0) {
-				new WriteTask().execute(mWriteQueue.poll().getValues());
-			} else if (mDeleteQueue.size() != 0){
-				new DeleteTask().execute(mDeleteQueue.peek());
-			}
-		}
-	}
-
-	private List<ContentValues> write(ContentValues[] valueSets) {
-		SQLiteDatabase db = mSQLiteHelper.getWritableDatabase();
-		List<ContentValues> failedSets = new LinkedList<ContentValues>();
-		for (ContentValues valueSet : valueSets) {
-			Log.d(TAG, "write(): "+valueSet);
-			
-			try {
-				db.insert(mTableName, null, valueSet);
-			} catch (Exception e) {
-				e.printStackTrace();
-				Log.d(TAG, "write(): failed to write valueSet: "+valueSet);
-				failedSets.add(valueSet);
-			}
-			
-		}
-		db.close();
-		return failedSets;
+	private enum Local {
+		IDS
 	}
 	
-	public List<Integer> delete(Integer[] ids) {
-		Log.d(TAG, "Deleting ids="+ids.toString());
-		
-		SQLiteDatabase db = mSQLiteHelper.getWritableDatabase();
-		List<Integer> failedIds = new LinkedList<Integer>();
-		for (Integer id: ids){
-			Log.d(TAG, "Deleting id="+id);
-			try {
-//				String command = "DELETE FROM "+mTableName+" WHERE "+ID+"="+id+";";
-//				Log.d(TAG, command);
-//				db.execSQL(command);
-				int affect = db.delete(mTableName, ID+"="+id, null);
-				if (affect == 1){
-					Log.d(TAG, "delete succes id="+id);
-				} else {
-					Log.d(TAG, "no lines were affect in delete id="+id);
-					failedIds.add(id);
-				}
-				
-			} catch (Exception e) {
-				Log.d(TAG, "Deleting failed id="+id);
-				e.printStackTrace();
-				failedIds.add(id);
-			}
-		}
-		return failedIds;
+	public static String tagify(String s){
+		return "[ "+s+" ] ";
 	}
-
-	private void fillIdPool() {
-		Log.d(TAG, "fillIdPool()");
-		
-		SQLiteDatabase db = mSQLiteHelper.getReadableDatabase();
-		String query = String.format("SELECT %s FROM %s;", ID,
-				mTableName, ID);
-		
-		Log.d(TAG, query);
-		
-		Cursor cursor = db.rawQuery(query, null);
-		if (cursor.moveToFirst()) {
-			int index = cursor.getColumnIndex(ID);
-			do {
-				mIdPool.add(cursor.getInt(index));
-			} while (cursor.moveToNext());
-		}
-		
-		Log.d(TAG, "mIdPool = "+mIdPool.toString());
-		
-		cursor.close();
-		db.close();		
-	}
-
-	protected abstract INTEGER[] getIntegerValues();
-	protected abstract STRING[] getStringValues();
-	protected abstract LONG[] getLongValues();
-	protected abstract INTEGER_LIST[] getIntegerListValues();
-	protected abstract BOOL[] getBoolValues();
-	protected abstract MODEL getNewInstance(ContentValues values);
 	
+	// ----------------------------------------------------------------------------------------------------
+	// Update
+	// ----------------------------------------------------------------------------------------------------
+	private final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
+	private Set<String> mDeleteKeys = new HashSet<String>();
+	private HashMap<String, String> mUpdatePool = new HashMap<String, String>();
 	
-	public MODEL get(int id) {
-		Log.d(TAG, "get(): Getting model with id="+id);
-		MODEL model = mModelPool.get(id);
-		if (model == null) {
-			Log.d(TAG, "get(): Did not find the model in the pool");
-			try {
-				SQLiteDatabase db = mSQLiteHelper.getWritableDatabase();
-				String idKey = ID;
-				Cursor cursor = db.query(mTableName, null, idKey + " = " + id,
-						null, null, null, null);
-				if (cursor.moveToFirst()){
-					ContentValues values = readValues(cursor);
-					model = getNewInstance(values);
-				} else {
-					Log.d(TAG, "get(): cursor was null");
-				}
-				cursor.close();
-				db.close();
-			} catch (Exception e){
-				e.printStackTrace();
-			}
-		}
-		if (model != null && !model.isDeleted()){
-			return model;
+	public void update(MODEL model){
+		Log.d(TAG, mLocalTag+tagify("update")+model.getData());
+		
+		String key = model.getId().toString();
+		String value = model.getData();
+		
+		if (model.isDeleted()){
+			delete(key);
 		} else {
+			update(key, value);
+		}
+	}
+	
+	private void delete(String key){
+		Log.d(TAG, mLocalTag+tagify("delete")+key);
+		
+		mDeleteKeys.add(key);
+		update(false);
+	}
+	
+	private void update(String key, String value){
+		Log.d(TAG, mLocalTag+tagify("update")+key+" "+value);
+		
+		mUpdatePool.put(key, value);
+		update(false);
+	}
+	
+	private synchronized void update(boolean force) {
+		Log.d(TAG, mLocalTag+tagify("update")+"force="+force);
+		
+//		if (mExecutor.isShutdown() || force) {
+			if (!(mUpdatePool.size() + mDeleteKeys.size() == 0)){
+				Log.d(TAG, mLocalTag+tagify("update")+"update allowed");
+				
+				UpdateTask task = new UpdateTask(mUpdatePool, mDeleteKeys);
+				mUpdatePool = new HashMap<String, String>();
+				mDeleteKeys = new HashSet<String>();
+				mExecutor.execute(task);
+			} else {
+				Log.d(TAG, mLocalTag+tagify("update")+"update not allowed");
+			}
+//		} else {
+//			Log.d(TAG, mLocalTag+tagify("update")+"update not allowed");
+//		}
+	}
+	
+	private class UpdateTask implements Runnable {
+		
+		private SharedPreferences.Editor mEditor = db.edit();
+		private HashMap<String, String> mUpdateTaskPool;
+		private Set<String> mTaskDeleteKeys;
+		
+		private UpdateTask(HashMap<String, String> updatePool, Set<String> deleteKeys) {
+			Log.d(TAG, mLocalTag+tagify("UpdateTask"));
+			
+			this.mUpdateTaskPool = updatePool;
+			this.mTaskDeleteKeys = deleteKeys;
+		}
+
+		@Override
+		public void run() {
+			Log.d(TAG, mLocalTag+tagify("UpdateTask")+tagify("run")+"start");
+			
+			for (String key: this.mUpdateTaskPool.keySet()){
+				String value = this.mUpdateTaskPool.get(key);
+				this.mEditor.putString(key, value);
+			}
+			
+			for (String key: this.mTaskDeleteKeys){
+				this.mEditor.remove(key);
+			}
+			
+			this.mEditor.apply();
+			
+			Log.d(TAG, mLocalTag+tagify("UpdateTask")+tagify("run")+"complete");
+			
+			update(true);
+			
+		}
+		
+	}
+	// ----------------------------------------------------------------------------------------------------
+
+	
+	
+	// ----------------------------------------------------------------------------------------------------
+	// Get
+	// ----------------------------------------------------------------------------------------------------
+	public MODEL get(String id){
+		Log.d(TAG, tagify("get")+"id="+id);
+		
+		if (id == null) {
 			return null;
 		}
 		
-	}
-	
-	private ContentValues readValues(Cursor cursor) {
-		Log.d(TAG, "readValues()");
+		MODEL result = null;
 		
-		ContentValues values = new ContentValues();
-		int index;
-		String key;
+		result = mModelPool.get(id);
 		
-		index = cursor.getColumnIndex(ID);
-		if (index != -1){
-			Integer value = cursor.getInt(index);
-			values.put(ID, value);
-		} 
-		
-		for (INTEGER i: getIntegerValues()){
-			key = Prefix.asInteger(i.name());
-			index = cursor.getColumnIndex(key);
-			if (index != -1){
-				Integer value = cursor.getInt(index);
-				values.put(key, value);
+		if (result == null && db.contains(id.toString())){
+			String json = db.getString(id.toString(), null);
+			try {
+				result = getInstance(new JSONObject(json));
+				add(result);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		
-		for (STRING i: getStringValues()){
-			key = Prefix.asString(i.name());
-			index = cursor.getColumnIndex(key);
-			if (index != -1){
-				String value = cursor.getString(index);
-				values.put(key, value);
-			}
+		if (result == null) {
+			mIdPool.remove(id);
+		} else if (result.isDeleted()) {
+			result = null;
 		}
 		
-		for (LONG i: getLongValues()){
-			key = Prefix.asLong(i.name());
-			index = cursor.getColumnIndex(key);
-			if (index != -1){
-				Long value = cursor.getLong(index);
-				values.put(key, value);
-			}
-		}
-		
-		for (INTEGER_LIST i: getIntegerListValues()){
-			key = Prefix.asIntegerList(i);
-			index = cursor.getColumnIndex(key);
-			if (index != -1){
-				String value = cursor.getString(index);
-				values.put(key, value);
-			}
-		}
-		
-		Log.d(TAG, "readValues() values="+values);
-		
-		return values;
-	}
-
-	public int getNewId() {
-		if (mIdPool.size() == 0){
-			fillIdPool();
-		}
-		int i = 1;
-		while (!mIdPool.add(i)){
-			i++;
-		}
-		return i;
-	}
-	
-	public void watch(MODEL model){
-		if (!model.isDeleted()){
-			mModelPool.put(model.getId(), model);
-		} else {
-			register(model);
-		}
-	}
-	
-	public void register(Db_Model model){
-		if (model.isDeleted()){
-			mDeleteQueue.add(model.getId());
-			mModelPool.remove(model.getId());
-		} else if (!mWriteQueue.contains(model)){
-			mWriteQueue.add(model);
-			checkForWrite();
-		}
+		return result;
 	}
 	
 	public LinkedHashSet<MODEL> getAll(){
+		Log.d(TAG, "[ getAll ]");
+		
 		LinkedHashSet<MODEL> list = new LinkedHashSet<MODEL>();
-		for (Integer id: mIdPool){
+		for (String id: mIdPool){
 			MODEL model = get(id);
-			if (model != null){
+			if (model != null && !model.isDeleted()){
 				list.add(model);
 			}
 		}
+		
 		return list;
 	}
-
+	// ----------------------------------------------------------------------------------------------------
+	
+	
+	
+	// ----------------------------------------------------------------------------------------------------
+	// Model Pool Management
+	// ----------------------------------------------------------------------------------------------------
+	private final HashMap<String, MODEL> mModelPool = new HashMap<String, MODEL>();
+	private final Set<String> mIdPool = new HashSet<String>();
+	
+	public void add(MODEL model){
+		Log.d(TAG, "[ add ] model="+model.getData());
+		
+		if (model != null){
+			if (!model.isDeleted()){
+				mModelPool.put(model.getId(), model);
+			} else {
+				mModelPool.remove(model.getId());
+				update(model);
+			}
+		}
+	}
+	
+	public void remove(MODEL model){
+		Log.d(TAG, "[ remove ] model="+model.getData());
+		
+		if (model != null) {
+			mModelPool.remove(model.getId());
+		}
+	}
+	
+	public int getNewId() {
+		Log.d(TAG, "[ getNewId ]");
+		
+		if (mIdPool.size() == 0){
+			loadIds();
+		}
+		Integer i = 1;
+		while (!mIdPool.add(i.toString())){
+			i++;
+		}
+		updateIds();
+		return i;
+	}
+	
+	
+	private void loadIds(){
+		Log.d(TAG, mLocalTag+tagify("loadIds"));
+		
+		String string = db.getString(Local.IDS.name(), "");
+		String[] strings = string.split(",");
+		for (String s: strings ){
+			if (! s.isEmpty()){
+				mIdPool.add(s);
+			}
+		}
+		
+		Log.d(TAG, mLocalTag+tagify("loadIds")+" ids="+mIdPool.toArray().toString());
+	}
+	
+	private void updateIds(){
+		Log.d(TAG, mLocalTag+tagify("updateIds"));
+		
+		StringBuilder sb = new StringBuilder();
+		
+		for (String id: mIdPool){
+			sb.append(id);
+			sb.append(',');
+		}
+		
+		if (sb.length() != 0){
+			String key = Local.IDS.toString();
+			String value = sb.substring(0, sb.length()-1);
+			
+			update(key, value);
+		}
+		
+	}
+	// ----------------------------------------------------------------------------------------------------
 }
+
+
+
+
+
+
+
+
+
 
 
 

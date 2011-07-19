@@ -11,7 +11,7 @@ public class Db_TaskCollection_Test extends AndroidTestCase {
     	 Db_TaskCollection.setContext(mContext);
     }
 	
-	public void testGetInstance() {
-		Db_TaskCollection group = Db_TaskCollection.getInstance();
-	}
+//	public void testGetInstance() {
+//		Db_TaskCollection group = Db_TaskCollection.getInstance();
+//	}
 }

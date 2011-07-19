@@ -1,68 +1,112 @@
 package android.taskninja.dbmodel;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
 
-import android.content.ContentValues;
-import android.os.SystemClock;
-import android.taskninja.dbmodel.Db_TableBuilder.BuiltIn;
-import android.taskninja.dbmodel.Db_TableBuilder.Prefix;
-import android.util.Log;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public abstract class Db_Model<MODEL extends Db_Model,
+import android.content.Context;
+
+
+public abstract class Db_Model<
+	MODEL extends Db_Model,
 	INTEGER extends Enum<INTEGER>,
 	LONG extends Enum<LONG>,
 	STRING extends Enum<STRING>,
-	INTEGER_LIST extends Enum<INTEGER_LIST>,
-	BOOL extends Enum<BOOL>> {
+	BOOL extends Enum<BOOL>
+	> {
 	
-	private static final String TAG = "DbModel";
+	private static final String TAG = "Z_Model";
 	
-	private ContentValues mValues;
+	protected abstract Db_Controller<MODEL, INTEGER, LONG, STRING, BOOL> getController();
 	
-	protected abstract Db_Controller<MODEL, INTEGER, LONG, STRING, INTEGER_LIST, BOOL> getController();
+	private JSONObject data;
 	
 	public Db_Model(){
-		mValues = new ContentValues();
-		mValues.put(BuiltIn.ID.name(), getController().getNewId());
-		getController().watch((MODEL) this);
-		getController().register(this);
+		data = new JSONObject();
+		
+		try { data.put(BuiltIn.ID.name(), getController().getNewId());
+		} catch (JSONException e) {e.printStackTrace();}
+		
+		getController().update(MODEL(this));
+		getController().add(MODEL(this));
 	}
 	
-	public Db_Model(ContentValues values){
-		mValues = values;
-		getController().watch((MODEL) this);
+	protected Db_Model(JSONObject data) {
+		this.data = data;
+		getController().add(MODEL(this));
 	}
 	
-	public int getId(){
-		return mValues.getAsInteger(BuiltIn.ID.name());
+	private MODEL MODEL(Db_Model model){
+		MODEL result = null;
+		try {
+			result = (MODEL) model;
+		} catch (Exception e){
+			// TODO
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
-	public ContentValues getValues() {
-		return new ContentValues(mValues);
+	public String getId() {
+		try { 
+			return data.getString(BuiltIn.ID.name());
+		} catch (JSONException e) { 
+			e.printStackTrace(); 
+			return null;
+		}
 	}
 	
-	private void onChange() {
-		getController().register(this);
+	private enum BuiltIn {
+		ID, DELETED,
 	}
+	
+	// -----------------------------------------------------------------------------
+	// Update
+	// ----------------------------------------------------------------------------- 
+	private final HashSet<Db_Listener> mListeners = new HashSet<Db_Listener>();
+	
+	public void addListener(Db_Listener listener){
+		mListeners.add(listener);
+	}
+	
+	public void removeListener(Db_Listener listener){
+		mListeners.remove(listener);
+	}
+	
+	public String getData() {
+		return data.toString();
+	}
+	
+	private void onChange(Enum e) {
+		for (Db_Listener listener: mListeners){
+			listener.onChange(e);
+		}
+		getController().update(MODEL(this));
+	}
+	// ----------------------------------------------------------------------------- 
+	
+	
 	
 	// -----------------------------------------------------------------------------
 	// Delete
 	// -----------------------------------------------------------------------------
 	public void delete(){
-		mValues.put(BuiltIn.DELETED.name(), SystemClock.currentThreadTimeMillis());
-		onChange();
+		try { data.put(BuiltIn.DELETED.name(), true);
+		} catch (JSONException e) { e.printStackTrace();}
+		getController().remove(MODEL(this));
+		onChange(BuiltIn.DELETED);
 	}
 	
-	public boolean isDeleted() {
-		Integer i = mValues.getAsInteger(BuiltIn.DELETED.name());
-		if (i != null && i != 0){
-			return true;
-		} else {
-			return false;
+	public  boolean isDeleted() {
+		boolean value = false;
+		String key = BuiltIn.DELETED.name();
+		if (data.has(key)){
+			try { value = data.getBoolean(key);
+			} catch (JSONException e) { e.printStackTrace(); }
 		}
+		return value;
 	}
-	
 	// -----------------------------------------------------------------------------
 	
 	
@@ -71,127 +115,108 @@ public abstract class Db_Model<MODEL extends Db_Model,
 	// Integer
 	// -----------------------------------------------------------------------------
 	public Integer getInteger(INTEGER key) {
-		return mValues.getAsInteger(Prefix.asInteger(key.name()));
+		
+		Integer result = null;
+		String localKey = Db_Prefix.asInteger(key);
+		
+		if (data.has(localKey)){
+			try { 
+				result = data.getInt(localKey);
+			} catch (JSONException e) { 
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
 	
 	public void put(INTEGER key, int value) {
-		mValues.put(Prefix.asInteger(key.name()), value);
-		onChange();
+		try {
+			data.put(Db_Prefix.asInteger(key), value);
+			onChange(key);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	// -----------------------------------------------------------------------------
-
 	
 	
 	// -----------------------------------------------------------------------------
 	// Long
 	// -----------------------------------------------------------------------------
 	public Long getLong(LONG key) {
-		return mValues.getAsLong(Prefix.asLong(key.name()));
+		try {
+			return data.getLong(Db_Prefix.asLong(key));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public void put(LONG key, Long value) {
-		mValues.put(Prefix.asLong(key.name()), value);
-		onChange();
+		try {
+			data.put(Db_Prefix.asLong(key), value);
+			onChange(key);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	// -----------------------------------------------------------------------------
 	
 	
 	
 	// -----------------------------------------------------------------------------
-	// Integer List
-	// -----------------------------------------------------------------------------
-	
-	public List<Integer> getIntegerList(INTEGER_LIST key) {
-		List<Integer> list = new LinkedList<Integer>();
-		String listString = mValues.getAsString(Prefix.asIntegerList(key));
-		if (listString != null){
-			String[] arr = listString.split(",");
-			for (String value: arr){
-				try {
-					list.add(Integer.valueOf(value));
-				} catch (NumberFormatException e){
-					Log.d(TAG, "Integer List has a non-integer entry");
-					e.printStackTrace();
-				}
+		// String
+		// -----------------------------------------------------------------------------
+		public String getString(STRING key) {
+			try {
+				return data.getString(Db_Prefix.asString(key));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}			
+		}
+		
+		public void put(STRING key, String value) {
+			try {
+				data.put(Db_Prefix.asString(key), value);
+				onChange(key);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		// -----------------------------------------------------------------------------
+		
+		
+		
+		// -----------------------------------------------------------------------------
+		// Boolean
+		// -----------------------------------------------------------------------------
+		public boolean getBool(BOOL key) {
+			try {
+				return data.getBoolean(Db_Prefix.asBool(key));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
 			}
 		}
-		return list;
-	}
-	
-	public void put(INTEGER_LIST key, List<Integer> value){
-		StringBuilder sb = new StringBuilder();
-		for (Integer i: value){
-			sb.append(i);
-			sb.append(',');
-		}
-		if (sb.length() != 0){
-			mValues.put(Prefix.asIntegerList(key), sb.substring(0, sb.length()-1));
-		} else {
-			mValues.put(Prefix.asIntegerList(key), "");
-		}
-		onChange();
-	}
-	// -----------------------------------------------------------------------------
-	
-	
-	
-	// -----------------------------------------------------------------------------
-	// String
-	// -----------------------------------------------------------------------------
-	public String getString(STRING key) {
-		String s = mValues.getAsString(Prefix.asString(key.name()));
-		if (s != null){
-			return s;
-		} else {
-			return "";
-		}
 		
-	}
-	
-	public void put(STRING key, String value) {
-		mValues.put(Prefix.asString(key), value);
-		onChange();
-	}
-	// -----------------------------------------------------------------------------
-	
-	
-	
-	// -----------------------------------------------------------------------------
-	// Boolean
-	// -----------------------------------------------------------------------------
-	public boolean getBool(BOOL key) {
-		Integer i = mValues.getAsInteger(Prefix.asBool(key));	
-		if (i != null && i != 0 ){	
-			return true;
-		} else {
-			return false;
+		public void put(BOOL key, boolean value) {
+			try {
+				data.put(Db_Prefix.asBool(key), value);
+				onChange(key);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-	}
-	
-	public void put(BOOL key, boolean value) {
-		if (value){
-			mValues.put(Prefix.asBool(key), 1);
-		} else {
-			mValues.put(Prefix.asBool(key), 0);
-		}
-		
-		onChange();
-	}
-	// -----------------------------------------------------------------------------
-	
-	
-	
-
-	
-	
-	
-
-	
-
-	
-
-	
-	
-	
-
+		// -----------------------------------------------------------------------------
 }

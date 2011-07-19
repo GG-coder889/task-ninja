@@ -3,6 +3,8 @@ package android.taskninja.test.dbmodel;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.os.SystemClock;
@@ -23,21 +25,17 @@ public class Db_Model_Test extends AndroidTestCase {
 	}
 	
 	@Override
-	public void tearDown(){ 
-		for (TestModel model: TestModel.mController.getAll()){
-			Integer[] i = {model.getId()};
-			TestModel.mController.delete(i);
-		}
-		
+	public void tearDown(){
+		assertTrue(mContext.getSharedPreferences("TestModel", 4).edit().clear().commit());		
 	}
 	
 	public void testId() {
 		assertNotNull(TestModel.mController);
 
 		TestModel model = new TestModel();
-		int id  = model.getId();
+		String id  = model.getId();
 		Log.d(TAG, "getId()="+id);
-		assertTrue(id != 0);
+		assertTrue(id != null);
 		
 		model.put(TestInteger.INT1, 5);
 		assertEquals(Integer.valueOf(5), model.getInteger(TestInteger.INT1));
@@ -64,7 +62,7 @@ public class Db_Model_Test extends AndroidTestCase {
 		TestModel model = new TestModel();
 		TestString key  = TestString.STRING1;
 		
-		assertEquals("", model.getString(key));
+		assertNull(model.getString(key));
 		
 		String value = "hello value";
 		
@@ -84,22 +82,6 @@ public class Db_Model_Test extends AndroidTestCase {
 		model.put(key, value);
 		
 		assertEquals(value, model.getInteger(key));
-	}
-	
-	public void testIntegerList(){
-		TestModel model = new TestModel();
-		TestIntegerList key  = TestIntegerList.INTEGER_LIST1;
-		
-		assertEquals(0, model.getIntegerList(key).size());
-		
-		List<Integer> value = new LinkedList<Integer>();
-		value.add(1);
-		value.add(2);
-		value.add(3);
-		
-		model.put(key, value);
-		
-		assertEquals(value, model.getIntegerList(key));
 	}
 	
 	public void testBool(){
@@ -128,18 +110,17 @@ public class Db_Model_Test extends AndroidTestCase {
 	}
 	
 	public void testDatabaseWrite(){
-		Db_Controller<TestModel, TestInteger, TestLong, TestString, TestIntegerList, TestBool> controller 
-		= new TestModel.TestController(TestModel.class, mContext, 1);
 		
 		TestModel model = new TestModel();
-		int id = model.getId();
+		String id = model.getId();
 		TestString key = TestString.STRING1;
 		String value = "Hello value";
 		model.put(key, value);
 		
-		controller.register(model);
-		
 		SystemClock.sleep(1000l);
+		
+		Db_Controller<TestModel, TestInteger, TestLong, TestString, TestBool> controller 
+		= new TestModel.TestController(TestModel.class, mContext);
 		
 		TestModel readModel = controller.get(id);
 		
@@ -148,24 +129,12 @@ public class Db_Model_Test extends AndroidTestCase {
 	
 	public void testDelete(){
 		
-		//  Test that get does not return a deleted model
 		TestModel model = new TestModel();
 		assertSame(model, TestModel.mController.get(model.getId()));
 		
 		model.delete();
 		assertTrue(model.isDeleted());
 		assertEquals(null, TestModel.mController.get(model.getId()));
-		
-		
-		// Test that DbController Delete deletes a model
-		model = new TestModel();
-		assertSame(model, TestModel.mController.get(model.getId()));
-		
-		Integer[] i = {model.getId()};
-		assertSame(0, TestModel.mController.delete(i).size());
-		Db_Controller<TestModel, TestInteger, TestLong, TestString, TestIntegerList, TestBool> controller 
-		= new TestModel.TestController(TestModel.class, mContext, 1);
-		assertEquals(null, controller.get(model.getId()));
 		
 		
 		// Test that model.delete() deletes a model
@@ -175,67 +144,47 @@ public class Db_Model_Test extends AndroidTestCase {
 		assertTrue(model.isDeleted());
 		assertEquals(null, TestModel.mController.get(model.getId()));
 		SystemClock.sleep(1000l);
-		controller = new TestModel.TestController(TestModel.class, mContext, 1);
+		
+		Db_Controller<TestModel, TestInteger, TestLong, TestString, TestBool> controller 
+		= new TestModel.TestController(TestModel.class, mContext);
+		
 		assertEquals(null, controller.get(model.getId()));
 		
 	}
 	
-	private static class TestModel extends Db_Model<TestModel, TestInteger, TestLong, TestString, TestIntegerList,TestBool> {
+	private static class TestModel extends Db_Model<TestModel, TestInteger, TestLong, TestString,TestBool> {
 
-		private static final Db_Controller<TestModel, TestInteger, TestLong, TestString, TestIntegerList,TestBool> mController 
-			= new TestController(TestModel.class, mContext, 1);
+		private static final Db_Controller<TestModel, TestInteger, TestLong, TestString,TestBool> mController 
+			= new TestController(TestModel.class, mContext);
 		
-		public TestModel(ContentValues values) {
-			super(values);
-		}
 		
 		public TestModel() {
 			super();
 		}
 
+		public TestModel(JSONObject json) {
+			super(json);
+		}
+
 		@Override
-		protected Db_Controller<TestModel, TestInteger, TestLong, TestString, TestIntegerList, TestBool> getController() {
+		protected Db_Controller<TestModel, TestInteger, TestLong, TestString, TestBool> getController() {
 			return mController;
 		}
 		
 		private static class TestController
 			
-			extends Db_Controller<TestModel, TestInteger, TestLong, TestString, TestIntegerList,TestBool> {
+			extends Db_Controller<TestModel, TestInteger, TestLong, TestString,TestBool> {
 			
-			protected TestController(Class<TestModel> dbModel, Context context, int version) {
-				super(dbModel, context, version);
-				assertNotNull(this.mSQLiteHelper);
+			protected TestController(Class<TestModel> dbModel, Context context) {
+				super(dbModel, context);
 			}
 
 			@Override
-			protected TestInteger[] getIntegerValues() {
-				return TestInteger.values();
+			protected TestModel getInstance(JSONObject json) {
+				return new TestModel(json);
 			}
 
-			@Override
-			protected TestString[] getStringValues() {
-				return TestString.values();
-			}
-
-			@Override
-			protected TestLong[] getLongValues() {
-				return TestLong.values();
-			}
-
-			@Override
-			protected TestIntegerList[] getIntegerListValues() {
-				return TestIntegerList.values();
-			}
-
-			@Override
-			protected TestModel getNewInstance(ContentValues values) {
-				return new TestModel(values);
-			}
-
-			@Override
-			protected TestBool[] getBoolValues() {
-				return TestBool.values();
-			}
+			
 
 		}
 	}
@@ -257,11 +206,6 @@ public class Db_Model_Test extends AndroidTestCase {
 		STRING1,
 		STRING2
 		
-	}
-	
-	enum TestIntegerList {
-		INTEGER_LIST1,
-		INTEGER_LIST2
 	}
 	
 	enum TestBool {
