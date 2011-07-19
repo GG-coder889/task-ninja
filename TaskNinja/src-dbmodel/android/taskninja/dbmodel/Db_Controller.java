@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.util.Log;
 
 public abstract class Db_Controller
@@ -54,7 +55,7 @@ public abstract class Db_Controller
 	// ----------------------------------------------------------------------------------------------------
 	// Update
 	// ----------------------------------------------------------------------------------------------------
-	private final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
+	private AsyncUpdate mAsyncUpdate = null;
 	private Set<String> mDeleteKeys = new HashSet<String>();
 	private HashMap<String, String> mUpdatePool = new HashMap<String, String>();
 	
@@ -75,67 +76,78 @@ public abstract class Db_Controller
 		Log.d(TAG, mLocalTag+tagify("delete")+key);
 		
 		mDeleteKeys.add(key);
-		update(false);
+		update();
 	}
 	
 	private void update(String key, String value){
 		Log.d(TAG, mLocalTag+tagify("update")+key+" "+value);
 		
 		mUpdatePool.put(key, value);
-		update(false);
+		update();
 	}
 	
-	private synchronized void update(boolean force) {
-		Log.d(TAG, mLocalTag+tagify("update")+"force="+force);
+	private synchronized void update() {
+		Log.d(TAG, mLocalTag+tagify("update"));
 		
-//		if (mExecutor.isShutdown() || force) {
-			if (!(mUpdatePool.size() + mDeleteKeys.size() == 0)){
-				Log.d(TAG, mLocalTag+tagify("update")+"update allowed");
-				
-				UpdateTask task = new UpdateTask(mUpdatePool, mDeleteKeys);
-				mUpdatePool = new HashMap<String, String>();
-				mDeleteKeys = new HashSet<String>();
-				mExecutor.execute(task);
-			} else {
-				Log.d(TAG, mLocalTag+tagify("update")+"update not allowed");
-			}
-//		} else {
-//			Log.d(TAG, mLocalTag+tagify("update")+"update not allowed");
-//		}
-	}
-	
-	private class UpdateTask implements Runnable {
-		
-		private SharedPreferences.Editor mEditor = db.edit();
-		private HashMap<String, String> mUpdateTaskPool;
-		private Set<String> mTaskDeleteKeys;
-		
-		private UpdateTask(HashMap<String, String> updatePool, Set<String> deleteKeys) {
-			Log.d(TAG, mLocalTag+tagify("UpdateTask"));
+		if (mAsyncUpdate == null){
+			Log.d(TAG, mLocalTag+tagify("update")+"update allowed");
 			
-			this.mUpdateTaskPool = updatePool;
-			this.mTaskDeleteKeys = deleteKeys;
+			UpdatePackage pkg = new UpdatePackage();
+			
+			pkg.mTaskDeleteKeys = mDeleteKeys;
+			pkg.mUpdateTaskPool = mUpdatePool;
+			
+			mUpdatePool = new HashMap<String, String>();
+			mDeleteKeys = new HashSet<String>();
+			
+			AsyncUpdate mAsyncUpdate = new AsyncUpdate();
+			mAsyncUpdate.execute(pkg);
+			
+		} else {
+			Log.d(TAG, mLocalTag+tagify("update")+"update denied");
 		}
+			
+
+	}
+	
+	private class UpdatePackage {
+		HashMap<String, String> mUpdateTaskPool; 
+		Set<String> mTaskDeleteKeys;
+		SharedPreferences.Editor mEditor = db.edit();
+	}
+	
+	private class AsyncUpdate extends AsyncTask<UpdatePackage, Void, UpdatePackage> {
 
 		@Override
-		public void run() {
+		protected UpdatePackage doInBackground(UpdatePackage... updatePackages) {
 			Log.d(TAG, mLocalTag+tagify("UpdateTask")+tagify("run")+"start");
 			
-			for (String key: this.mUpdateTaskPool.keySet()){
-				String value = this.mUpdateTaskPool.get(key);
-				this.mEditor.putString(key, value);
+			if (updatePackages.length != 0){
+				UpdatePackage pkg = updatePackages[0];
+						
+				for (String key: pkg.mUpdateTaskPool.keySet()){
+					String value = pkg.mUpdateTaskPool.get(key);
+					pkg.mEditor.putString(key, value);
+				}
+				
+				for (String key: pkg.mTaskDeleteKeys){
+					pkg.mEditor.remove(key);
+				}
+				
+				pkg.mEditor.apply();
+				
+				return pkg;
 			}
 			
-			for (String key: this.mTaskDeleteKeys){
-				this.mEditor.remove(key);
-			}
-			
-			this.mEditor.apply();
-			
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(UpdatePackage pkg) {
 			Log.d(TAG, mLocalTag+tagify("UpdateTask")+tagify("run")+"complete");
 			
-			update(true);
-			
+			mAsyncUpdate =  null;
+			update();
 		}
 		
 	}

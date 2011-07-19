@@ -28,11 +28,7 @@ public class Db_TaskGroup extends Db_Model<Db_TaskGroup, Db_NullEnum, Db_NullEnu
 	}
 	
 	public static LinkedHashSet<Db_TaskGroup> getAll() {
-		LinkedHashSet<Db_TaskGroup> tasks = new LinkedHashSet<Db_TaskGroup>();
-		for (Db_TaskGroup task: controller().getAll()) {
-			tasks.add(task);
-		}
-		return tasks;
+		return controller().getAll();
 	}
 	
 	@Override

@@ -15,11 +15,7 @@ public class Db_TaskGroup_Test extends AndroidTestCase {
 	
 	@Override
 	protected void tearDown() {
-
-		for (Db_TaskGroup list: Db_TaskGroup.getAll()){
-			list.delete();
-		}
-		
+		assertTrue(mContext.getSharedPreferences("Db_TaskGroup", 4).edit().clear().commit());		
 	}
 	
 	public void testGetInsance() {
