@@ -28,6 +28,11 @@ public class Db_TaskGroup extends Db_Model<Db_TaskGroup, Db_NullEnum, Db_NullEnu
 	}
 	
 	public static LinkedHashSet<Db_TaskGroup> getAll() {
+		LinkedHashSet<Db_TaskGroup> all = controller().getAll();
+		if (all.size() == 0){
+			all.add(Db_TaskGroup.getInstance("Default"));
+		}
+		
 		return controller().getAll();
 	}
 	

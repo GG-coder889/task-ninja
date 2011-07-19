@@ -3,19 +3,29 @@ package android.taskninja.app;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.taskninja.taskgroup.dbtaskgroup.Db_TaskGroup;
 import android.taskninja.tools.Background;
 import android.taskninja.tools.BackgroundManager;
 import android.taskninja.tools.Color;
 import android.taskninja.tools.ColorManager;
 
 public class App extends Application {
+	
+	private boolean DEVELOPER_MODE = true;
 
 	private static App mApp;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		Db_TaskGroup.setContext(this);
+		
+		
 		mApp = this;
+		
+		if (DEVELOPER_MODE) {
+			getSharedPreferences("Db_TaskGroup", 4).edit().clear().commit();	
+		}
 	}
 
 	public static App getApp() {

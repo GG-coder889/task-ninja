@@ -24,10 +24,10 @@ public class SettingsActivity extends AbsractBaseActivity implements OnActionLis
         
         mSettingList = SettingsList.getInstance(getApplicationContext());
         mSettingList.addOnActionListener(this);
-        mRoot.addView(mSettingList);
+//        mRoot.addView(mSettingList);
         
         mFragmentFrame = FragmentFrame.getInstance(getApplicationContext());
-        mRoot.addView(mFragmentFrame);
+//        mRoot.addView(mFragmentFrame);
         
         showSetting();
         

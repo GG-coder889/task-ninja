@@ -89,7 +89,7 @@ public abstract class Db_Controller
 	private synchronized void update() {
 		Log.d(TAG, mLocalTag+tagify("update"));
 		
-		if (mAsyncUpdate == null){
+		if (mAsyncUpdate == null  && mUpdatePool.size() + mDeleteKeys.size() > 0){
 			Log.d(TAG, mLocalTag+tagify("update")+"update allowed");
 			
 			UpdatePackage pkg = new UpdatePackage();
