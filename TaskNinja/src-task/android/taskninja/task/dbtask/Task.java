@@ -8,10 +8,24 @@ import android.content.Context;
 import android.taskninja.app.App;
 import android.taskninja.dbmodel.Db_Controller;
 import android.taskninja.dbmodel.Db_Model;
+import android.taskninja.taskcollection.TaskCollection;
+import android.taskninja.taskcollection.TaskCollection_String;
 
 
 public class Task extends Db_Model<Task, Task_Integer, Task_Long, Task_String, Task_Bool> {
 	
+	
+	
+	public String toString() {
+		return getString(Task_String.title);
+	}
+	
+	
+	
+	
+	// ----------------------------------------------------------------------------------------------------
+	//  Constructor/Builder
+	// ----------------------------------------------------------------------------------------------------
 	public static Task getInstance(CharSequence title) {
 		return new Task(title);
 	}
@@ -19,7 +33,13 @@ public class Task extends Db_Model<Task, Task_Integer, Task_Long, Task_String, T
 	private Task(CharSequence title) {
 		put(Task_String.title, title.toString());
 	}
-	
+	// ----------------------------------------------------------------------------------------------------
+				
+				
+			
+	// ----------------------------------------------------------------------------------------------------
+	//  Static Methods
+	// ----------------------------------------------------------------------------------------------------
 	public static Task get(String id){
 		return controller().get(id);
 	}
@@ -31,37 +51,13 @@ public class Task extends Db_Model<Task, Task_Integer, Task_Long, Task_String, T
 		}
 		return tasks;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	// ----------------------------------------------------------------------------------------------------
 	
 	
 	
 	// ----------------------------------------------------------------------------------------------------
 	//  DbModel Interface Configuration
 	// ----------------------------------------------------------------------------------------------------
-	private static Context mContext;
 	private static Db_Controller<Task, Task_Integer, Task_Long, Task_String, Task_Bool> mController;
 	
 	@Override
@@ -85,17 +81,11 @@ public class Task extends Db_Model<Task, Task_Integer, Task_Long, Task_String, T
 		return mController;
 	}
 	
-	public static void setContext(Context context){
-		LocalController.mContext = context;
-	}
-	
 	private Task(JSONObject JSONObject){
 		super(JSONObject);
 	}
 	
 	private static class LocalController extends Db_Controller<Task, Task_Integer, Task_Long, Task_String, Task_Bool> {
-		
-		public static Context mContext;
 			
 		protected LocalController(Class<Task> dbModel, Context context) {
 			super(dbModel, context);

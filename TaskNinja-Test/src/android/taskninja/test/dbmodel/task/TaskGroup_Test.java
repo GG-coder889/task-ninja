@@ -55,5 +55,21 @@ public class TaskGroup_Test extends AndroidTestCase {
 		assertEquals(title, list.toString());
 	}
 	
+	public void testList(){
+		String groupTitle = "Group Title";
+		TaskGroup group = TaskGroup.getInstance(groupTitle);
+		
+		String taskTitle = "Task Title";
+		Task task = Task.getInstance(taskTitle);
+		
+		assertTrue(group.isEmpty());
+		assertTrue(group.add(task));
+		assertTrue(group.contains(task));
+		assertFalse(group.add(task));
+		assertEquals(0, group.indexOf(task));
+		assertFalse(group.isEmpty());
+		
+	}
+	
 	
 }

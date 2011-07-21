@@ -2,6 +2,7 @@ package android.taskninja.test.dbmodel;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 import org.json.JSONObject;
 
@@ -9,6 +10,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.os.SystemClock;
 import android.taskninja.dbmodel.Db_Controller;
+import android.taskninja.dbmodel.Db_Listener;
 import android.taskninja.dbmodel.Db_Model;
 import android.test.AndroidTestCase;
 import android.util.Log;
@@ -149,6 +151,30 @@ public class Db_Model_Test extends AndroidTestCase {
 		= new TestModel.TestController(TestModel.class, mContext);
 		
 		assertEquals(null, controller.get(model.getId()));
+		
+	}
+	
+	public void testListener(){
+		final Stack<Enum> enums = new Stack();
+		TestModel model = new TestModel();
+		
+		model.addListener(new Db_Listener() {
+			@Override
+			public void onChange(Enum key) {
+			enums.push(key);
+			}
+		});
+		
+		model.put(TestBool.BOOL, true);
+		model.put(TestBool.BOOL, false);
+		model.put(TestInteger.INT1, 1);
+		
+		assertEquals(TestInteger.INT1, enums.pop());
+		assertEquals(TestBool.BOOL, enums.pop());
+		assertEquals(TestBool.BOOL, enums.pop());
+		
+		
+		
 		
 	}
 	
