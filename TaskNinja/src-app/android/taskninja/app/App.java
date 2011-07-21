@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.taskninja.dbmodel.Db_Model;
+import android.taskninja.task.dbtask.Task;
 import android.taskninja.taskgroup.TaskGroup;
 import android.taskninja.tools.Background;
 import android.taskninja.tools.BackgroundManager;
@@ -19,15 +20,24 @@ public class App extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Db_Model.setContext(this);
-		
 		mApp = this;
 		
 		if (DEVELOPER_MODE) {
-			this.getSharedPreferences("Db_TaskGroup", 4).edit().clear().commit();
-			this.getSharedPreferences("Db_TaskCollection", 4).edit().clear().commit();
-			this.getSharedPreferences("Db_Task", 4).edit().clear().commit();
+			this.getSharedPreferences("TaskGroup", 4).edit().clear().commit();
+			this.getSharedPreferences("TaskCollection", 4).edit().clear().commit();
+			this.getSharedPreferences("Task", 4).edit().clear().commit();
+			
+			Db_Model.setContext(this);
+			
+			TaskGroup group = TaskGroup.getInstance("Default");
+			group.add(Task.getInstance("Hello task1"));
+			group.add(Task.getInstance("Hello task2"));
+			group.add(Task.getInstance("Hello task3"));
+			group.add(Task.getInstance("Hello task4"));
+		} else {
+			Db_Model.setContext(this);
 		}
+		
 	}
 
 	public static App getApp() {

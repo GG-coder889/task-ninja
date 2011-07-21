@@ -2,21 +2,25 @@ package android.taskninja.taskgroup.views;
 
 import java.util.LinkedHashSet;
 
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.taskninja.R;
+import android.taskninja.app.App;
 import android.taskninja.task.dbtask.Task;
 import android.taskninja.taskgroup.TaskGroup;
+import android.taskninja.tools.Background;
 import android.taskninja.tools.OnActionListener;
-import android.taskninja.views.AddButton;
-import android.taskninja.views.TitleText;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class TaskGroupFragment extends Fragment implements OnItemClickListener {
 	
@@ -24,7 +28,9 @@ public class TaskGroupFragment extends Fragment implements OnItemClickListener {
 	
 	private TaskGroup mGroup;
 	private ListView mListView;
+	
 	private ArrayAdapter<Task> mAdapter;
+	private View mTitleView;
 	
 	public static TaskGroupFragment getInstance(TaskGroup group){
 		return new TaskGroupFragment(group);
@@ -39,23 +45,28 @@ public class TaskGroupFragment extends Fragment implements OnItemClickListener {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		mListView = new ListView(getActivity());
-		mListView.addHeaderView(TitleText.getInstance(getActivity(), mGroup.toString()));
+		mListView.setOnItemClickListener(this);
+		
+		mTitleView = HeaderView.getInstance(getActivity(), mGroup.toString());
+		mListView.addHeaderView(mTitleView);
 		
 		mAdapter = new ArrayAdapter<Task>(getActivity(), R.layout.text_list_item, mGroup);
 		mListView.setAdapter(mAdapter);
-		
-		mListView.addFooterView(AddButton.getInstance(getActivity()));
-		mListView.addFooterView(AddButton.getInstance(getActivity()));
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		super.onCreateView(inflater, container, savedInstanceState);
+		mListView.setBackgroundDrawable(App.get(Background.Secondary, getActivity()));
 		return mListView;
 	}
 	
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+		if (mTitleView.equals(arg1)){
+//			Toast.makeText(getActivity(), "Hello edit", Toast.LENGTH_SHORT).show();
+			onEditGroup();
+		}
 		if (position < mGroup.size()){
 			
 			Task task = mGroup.get(position);
@@ -69,6 +80,13 @@ public class TaskGroupFragment extends Fragment implements OnItemClickListener {
 		}
 	}
 	
+	private void onEditGroup() {
+		FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+		EditGroupDialog newFragment = EditGroupDialog.getInstance(mGroup);
+	    newFragment.show(ft, "dialog");
+		
+	}
+
 	public void addOnActionListener(OnActionListener<Task> listener){
 		mActionListeners.add(listener);
 	}

@@ -94,6 +94,12 @@ public class TaskGroup
 	
 	public TaskGroup(JSONObject json) {
 		super(json);
+		mCollection = TaskCollection.get(getString(TaskGroup_String.COLLECTION_ID));
+		if (mCollection == null){
+			mCollection = TaskCollection.getInstance();
+			put(TaskGroup_String.COLLECTION_ID, mCollection.getId());
+		}
+		
 	}
 
 	private static class LocalController extends Db_Controller<TaskGroup, Db_NullEnum, Db_NullEnum, TaskGroup_String, Db_NullEnum> {
@@ -105,6 +111,7 @@ public class TaskGroup
 		@Override
 		protected TaskGroup getInstance(JSONObject json) {
 			return new TaskGroup(json);
+			
 		}
 
 	}

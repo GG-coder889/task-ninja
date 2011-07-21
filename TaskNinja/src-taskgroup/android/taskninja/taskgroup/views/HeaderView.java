@@ -1,13 +1,27 @@
 package android.taskninja.taskgroup.views;
 
 import android.content.Context;
+import android.taskninja.R;
+import android.taskninja.app.App;
+import android.taskninja.tools.Color;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class HeaderView extends LinearLayout {
+	
+	public static HeaderView getInstance(Context context, String title){
+		return new HeaderView(context, title);
+	}
 
-	public HeaderView(Context context) {
+	private HeaderView(Context context, String title) {
 		super(context);
-		// TODO Auto-generated constructor stub
+		
+		inflate(getContext(), R.layout.list_header_text, this);
+		TextView tv = (TextView) findViewById(R.id.headerText);
+		tv.setText(title);
+		tv.setClickable(false);
+		tv.setFocusable(false);
+
 	}
 
 }

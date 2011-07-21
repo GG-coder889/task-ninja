@@ -68,6 +68,7 @@ public class TaskGroup_Test extends AndroidTestCase {
 		assertFalse(group.add(task));
 		assertEquals(0, group.indexOf(task));
 		assertFalse(group.isEmpty());
+		assertEquals(1, group.size());
 		
 	}
 	

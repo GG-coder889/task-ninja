@@ -1,17 +1,27 @@
 package android.taskninja.app;
 
-import android.app.ActionBar;
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.taskninja.R;
 import android.taskninja.dbmodel.Db_Model;
 import android.taskninja.taskgroup.TaskGroup;
+import android.taskninja.taskgroup.views.NewGroupDialog;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 public abstract class AbsractBaseActivity extends Activity {
+	
+	private void onNewGroup(){
+	    FragmentTransaction ft = getFragmentManager().beginTransaction();
+	    DialogFragment newFragment = NewGroupDialog.getInstance();
+	    newFragment.show(ft, "dialog");
+	}
 	
 	
 	
@@ -41,6 +51,9 @@ public abstract class AbsractBaseActivity extends Activity {
 			return true;
 		case R.id.tasks:
 //			startActivity(new Intent(this, Info.class));
+			return true;
+		case R.id.newGroup:
+			onNewGroup();
 			return true;
 		default:
 			Intent i = item.getIntent();
