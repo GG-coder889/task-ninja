@@ -2,24 +2,31 @@ package android.taskninja.test.dbmodel.task;
 
 import java.util.LinkedHashSet;
 
+import android.taskninja.dbmodel.Db_Model;
 import android.taskninja.task.dbtask.Db_Task;
 import android.taskninja.taskgroup.dbtaskgroup.Db_TaskGroup;
+import android.taskninja.taskgroup.dbtaskgroup.Db_TaskGroup_String;
 import android.test.AndroidTestCase;
 
 public class Db_TaskGroup_Test extends AndroidTestCase {
+	
 	@Override
     protected void setUp() throws Exception {
     	 super.setUp();
-    	 Db_TaskGroup.setContext(mContext);
+    	 Db_Model.setContext(mContext);
     }
 	
 	@Override
 	protected void tearDown() {
-		assertTrue(mContext.getSharedPreferences("Db_TaskGroup", 4).edit().clear().commit());		
+		assertTrue(mContext.getSharedPreferences("Db_TaskGroup", 4).edit().clear().commit());
+		assertTrue(mContext.getSharedPreferences("Db_TaskCollection", 4).edit().clear().commit());
+		assertTrue(mContext.getSharedPreferences("Db_Task", 4).edit().clear().commit());
 	}
 	
 	public void testGetInsance() {
-		Db_TaskGroup list = Db_TaskGroup.getInstance("Title");
+		String title = "Title";
+		Db_TaskGroup group = Db_TaskGroup.getInstance(title);
+		assertEquals(title, group.getString(Db_TaskGroup_String.title));
 	}
 	
 	public void testGet(){
@@ -42,7 +49,7 @@ public class Db_TaskGroup_Test extends AndroidTestCase {
 		assertTrue(lists.contains(list2));
 	}
 	
-	public void testToString(){
+	public void testToString() {
 		String title = "Title";
 		Db_TaskGroup list = Db_TaskGroup.getInstance(title);
 		assertEquals(title, list.toString());

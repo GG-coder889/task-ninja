@@ -2,7 +2,9 @@ package android.taskninja.app;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
 import android.taskninja.R;
+import android.taskninja.dbmodel.Db_Model;
 import android.taskninja.taskgroup.dbtaskgroup.Db_TaskGroup;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,18 +13,6 @@ import android.view.MenuItem;
 
 public abstract class AbsractBaseActivity extends Activity {
 	
-//	protected LinearLayout mRoot;
-//    
-//    /** Called when the activity is first created. */
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-////        setContentView(R.layout.main);
-////
-////        mRoot = (LinearLayout) findViewById(R.id.root);
-//        
-//    }
-	
 	
 	
 	@Override
@@ -30,6 +20,9 @@ public abstract class AbsractBaseActivity extends Activity {
 			
 		for (Db_TaskGroup group :Db_TaskGroup.getAll()){
 			MenuItem item = menu.add(group.toString());
+			Intent i = new Intent(this, TaskGroupActivity.class);
+			i.putExtra(Db_Model.BuiltIn.ID.name(), group.getId());
+			item.setIntent(i);
 		}
 		
 		MenuInflater inflater = getMenuInflater();
@@ -50,9 +43,12 @@ public abstract class AbsractBaseActivity extends Activity {
 //			startActivity(new Intent(this, Info.class));
 			return true;
 		default:
-//			item.get
-//			startActivity(new Intent(this, Info.class));
-			return true;
+			Intent i = item.getIntent();
+			if (i != null){
+				startActivity(i);
+				return true;
+			}
+			return false;
 		}
 	}
 

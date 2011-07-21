@@ -6,6 +6,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.taskninja.taskgroup.dbtaskgroup.Db_TaskGroup;
+import android.taskninja.taskgroup.dbtaskgroup.Db_TaskGroup_String;
 
 
 public abstract class Db_Model<
@@ -17,6 +19,11 @@ public abstract class Db_Model<
 	> {
 	
 	private static final String TAG = "Z_Model";
+	protected static Context mContext;
+	
+	public static void setContext(Context context){
+		mContext = context;
+	}
 	
 	protected abstract Db_Controller<MODEL, INTEGER, LONG, STRING, BOOL> getController();
 	
@@ -57,7 +64,7 @@ public abstract class Db_Model<
 		}
 	}
 	
-	private enum BuiltIn {
+	public enum BuiltIn {
 		ID, DELETED,
 	}
 	

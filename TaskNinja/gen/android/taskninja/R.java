@@ -45,7 +45,7 @@ public final class R {
     public static final class layout {
         public static final int current_task_widget=0x7f030000;
         public static final int main=0x7f030001;
-        public static final int taskgroups=0x7f030002;
+        public static final int taskgroup=0x7f030002;
         public static final int text_list_item=0x7f030003;
     }
     public static final class menu {

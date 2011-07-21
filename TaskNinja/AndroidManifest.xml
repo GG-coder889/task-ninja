@@ -11,8 +11,8 @@
     	android:name=".app.App">
     	
         <activity 
-        	android:name=".app.TaskGroupsActivity"
-            android:label="@string/app_name"
+        	android:name=".app.TaskGroupActivity"
+            android:label="@string/app_name" 
             android:theme="@android:style/Theme.Holo.Wallpaper">
             
             <intent-filter>

@@ -3,6 +3,7 @@ package android.taskninja.app;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.taskninja.dbmodel.Db_Model;
 import android.taskninja.taskgroup.dbtaskgroup.Db_TaskGroup;
 import android.taskninja.tools.Background;
 import android.taskninja.tools.BackgroundManager;
@@ -18,13 +19,14 @@ public class App extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Db_TaskGroup.setContext(this);
-		
+		Db_Model.setContext(this);
 		
 		mApp = this;
 		
 		if (DEVELOPER_MODE) {
-			getSharedPreferences("Db_TaskGroup", 4).edit().clear().commit();	
+			this.getSharedPreferences("Db_TaskGroup", 4).edit().clear().commit();
+			this.getSharedPreferences("Db_TaskCollection", 4).edit().clear().commit();
+			this.getSharedPreferences("Db_Task", 4).edit().clear().commit();
 		}
 	}
 

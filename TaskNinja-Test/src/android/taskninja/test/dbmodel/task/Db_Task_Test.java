@@ -15,6 +15,13 @@ public class Db_Task_Test extends AndroidTestCase {
     	 Db_Task.setContext(mContext);
     }
 	
+	@Override
+	protected void tearDown() {
+		assertTrue(mContext.getSharedPreferences("Db_TaskGroup", 4).edit().clear().commit());
+		assertTrue(mContext.getSharedPreferences("Db_TaskCollection", 4).edit().clear().commit());
+		assertTrue(mContext.getSharedPreferences("Db_Task", 4).edit().clear().commit());
+	}
+	
 	public void testGetInstance() {
 		Db_Task task = Db_Task.getInstance("Title");
 	}

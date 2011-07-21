@@ -5,5 +5,8 @@ public enum Db_TaskGroup_String {
 	id,
 	etag,
 	title,
-	selfLink
+	selfLink,
+	
+	// Task Ninja
+	COLLECTION_ID
 }

@@ -1,5 +1,12 @@
 package android.taskninja.taskcollection.dbtaskcollection;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.ListIterator;
+
 import org.json.JSONObject;
 
 import android.content.ContentValues;
@@ -8,44 +15,69 @@ import android.taskninja.app.App;
 import android.taskninja.dbmodel.Db_Controller;
 import android.taskninja.dbmodel.Db_Model;
 import android.taskninja.dbmodel.Db_NullEnum;
+import android.taskninja.task.dbtask.Db_Task;
+import android.taskninja.taskgroup.dbtaskgroup.Db_TaskGroup;
+import android.taskninja.taskgroup.dbtaskgroup.Db_TaskGroup_String;
 
-public class Db_TaskCollection extends Db_Model {
-
-	public static Db_TaskCollection get(String id) {
-		return controller().get(id);
+public class Db_TaskCollection 
+	extends Db_Model <Db_TaskCollection, Db_NullEnum, Db_NullEnum, Db_TaskCollection_String, Db_NullEnum>
+	implements List<Db_Task> 
+	{
+		
+	private final List<Db_Task> mTasks = new ArrayList<Db_Task>();
+	
+	
+	private void updateTasks(){
+		StringBuffer buffer = new StringBuffer();
+		for (Db_Task task : mTasks){
+			if (buffer.length() != 0){
+				buffer.append(',');
+			}
+			buffer.append(task.getId());
+		}
+		put(Db_TaskCollection_String.ITEM_IDS, buffer.toString());
+	}
+	
+	// ----------------------------------------------------------------------------------------------------
+	//  Constructor/Builder
+	// ----------------------------------------------------------------------------------------------------
+	public static Db_TaskCollection getInstance() {
+		return new Db_TaskCollection();
 	}
 	
 	private Db_TaskCollection() {
-		
+		String itemIds = getString(Db_TaskCollection_String.ITEM_IDS);
+		if (itemIds != null){
+			String[] split = itemIds.split(",");
+			for (String id: split){
+				Db_Task task = Db_Task.get(id);
+				if (task != null && !mTasks.contains(task)){
+					mTasks.add(task);
+				}
+			}
+		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	// ----------------------------------------------------------------------------------------------------
+			
+			
+		
+	// ----------------------------------------------------------------------------------------------------
+	//  Static Methods
+	// ----------------------------------------------------------------------------------------------------
+	public static Db_TaskCollection get(String id) {
+		return controller().get(id);
+	}
+		
+	public static LinkedHashSet<Db_TaskCollection> getAll() {
+		return controller().getAll();
+	}
+	// ----------------------------------------------------------------------------------------------------
+		
 	
 	
 	// ----------------------------------------------------------------------------------------------------
 	//  DbModel Interface Configuration
 	// ----------------------------------------------------------------------------------------------------
-	private static Context mContext;
 	private static Db_Controller<Db_TaskCollection, Db_NullEnum, Db_NullEnum, Db_TaskCollection_String, Db_NullEnum> mController;
 	
 	@Override
@@ -68,10 +100,6 @@ public class Db_TaskCollection extends Db_Model {
 		}
 		return mController;
 	}
-	
-	public static void setContext(Context context){
-		LocalController.mContext = context;
-	}
 
 	public Db_TaskCollection(JSONObject json) {
 		super(json);
@@ -93,6 +121,155 @@ public class Db_TaskCollection extends Db_Model {
 	}
 	// ----------------------------------------------------------------------------------------------------
 
+	
+	
+	// ----------------------------------------------------------------------------------------------------
+	//  List Methods
+	// ----------------------------------------------------------------------------------------------------
+	@Override
+	public boolean add(Db_Task object) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
+	@Override
+	public void add(int location, Db_Task object) {
+		if (! mTasks.contains(object)){
+			mTasks.add(object);
+		} else {
+			
+		}
+		
+	}
+
+	@Override
+	public boolean addAll(Collection<? extends Db_Task> arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean addAll(int arg0, Collection<? extends Db_Task> arg1) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean contains(Object object) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean containsAll(Collection<?> arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Db_Task get(int location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int indexOf(Object object) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Iterator<Db_Task> iterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int lastIndexOf(Object object) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public ListIterator<Db_Task> listIterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ListIterator<Db_Task> listIterator(int location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Db_Task remove(int location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean remove(Object object) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean removeAll(Collection<?> arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean retainAll(Collection<?> arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Db_Task set(int location, Db_Task object) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int size() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<Db_Task> subList(int start, int end) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object[] toArray() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> T[] toArray(T[] array) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	// ----------------------------------------------------------------------------------------------------
+
+
+	
 
 }
