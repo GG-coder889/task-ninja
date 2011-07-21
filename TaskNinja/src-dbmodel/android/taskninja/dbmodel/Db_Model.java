@@ -6,8 +6,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.taskninja.taskgroup.dbtaskgroup.Db_TaskGroup;
-import android.taskninja.taskgroup.dbtaskgroup.Db_TaskGroup_String;
+import android.taskninja.taskgroup.TaskGroup;
+import android.taskninja.taskgroup.TaskGroup_String;
 
 
 public abstract class Db_Model<

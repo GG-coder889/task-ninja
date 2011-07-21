@@ -1,5 +1,7 @@
 package android.taskninja.task.dbtask;
 
-public enum Db_Task_Long {
+public enum Task_Integer {
+	
+
 
 }

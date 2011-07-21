@@ -1,18 +1,18 @@
 package android.taskninja.test.dbmodel.task;
 
-import android.taskninja.task.dbtask.Db_Task;
+import android.taskninja.task.dbtask.Task;
 import android.test.AndroidTestCase;
 
 
 
-public class Db_Task_Test extends AndroidTestCase {
+public class Task_Test extends AndroidTestCase {
 	
 	private static final String TAG = "TaskTest";
 	
 	@Override
     protected void setUp() throws Exception {
     	 super.setUp();
-    	 Db_Task.setContext(mContext);
+    	 Task.setContext(mContext);
     }
 	
 	@Override
@@ -23,7 +23,7 @@ public class Db_Task_Test extends AndroidTestCase {
 	}
 	
 	public void testGetInstance() {
-		Db_Task task = Db_Task.getInstance("Title");
+		Task task = Task.getInstance("Title");
 	}
 	
 //	public void testParentChild(){

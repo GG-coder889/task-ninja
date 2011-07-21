@@ -1,6 +1,6 @@
 package android.taskninja.task.dbtask;
 
-public enum Db_Task_String {
+public enum Task_String {
 	// Google
 	title,
 	id,

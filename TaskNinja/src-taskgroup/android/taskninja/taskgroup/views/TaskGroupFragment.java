@@ -5,8 +5,8 @@ import java.util.LinkedHashSet;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.taskninja.R;
-import android.taskninja.task.dbtask.Db_Task;
-import android.taskninja.taskgroup.dbtaskgroup.Db_TaskGroup;
+import android.taskninja.task.dbtask.Task;
+import android.taskninja.taskgroup.TaskGroup;
 import android.taskninja.tools.OnActionListener;
 import android.taskninja.views.AddButton;
 import android.taskninja.views.TitleText;
@@ -20,17 +20,17 @@ import android.widget.ListView;
 
 public class TaskGroupFragment extends Fragment implements OnItemClickListener {
 	
-	private LinkedHashSet<OnActionListener<Db_Task>> mActionListeners = new LinkedHashSet<OnActionListener<Db_Task>>();
+	private LinkedHashSet<OnActionListener<Task>> mActionListeners = new LinkedHashSet<OnActionListener<Task>>();
 	
-	private Db_TaskGroup mGroup;
+	private TaskGroup mGroup;
 	private ListView mListView;
-	private ArrayAdapter<Db_Task> mAdapter;
+	private ArrayAdapter<Task> mAdapter;
 	
-	public static TaskGroupFragment getInstance(Db_TaskGroup group){
+	public static TaskGroupFragment getInstance(TaskGroup group){
 		return new TaskGroupFragment(group);
 	}
 	
-	public TaskGroupFragment(Db_TaskGroup group){
+	public TaskGroupFragment(TaskGroup group){
 		super();
 		mGroup = group;
 	}
@@ -41,7 +41,7 @@ public class TaskGroupFragment extends Fragment implements OnItemClickListener {
 		mListView = new ListView(getActivity());
 		mListView.addHeaderView(TitleText.getInstance(getActivity(), mGroup.toString()));
 		
-		mAdapter = new ArrayAdapter<Db_Task>(getActivity(), R.layout.text_list_item, mGroup);
+		mAdapter = new ArrayAdapter<Task>(getActivity(), R.layout.text_list_item, mGroup);
 		mListView.setAdapter(mAdapter);
 		
 		mListView.addFooterView(AddButton.getInstance(getActivity()));
@@ -58,10 +58,10 @@ public class TaskGroupFragment extends Fragment implements OnItemClickListener {
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 		if (position < mGroup.size()){
 			
-			Db_Task task = mGroup.get(position);
+			Task task = mGroup.get(position);
 			
 			if (task != null){
-				for (OnActionListener<Db_Task> listener: mActionListeners){
+				for (OnActionListener<Task> listener: mActionListeners){
 					listener.onAction(task);
 				}
 			}
@@ -69,11 +69,11 @@ public class TaskGroupFragment extends Fragment implements OnItemClickListener {
 		}
 	}
 	
-	public void addOnActionListener(OnActionListener<Db_Task> listener){
+	public void addOnActionListener(OnActionListener<Task> listener){
 		mActionListeners.add(listener);
 	}
 	
-	public void removeOnActionListener(OnActionListener<Db_Task> listener){
+	public void removeOnActionListener(OnActionListener<Task> listener){
 		mActionListeners.remove(listener);
 	}
 }

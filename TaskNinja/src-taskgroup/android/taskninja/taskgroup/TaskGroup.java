@@ -1,4 +1,4 @@
-package android.taskninja.taskgroup.dbtaskgroup;
+package android.taskninja.taskgroup;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -15,35 +15,35 @@ import android.taskninja.app.App;
 import android.taskninja.dbmodel.Db_Controller;
 import android.taskninja.dbmodel.Db_Model;
 import android.taskninja.dbmodel.Db_NullEnum;
-import android.taskninja.task.dbtask.Db_Task;
-import android.taskninja.taskcollection.dbtaskcollection.Db_TaskCollection;
-import android.taskninja.taskcollection.dbtaskcollection.Db_TaskCollection_String;
+import android.taskninja.task.dbtask.Task;
+import android.taskninja.taskcollection.TaskCollection;
+import android.taskninja.taskcollection.TaskCollection_String;
 
-public class Db_TaskGroup 
-	extends Db_Model<Db_TaskGroup, Db_NullEnum, Db_NullEnum, Db_TaskGroup_String, Db_NullEnum>
-	implements List<Db_Task> {
+public class TaskGroup 
+	extends Db_Model<TaskGroup, Db_NullEnum, Db_NullEnum, TaskGroup_String, Db_NullEnum>
+	implements List<Task> {
 
-	private Db_TaskCollection mCollection;
+	private TaskCollection mCollection;
 	
 	@Override
 	public String toString(){
-		return getString(Db_TaskGroup_String.title);
+		return getString(TaskGroup_String.title);
 	}
 		
 	// ----------------------------------------------------------------------------------------------------
 	//  Constructor/Builder
 	// ----------------------------------------------------------------------------------------------------
-	public static Db_TaskGroup getInstance(String title){
-		return new Db_TaskGroup(title);
+	public static TaskGroup getInstance(String title){
+		return new TaskGroup(title);
 	}
 	
-	private Db_TaskGroup(String title){
+	private TaskGroup(String title){
 		super();
-		put(Db_TaskGroup_String.title, title);
-		mCollection = Db_TaskCollection.get(getString(Db_TaskGroup_String.COLLECTION_ID));
+		put(TaskGroup_String.title, title);
+		mCollection = TaskCollection.get(getString(TaskGroup_String.COLLECTION_ID));
 		if (mCollection == null){
-			mCollection = Db_TaskCollection.getInstance();
-			put(Db_TaskGroup_String.COLLECTION_ID, mCollection.getId());
+			mCollection = TaskCollection.getInstance();
+			put(TaskGroup_String.COLLECTION_ID, mCollection.getId());
 		}
 	}
 	// ----------------------------------------------------------------------------------------------------
@@ -53,14 +53,14 @@ public class Db_TaskGroup
 	// ----------------------------------------------------------------------------------------------------
 	//  Static Methods
 	// ----------------------------------------------------------------------------------------------------
-	public static Db_TaskGroup get(String id){
+	public static TaskGroup get(String id){
 		return controller().get(id);
 	}
 	
-	public static LinkedHashSet<Db_TaskGroup> getAll() {
-		LinkedHashSet<Db_TaskGroup> all = controller().getAll();
+	public static LinkedHashSet<TaskGroup> getAll() {
+		LinkedHashSet<TaskGroup> all = controller().getAll();
 		if (all.size() == 0) {
-			all.add(Db_TaskGroup.getInstance("Default"));
+			all.add(TaskGroup.getInstance("Default"));
 		}
 		
 		return controller().getAll();
@@ -73,17 +73,17 @@ public class Db_TaskGroup
 	// ----------------------------------------------------------------------------------------------------
 	//  DbModel Interface Configuration
 	// ----------------------------------------------------------------------------------------------------
-	private static Db_Controller<Db_TaskGroup, Db_NullEnum, Db_NullEnum, Db_TaskGroup_String, Db_NullEnum> mController;
+	private static Db_Controller<TaskGroup, Db_NullEnum, Db_NullEnum, TaskGroup_String, Db_NullEnum> mController;
 	
 	@Override
-	protected Db_Controller <Db_TaskGroup, Db_NullEnum, Db_NullEnum, Db_TaskGroup_String, Db_NullEnum> getController() {
+	protected Db_Controller <TaskGroup, Db_NullEnum, Db_NullEnum, TaskGroup_String, Db_NullEnum> getController() {
 		return controller();
 	}
 	
-	private static Db_Controller<Db_TaskGroup, Db_NullEnum, Db_NullEnum, Db_TaskGroup_String, Db_NullEnum> controller(){
+	private static Db_Controller<TaskGroup, Db_NullEnum, Db_NullEnum, TaskGroup_String, Db_NullEnum> controller(){
 		if (mController == null){
 			try {
-				mController = new LocalController(Db_TaskGroup.class, mContext);
+				mController = new LocalController(TaskGroup.class, mContext);
 			}catch (Exception e2){
 				e2.printStackTrace();
 				return null;
@@ -92,19 +92,19 @@ public class Db_TaskGroup
 		return mController;
 	}
 	
-	public Db_TaskGroup(JSONObject json) {
+	public TaskGroup(JSONObject json) {
 		super(json);
 	}
 
-	private static class LocalController extends Db_Controller<Db_TaskGroup, Db_NullEnum, Db_NullEnum, Db_TaskGroup_String, Db_NullEnum> {
+	private static class LocalController extends Db_Controller<TaskGroup, Db_NullEnum, Db_NullEnum, TaskGroup_String, Db_NullEnum> {
 			
-		protected LocalController(Class<Db_TaskGroup> dbModel, Context context) {
+		protected LocalController(Class<TaskGroup> dbModel, Context context) {
 			super(dbModel, context);
 		}
 
 		@Override
-		protected Db_TaskGroup getInstance(JSONObject json) {
-			return new Db_TaskGroup(json);
+		protected TaskGroup getInstance(JSONObject json) {
+			return new TaskGroup(json);
 		}
 
 	}
@@ -117,22 +117,22 @@ public class Db_TaskGroup
 	//  List Methods
 	// ----------------------------------------------------------------------------------------------------
 	@Override
-	public boolean add(Db_Task task) {
+	public boolean add(Task task) {
 		return mCollection.add(task);
 	}
 
 	@Override
-	public void add(int location, Db_Task task) {
+	public void add(int location, Task task) {
 		mCollection.add(location, task);
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends Db_Task> arg0) {
+	public boolean addAll(Collection<? extends Task> arg0) {
 		return addAll(arg0);
 	}
 
 	@Override
-	public boolean addAll(int arg0, Collection<? extends Db_Task> arg1) {
+	public boolean addAll(int arg0, Collection<? extends Task> arg1) {
 		return mCollection.addAll(arg0, arg1);
 	}
 
@@ -152,7 +152,7 @@ public class Db_TaskGroup
 	}
 
 	@Override
-	public Db_Task get(int location) {
+	public Task get(int location) {
 		return mCollection.get(location);
 	}
 
@@ -172,17 +172,17 @@ public class Db_TaskGroup
 	}
 
 	@Override
-	public ListIterator<Db_Task> listIterator() {
+	public ListIterator<Task> listIterator() {
 		return mCollection.listIterator();
 	}
 
 	@Override
-	public ListIterator<Db_Task> listIterator(int location) {
+	public ListIterator<Task> listIterator(int location) {
 		return mCollection.listIterator(location);
 	}
 
 	@Override
-	public Db_Task remove(int location) {
+	public Task remove(int location) {
 		return mCollection.remove(location);
 	}
 
@@ -202,12 +202,12 @@ public class Db_TaskGroup
 	}
 
 	@Override
-	public Db_Task set(int location, Db_Task object) {
+	public Task set(int location, Task object) {
 		return mCollection.set(location, object);
 	}
 
 	@Override
-	public List<Db_Task> subList(int start, int end) {
+	public List<Task> subList(int start, int end) {
 		return mCollection.subList(start, end);
 	}
 
@@ -222,7 +222,7 @@ public class Db_TaskGroup
 	}
 	
 	@Override
-	public Iterator<Db_Task> iterator() {
+	public Iterator<Task> iterator() {
 		return mCollection.iterator();
 	}
 	

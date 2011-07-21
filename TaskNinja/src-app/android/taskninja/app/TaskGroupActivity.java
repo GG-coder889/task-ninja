@@ -7,7 +7,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.taskninja.R;
 import android.taskninja.dbmodel.Db_Model;
-import android.taskninja.taskgroup.dbtaskgroup.Db_TaskGroup;
+import android.taskninja.taskgroup.TaskGroup;
 import android.taskninja.taskgroup.views.TaskGroupFragment;
 import android.taskninja.tools.IterTool;
 import android.widget.Toast;
@@ -25,14 +25,14 @@ public class TaskGroupActivity extends AbsractBaseActivity {
         setContentView(R.layout.taskgroup);
         
         String id = getIntent().getStringExtra(Db_Model.BuiltIn.ID.name());
-        Db_TaskGroup group = Db_TaskGroup.get(id);
+        TaskGroup group = TaskGroup.get(id);
         
         if (group == null) {
-        	LinkedHashSet<Db_TaskGroup> groups = Db_TaskGroup.getAll();
+        	LinkedHashSet<TaskGroup> groups = TaskGroup.getAll();
         	if (groups.size() == 0){
-        		group = Db_TaskGroup.getInstance("Default");
+        		group = TaskGroup.getInstance("Default");
         	} else {
-        		for (Db_TaskGroup g: groups ){
+        		for (TaskGroup g: groups ){
         			group = g;
         			break;
         		}

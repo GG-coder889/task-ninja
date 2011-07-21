@@ -1,10 +1,10 @@
 package android.taskninja.test.dbmodel.task;
 
 import android.taskninja.dbmodel.Db_Model;
-import android.taskninja.taskcollection.dbtaskcollection.Db_TaskCollection;
+import android.taskninja.taskcollection.TaskCollection;
 import android.test.AndroidTestCase;
 
-public class Db_TaskCollection_Test extends AndroidTestCase {
+public class TaskCollection_Test extends AndroidTestCase {
 	
 	@Override
     protected void setUp() throws Exception {
@@ -20,6 +20,6 @@ public class Db_TaskCollection_Test extends AndroidTestCase {
 	}
 	
 	public void testGetInstance() {
-		Db_TaskCollection group = Db_TaskCollection.getInstance();
+		TaskCollection group = TaskCollection.getInstance();
 	}
 }

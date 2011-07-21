@@ -10,23 +10,23 @@ import android.taskninja.dbmodel.Db_Controller;
 import android.taskninja.dbmodel.Db_Model;
 
 
-public class Db_Task extends Db_Model<Db_Task, Db_Task_Integer, Db_Task_Long, Db_Task_String, Db_Task_Bool> {
+public class Task extends Db_Model<Task, Task_Integer, Task_Long, Task_String, Task_Bool> {
 	
-	public static Db_Task getInstance(CharSequence title) {
-		return new Db_Task(title);
+	public static Task getInstance(CharSequence title) {
+		return new Task(title);
 	}
 	
-	private Db_Task(CharSequence title) {
-		put(Db_Task_String.title, title.toString());
+	private Task(CharSequence title) {
+		put(Task_String.title, title.toString());
 	}
 	
-	public static Db_Task get(String id){
+	public static Task get(String id){
 		return controller().get(id);
 	}
 
-	public static LinkedHashSet<Db_Task> getAll() {
-		LinkedHashSet<Db_Task> tasks = new LinkedHashSet<Db_Task>();
-		for (Db_Task task: controller().getAll()) {
+	public static LinkedHashSet<Task> getAll() {
+		LinkedHashSet<Task> tasks = new LinkedHashSet<Task>();
+		for (Task task: controller().getAll()) {
 			tasks.add(task);
 		}
 		return tasks;
@@ -62,20 +62,20 @@ public class Db_Task extends Db_Model<Db_Task, Db_Task_Integer, Db_Task_Long, Db
 	//  DbModel Interface Configuration
 	// ----------------------------------------------------------------------------------------------------
 	private static Context mContext;
-	private static Db_Controller<Db_Task, Db_Task_Integer, Db_Task_Long, Db_Task_String, Db_Task_Bool> mController;
+	private static Db_Controller<Task, Task_Integer, Task_Long, Task_String, Task_Bool> mController;
 	
 	@Override
-	protected Db_Controller <Db_Task, Db_Task_Integer, Db_Task_Long, Db_Task_String, Db_Task_Bool> getController() {
+	protected Db_Controller <Task, Task_Integer, Task_Long, Task_String, Task_Bool> getController() {
 		return controller();
 	}
 	
-	private static Db_Controller<Db_Task, Db_Task_Integer, Db_Task_Long, Db_Task_String, Db_Task_Bool> controller(){
+	private static Db_Controller<Task, Task_Integer, Task_Long, Task_String, Task_Bool> controller(){
 		if (mController == null){
 			try {
-				mController = new LocalController(Db_Task.class, App.getContext());
+				mController = new LocalController(Task.class, App.getContext());
 			} catch (Exception e1){
 				try {
-					mController = new LocalController(Db_Task.class, mContext);
+					mController = new LocalController(Task.class, mContext);
 				}catch (Exception e2){
 					e2.printStackTrace();
 					return null;
@@ -89,21 +89,21 @@ public class Db_Task extends Db_Model<Db_Task, Db_Task_Integer, Db_Task_Long, Db
 		LocalController.mContext = context;
 	}
 	
-	private Db_Task(JSONObject JSONObject){
+	private Task(JSONObject JSONObject){
 		super(JSONObject);
 	}
 	
-	private static class LocalController extends Db_Controller<Db_Task, Db_Task_Integer, Db_Task_Long, Db_Task_String, Db_Task_Bool> {
+	private static class LocalController extends Db_Controller<Task, Task_Integer, Task_Long, Task_String, Task_Bool> {
 		
 		public static Context mContext;
 			
-		protected LocalController(Class<Db_Task> dbModel, Context context) {
+		protected LocalController(Class<Task> dbModel, Context context) {
 			super(dbModel, context);
 		}
 
 		@Override
-		protected Db_Task getInstance(JSONObject json) {
-			return new Db_Task(json);
+		protected Task getInstance(JSONObject json) {
+			return new Task(json);
 		}	
 	}
 	// ----------------------------------------------------------------------------------------------------
