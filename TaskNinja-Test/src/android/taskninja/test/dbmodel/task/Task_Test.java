@@ -1,6 +1,6 @@
 package android.taskninja.test.dbmodel.task;
 
-import android.taskninja.task.dbtask.Task;
+import android.taskninja.task.Task;
 import android.test.AndroidTestCase;
 
 

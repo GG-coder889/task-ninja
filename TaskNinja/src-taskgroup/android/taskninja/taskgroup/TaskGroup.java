@@ -15,7 +15,7 @@ import android.taskninja.app.App;
 import android.taskninja.dbmodel.Db_Controller;
 import android.taskninja.dbmodel.Db_Model;
 import android.taskninja.dbmodel.Db_NullEnum;
-import android.taskninja.task.dbtask.Task;
+import android.taskninja.task.Task;
 import android.taskninja.taskcollection.TaskCollection;
 import android.taskninja.taskcollection.TaskCollection_String;
 

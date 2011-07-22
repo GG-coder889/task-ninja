@@ -1,4 +1,4 @@
-package android.taskninja.task.dbtask;
+package android.taskninja.task;
 
 import java.util.LinkedHashSet;
 

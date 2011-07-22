@@ -7,15 +7,23 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.taskninja.R;
 import android.taskninja.dbmodel.Db_Model;
+import android.taskninja.task.Task;
+import android.taskninja.task.views.TaskFragment;
 import android.taskninja.taskgroup.TaskGroup;
 import android.taskninja.taskgroup.views.TaskGroupFragment;
 import android.taskninja.tools.IterTool;
+import android.taskninja.tools.OnActionListener;
 import android.widget.Toast;
 
 
 
 
-public class TaskGroupActivity extends AbsractBaseActivity {
+public class TaskGroupActivity extends AbsractBaseActivity implements OnActionListener<Task> {
+	
+	private TaskGroupFragment mGroupFrag;
+	private TaskFragment mTaskFrag;
+	
+	private FragmentManager mFragMan;;
 	
 	
     /** Called when the activity is first created. */
@@ -38,17 +46,21 @@ public class TaskGroupActivity extends AbsractBaseActivity {
         		}
         	}
         }
-        
-        Toast.makeText(this, "Hello from "+group.toString()+" group.", Toast.LENGTH_SHORT).show();
         	
-    	FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        mFragMan = getFragmentManager();
         
-        fragmentTransaction.add(R.id.root, new TaskGroupFragment(group));
-        fragmentTransaction.commit();
-
+        mGroupFrag = new TaskGroupFragment(group);
+        mGroupFrag.addOnActionListener(this);
         
+        mFragMan.beginTransaction().add(R.id.leftRoot, mGroupFrag).commit();
     }
+
+
+	@Override
+	public void onAction(Task action) {
+		mTaskFrag = TaskFragment.getInstance(action);
+		mFragMan.beginTransaction().replace(R.id.rightRoot, mTaskFrag).commit();
+	}
     
 
 }

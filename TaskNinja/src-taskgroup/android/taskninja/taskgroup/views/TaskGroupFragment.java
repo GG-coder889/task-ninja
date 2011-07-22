@@ -8,7 +8,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.taskninja.R;
 import android.taskninja.app.App;
-import android.taskninja.task.dbtask.Task;
+import android.taskninja.task.Task;
 import android.taskninja.taskgroup.TaskGroup;
 import android.taskninja.tools.Background;
 import android.taskninja.tools.OnActionListener;
