@@ -1,12 +1,16 @@
 package android.taskninja.task.views;
 
+import java.util.HashSet;
+
 import android.app.Fragment;
 import android.os.Bundle;
 import android.taskninja.R;
+import android.taskninja.app.App;
 import android.taskninja.task.Task;
-import android.taskninja.views.TitleText;
+import android.taskninja.tools.Background;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,6 +20,8 @@ public class TaskFragment extends Fragment {
 	private Task mTask;
 	private LinearLayout mLinearLayout;
 	private TextView mTitleText;
+	
+	private TaskSettingsTitleView mTaskSettingsTitleView;
 	
 	public static TaskFragment getInstance(Task task){
 		return new TaskFragment(task);
@@ -29,6 +35,10 @@ public class TaskFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		
+		mTaskSettingsTitleView = TaskSettingsTitleView.getInstance(getActivity(), mTask);
+
+		
 	}
 
 	@Override
@@ -37,9 +47,6 @@ public class TaskFragment extends Fragment {
 		View view = inflater.inflate(R.layout.task_view, container);
 		
 		mLinearLayout = (LinearLayout) view.findViewById(R.id.linearLayout);
-		mTitleText = (TextView) view.findViewById(R.id.titleText);
-		
-		mTitleText.setText(mTask.toString());
 		
 		loadSettingsViews();
 		
@@ -47,7 +54,11 @@ public class TaskFragment extends Fragment {
 	}
 
 	private void loadSettingsViews() {
-		// TODO Auto-generated method stub
+		
+		mLinearLayout.removeAllViews();
+		mLinearLayout.addView(mTaskSettingsTitleView);
 		
 	}
+
+
 }

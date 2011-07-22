@@ -62,12 +62,12 @@ public class EditGroupDialog extends DialogFragment implements OnClickListener {
 			onDelete();
 			break;
 		}
+		
 	}
 
 	private void onDelete() {
 		mGroup.delete();
 		startActivity(new Intent(getActivity(), TaskGroupActivity.class));
-		this.dismiss();
 	}
 
 	private void onSave() {

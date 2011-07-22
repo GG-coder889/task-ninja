@@ -5,14 +5,7 @@
   android:layout_height="match_parent" 
   android:weightSum="1" 
   android:orientation="horizontal"
-  android:background="@android:color/black"
-  android:alpha="100"
   android:id="@+id/taskViewRoot" >
-  
-<!--     <View 
-    	android:background="@android:color/white" 
-    	android:layout_height="wrap_content" 
-    	android:layout_width="10dp"/> -->
     	
    	<LinearLayout 
 	    android:layout_width="wrap_content" 
@@ -20,50 +13,23 @@
 	    android:orientation="vertical"
 	    android:layout_weight="1">
    	
-	   	<TextView 
-	   		android:id="@+id/titleText" 
-	   		android:layout_width="match_parent" 
-	    	android:layout_height="wrap_content" 
-	    	android:textColor="@color/window_header_text"
-	    	android:textSize="24sp"
-	    	android:padding="10dp"
-	   		/>
    	
 	   	<ScrollView 
 	    	android:id="@+id/scrollView" 
-	    	android:layout_width="wrap_content" 
+	    	android:layout_width="match_parent" 
 	    	android:layout_height="match_parent" 
 	    	android:layout_weight="1">
 	    	
 	        <LinearLayout 
 	        	android:id="@+id/linearLayout" 
 	        	android:layout_width="match_parent" 
-	        	android:layout_height="match_parent"
-	        	android:orientation="vertical"/>
+	        	android:layout_height="wrap_content"
+	        	android:orientation="vertical"
+	        	android:padding="5dp"/>
 	        	
 	    </ScrollView>
     
-	    <LinearLayout
-    		android:orientation="horizontal"
-	    		android:layout_width="fill_parent"
-	    	android:layout_height="wrap_content">
-    	
-	    	<Button 
-	    		android:id="@+id/cancelButton"
-	    		android:layout_width="0dp"
-	    		android:layout_height="wrap_content"
-	    		android:layout_weight="1"
-	    		android:text="Cancel"/>
-	    		
-	    	<Button 
-	    		android:id="@+id/saveButton"
-	    		android:layout_width="0dp"
-	    		android:layout_height="wrap_content"
-	    		android:layout_weight="1"
-	    		android:text="Save"/>
-    	
-    	</LinearLayout>
-    
    	</LinearLayout>
+ 
     
 </LinearLayout>

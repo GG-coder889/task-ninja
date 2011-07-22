@@ -4,6 +4,7 @@ import java.util.LinkedHashSet;
 
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.taskninja.R;
@@ -29,6 +30,10 @@ public class TaskGroupFragment extends Fragment implements OnItemClickListener {
 	private TaskGroup mGroup;
 	private ListView mListView;
 	
+//	private FragmentManager mFragMan;
+	
+	private EditGroupDialog mEditDialog;
+	
 	private ArrayAdapter<Task> mAdapter;
 	private View mTitleView;
 	
@@ -44,6 +49,9 @@ public class TaskGroupFragment extends Fragment implements OnItemClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		
+//		mEditDialog = EditGroupDialog.getInstance(mGroup);
+		
 		mListView = new ListView(getActivity());
 		mListView.setOnItemClickListener(this);
 		
@@ -57,34 +65,42 @@ public class TaskGroupFragment extends Fragment implements OnItemClickListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		super.onCreateView(inflater, container, savedInstanceState);
-		mListView.setBackgroundDrawable(App.get(Background.Secondary, getActivity()));
+		mListView.setBackgroundResource(android.R.drawable.screen_background_dark_transparent);
 		return mListView;
 	}
 	
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+		switch(position){
+		case 0:
+			onEditGroup();
+			break;
+		}
 		if (mTitleView.equals(arg1)){
 //			Toast.makeText(getActivity(), "Hello edit", Toast.LENGTH_SHORT).show();
 			onEditGroup();
-		}
-		if (position < mGroup.size()){
-			
-			Task task = mGroup.get(position);
-			
-			if (task != null){
-				for (OnActionListener<Task> listener: mActionListeners){
-					listener.onAction(task);
+		} else {
+			if (position -1 < mGroup.size()){
+				Task task = mGroup.get(position-1);
+				
+				if (task != null){
+					for (OnActionListener<Task> listener: mActionListeners){
+						listener.onAction(task);
+					}
 				}
 			}
 			
 		}
+		
 	}
 	
 	private void onEditGroup() {
-		FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
-		EditGroupDialog newFragment = EditGroupDialog.getInstance(mGroup);
-	    newFragment.show(ft, "dialog");
-		
+//		FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+//		EditGroupDialog newFragment = EditGroupDialog.getInstance(mGroup);
+//	    newFragment.show(ft, "dialog");
+//	    newFragment.show(manager, tag)
+//		mEditDialog.dismiss();
+//		mEditDialog.show(getFragmentManager(), "EditGroup");
 	}
 
 	public void addOnActionListener(OnActionListener<Task> listener){

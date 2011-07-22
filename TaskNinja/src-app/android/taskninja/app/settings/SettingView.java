@@ -20,7 +20,7 @@ public class SettingView extends LinearLayout {
 		
 		mSetting = setting;
 		
-		setBackgroundDrawable(App.get(Background.Primary, getContext()));
+		setBackgroundResource(android.R.drawable.screen_background_dark_transparent);
 		
 		addView(TitleText.getInstance(getContext(), mSetting.toString()));
 	}

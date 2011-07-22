@@ -27,7 +27,7 @@ public class SettingsList extends ListView implements android.widget.AdapterView
 		setAdapter(new ArrayAdapter<Settings>(getContext(), R.layout.text_list_item, mActions));
 		setOnItemClickListener(this);
 		
-		setBackgroundDrawable(App.get(Background.Primary, getContext()));
+		setBackgroundResource(android.R.drawable.screen_background_dark_transparent);
 		
 	}
 	

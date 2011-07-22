@@ -48,13 +48,7 @@ public class App extends Application {
 		return mApp.getBaseContext();
 	}
 	
-	public static Drawable get(Background background, Context context){
-		return BackgroundManager.get(background, context);
-	}
-	
-	public static int getResource(Color color){
-		return ColorManager.getResource(color);
-	}
+
 	
 	// Settings
 	static final String PREFS = "settings";

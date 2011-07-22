@@ -58,9 +58,28 @@ public class TaskGroupActivity extends AbsractBaseActivity implements OnActionLi
 
 	@Override
 	public void onAction(Task action) {
-		mTaskFrag = TaskFragment.getInstance(action);
-		mFragMan.beginTransaction().replace(R.id.rightRoot, mTaskFrag).commit();
+		 FragmentTransaction tran = mFragMan.beginTransaction();
+		 if (mTaskFrag != null){
+			 tran.remove(mTaskFrag);
+		 }
+		 mTaskFrag = TaskFragment.getInstance(action);
+		 tran.add(R.id.rightRoot, mTaskFrag);
+		 tran.commitAllowingStateLoss();
 	}
     
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

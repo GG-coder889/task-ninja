@@ -14,7 +14,6 @@ public class TitleText extends TextView {
 	public TitleText(Context context, CharSequence title) {
 		super(context);
 		setText(title);
-		setTextColor(App.getResource(Color.ButtonText));
 	}
 
 }
