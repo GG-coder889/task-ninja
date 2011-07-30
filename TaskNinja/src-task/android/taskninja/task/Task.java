@@ -5,19 +5,22 @@ import java.util.LinkedHashSet;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.taskninja.alarm.TaskAlarm;
 import android.taskninja.app.App;
 import android.taskninja.dbmodel.Db_Controller;
+import android.taskninja.dbmodel.Db_Listener;
 import android.taskninja.dbmodel.Db_Model;
 import android.taskninja.taskcollection.TaskCollection;
 import android.taskninja.taskcollection.TaskCollection_String;
+import android.util.Log;
 
 
-public class Task extends Db_Model<Task, Task_Integer, Task_Long, Task_String, Task_Bool> {
+public class Task extends Db_Model<Task, TaskInteger, TaskLong, TaskString, TaskBool>  {
 	
-	
+	private static final String TAG = "Task";
 	
 	public String toString() {
-		return getString(Task_String.title);
+		return getString(TaskString.title);
 	}
 	
 	
@@ -31,7 +34,7 @@ public class Task extends Db_Model<Task, Task_Integer, Task_Long, Task_String, T
 	}
 	
 	private Task(CharSequence title) {
-		put(Task_String.title, title.toString());
+		put(TaskString.title, title.toString());
 	}
 	// ----------------------------------------------------------------------------------------------------
 				
@@ -58,14 +61,14 @@ public class Task extends Db_Model<Task, Task_Integer, Task_Long, Task_String, T
 	// ----------------------------------------------------------------------------------------------------
 	//  DbModel Interface Configuration
 	// ----------------------------------------------------------------------------------------------------
-	private static Db_Controller<Task, Task_Integer, Task_Long, Task_String, Task_Bool> mController;
+	private static Db_Controller<Task, TaskInteger, TaskLong, TaskString, TaskBool> mController;
 	
 	@Override
-	protected Db_Controller <Task, Task_Integer, Task_Long, Task_String, Task_Bool> getController() {
+	protected Db_Controller <Task, TaskInteger, TaskLong, TaskString, TaskBool> getController() {
 		return controller();
 	}
 	
-	private static Db_Controller<Task, Task_Integer, Task_Long, Task_String, Task_Bool> controller(){
+	private static Db_Controller<Task, TaskInteger, TaskLong, TaskString, TaskBool> controller(){
 		if (mController == null){
 			try {
 				mController = new LocalController(Task.class, App.getContext());
@@ -85,7 +88,7 @@ public class Task extends Db_Model<Task, Task_Integer, Task_Long, Task_String, T
 		super(JSONObject);
 	}
 	
-	private static class LocalController extends Db_Controller<Task, Task_Integer, Task_Long, Task_String, Task_Bool> {
+	private static class LocalController extends Db_Controller<Task, TaskInteger, TaskLong, TaskString, TaskBool> {
 			
 		protected LocalController(Class<Task> dbModel, Context context) {
 			super(dbModel, context);
@@ -97,6 +100,11 @@ public class Task extends Db_Model<Task, Task_Integer, Task_Long, Task_String, T
 		}	
 	}
 	// ----------------------------------------------------------------------------------------------------
+
+
+	
+	
+
 
 
 

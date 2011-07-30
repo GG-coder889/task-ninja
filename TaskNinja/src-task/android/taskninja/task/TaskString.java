@@ -1,6 +1,6 @@
 package android.taskninja.task;
 
-public enum Task_String {
+public enum TaskString {
 	// Google
 	title,
 	id,
@@ -11,6 +11,6 @@ public enum Task_String {
 	position,
 	notes,
 	due,
-	comleted,
+	completed,
 
 }

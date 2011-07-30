@@ -3,21 +3,17 @@ package android.taskninja.taskgroup;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Queue;
 
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.taskninja.app.App;
 import android.taskninja.dbmodel.Db_Controller;
 import android.taskninja.dbmodel.Db_Model;
 import android.taskninja.dbmodel.Db_NullEnum;
 import android.taskninja.task.Task;
 import android.taskninja.taskcollection.TaskCollection;
-import android.taskninja.taskcollection.TaskCollection_String;
 
 public class TaskGroup 
 	extends Db_Model<TaskGroup, Db_NullEnum, Db_NullEnum, TaskGroup_String, Db_NullEnum>

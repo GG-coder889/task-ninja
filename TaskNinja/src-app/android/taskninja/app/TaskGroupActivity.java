@@ -25,7 +25,10 @@ public class TaskGroupActivity extends AbsractBaseActivity implements OnActionLi
 	
 	private FragmentManager mFragMan;;
 	
-	
+	public enum ExtraChoices {
+		TaskId,
+		TaskGroupId,
+	}
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {

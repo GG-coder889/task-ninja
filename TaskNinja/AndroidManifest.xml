@@ -4,6 +4,7 @@
       android:versionCode="1"
       android:versionName="1.0">
     <uses-sdk android:minSdkVersion="11" />
+    <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
 
     <application 
     	android:icon="@drawable/ic_launcher" 
@@ -21,6 +22,8 @@
             </intent-filter>
             
         </activity> 
+        
+        <service android:name=".alarm.app.NotificationService"/>
         
 <!--          <activity 
         	android:name=".app.settings.SettingsActivity"

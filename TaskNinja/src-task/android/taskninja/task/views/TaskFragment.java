@@ -58,7 +58,12 @@ public class TaskFragment extends Fragment {
 		mLinearLayout.removeAllViews();
 		mLinearLayout.addView(mTaskSettingsTitleView);
 		
+		mLinearLayout.addView(TaskSingleNotifiactionView.getInstance(getActivity(), mTask));
+		
 	}
+	
+	
+	
 
 
 }
