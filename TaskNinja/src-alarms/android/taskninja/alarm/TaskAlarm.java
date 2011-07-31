@@ -1,5 +1,6 @@
 package android.taskninja.alarm;
 
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
@@ -46,11 +47,23 @@ public class TaskAlarm extends Db_Model<TaskAlarm, Db_NullEnum, AlarmLong, Alarm
 		return task;
 	}
 	
+	public static Calendar getZeroCal() {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.setTimeInMillis(roundMillis(cal.getTimeInMillis(), TimeUnit.MINUTES));
+		return cal;
+	}
+	
+	public static long roundMillis(long millis, TimeUnit unit){
+		return millis - millis % unit.toMillis(1);
+	}
+	
 	// ----------------------------------------------------------------------------------------------------
 	// Set Alarm Methods
 	// ----------------------------------------------------------------------------------------------------
 	public static void setSingleNotification(Task task) {
-		if (task.getBool(TaskBool.HasSingleNotification)
+		if (task.getBool(TaskBool.SingleNotification)
 				&& task.getLong(TaskLong.SingleNotificationTime) != null
 				&& task.getLong(TaskLong.SingleNotificationTime) > System.currentTimeMillis()
 				){
@@ -65,6 +78,84 @@ public class TaskAlarm extends Db_Model<TaskAlarm, Db_NullEnum, AlarmLong, Alarm
 		} else {
 			Log.d(TAG, "failed to set single notification");
 		}
+	}
+	
+	public static void setRecurringNotification(Task task){
+		if (task.getBool(TaskBool.RecurringNotification) && task.getLong(TaskLong.RecurringNotificationTime) != null){
+
+			long recurringTime = TimeUnit.DAYS.toMillis(7);
+			Calendar c;
+			
+			if (task.getBool(TaskBool.MondayNotification)){
+				c = getZeroCal();
+				c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+				c.setTimeInMillis(c.getTimeInMillis() + task.getLong(TaskLong.RecurringNotificationTime));
+				setNotification(task, c.getTimeInMillis(), recurringTime);
+			}
+			
+			if (task.getBool(TaskBool.TuesdayNotification)){
+				c = getZeroCal();
+				c.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+				c.setTimeInMillis(c.getTimeInMillis() + task.getLong(TaskLong.RecurringNotificationTime));
+				setNotification(task, c.getTimeInMillis(), recurringTime);
+			}
+			
+			if (task.getBool(TaskBool.WednesdayNotification)){
+				c = getZeroCal();
+				c.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+				c.setTimeInMillis(c.getTimeInMillis() + task.getLong(TaskLong.RecurringNotificationTime));
+				setNotification(task, c.getTimeInMillis(), recurringTime);
+			}
+			
+			if (task.getBool(TaskBool.ThursdayNotification)){
+				c = getZeroCal();
+				c.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+				c.setTimeInMillis(c.getTimeInMillis() + task.getLong(TaskLong.RecurringNotificationTime));
+				setNotification(task, c.getTimeInMillis(), recurringTime);
+			}
+			
+			if (task.getBool(TaskBool.FridayNotification)){
+				c = getZeroCal();
+				c.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+				c.setTimeInMillis(c.getTimeInMillis() + task.getLong(TaskLong.RecurringNotificationTime));
+				setNotification(task, c.getTimeInMillis(), recurringTime);
+			}
+			
+			if (task.getBool(TaskBool.SaturdayNotification)){
+				c = getZeroCal();
+				c.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+				c.setTimeInMillis(c.getTimeInMillis() + task.getLong(TaskLong.RecurringNotificationTime));
+				setNotification(task, c.getTimeInMillis(), recurringTime);
+			}
+			
+			if (task.getBool(TaskBool.SundayNotification)){
+				c = getZeroCal();
+				c.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+				c.setTimeInMillis(c.getTimeInMillis() + task.getLong(TaskLong.RecurringNotificationTime));
+				setNotification(task, c.getTimeInMillis(), recurringTime);
+			}
+			
+		}
+		
+		
+		
+	}
+	
+	private static void setNotification(Task task, long when, Long recurringTime){
+		TaskAlarm alarm = new TaskAlarm();
+		
+		alarm.put(AlarmString.TaskId, task.getId());
+		alarm.put(AlarmBool.IsNotification, true);
+		alarm.put(AlarmLong.AlarmTime, when);
+		
+		if (recurringTime != null){
+			alarm.put(AlarmLong.RecurringTime, recurringTime);
+			alarm.put(AlarmBool.IsRecurring, true);
+		} else {
+			alarm.put(AlarmBool.IsRecurring, false);
+		}
+		
+		alarm.set();
 	}
 	
 	

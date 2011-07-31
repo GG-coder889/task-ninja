@@ -1,8 +1,6 @@
 package android.taskninja.views;
 
 import android.content.Context;
-import android.taskninja.app.App;
-import android.taskninja.tools.Color;
 import android.widget.TextView;
 
 public class TitleText extends TextView {

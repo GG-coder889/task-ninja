@@ -5,6 +5,16 @@ public enum TaskBool {
 	deleted,
 	hidden, 
 	
-	HasSingleNotification,
+	SingleNotification, 
+	
+	RecurringNotification,
+	MondayNotification,
+	TuesdayNotification,
+	WednesdayNotification,
+	ThursdayNotification,
+	FridayNotification,
+	SaturdayNotification,
+	SundayNotification,
+	
 	
 }

@@ -39,7 +39,15 @@ public class TaskHeaderView extends LinearLayout {
 					mPrimaryText.setText(mTask.toString());
 				}
 				if (key.equals(TaskString.notes)){
-					mSecondaryText.setText(mTask.getString(TaskString.notes));
+					String text = mTask.getString(TaskString.notes);
+					if (text == null || text.equals("")){
+						mSecondaryText.setText(text);
+						mSecondaryText.setVisibility(GONE);
+					} else {
+						mSecondaryText.setText(text);
+						mSecondaryText.setVisibility(VISIBLE);
+					}
+					
 				}
 			}
 		});

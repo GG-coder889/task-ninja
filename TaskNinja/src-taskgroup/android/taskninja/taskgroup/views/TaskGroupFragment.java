@@ -2,26 +2,19 @@ package android.taskninja.taskgroup.views;
 
 import java.util.LinkedHashSet;
 
-import android.app.DialogFragment;
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.taskninja.R;
-import android.taskninja.app.App;
 import android.taskninja.task.Task;
 import android.taskninja.taskgroup.TaskGroup;
-import android.taskninja.tools.Background;
 import android.taskninja.tools.OnActionListener;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class TaskGroupFragment extends Fragment implements OnItemClickListener {
 	

@@ -1,11 +1,8 @@
 package android.taskninja.app.settings;
 
 import android.content.Context;
-import android.taskninja.app.App;
-import android.taskninja.tools.Background;
 import android.taskninja.views.TitleText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class SettingView extends LinearLayout {
 	

@@ -2,8 +2,6 @@ package android.taskninja.taskgroup.views;
 
 import android.content.Context;
 import android.taskninja.R;
-import android.taskninja.app.App;
-import android.taskninja.tools.Color;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 

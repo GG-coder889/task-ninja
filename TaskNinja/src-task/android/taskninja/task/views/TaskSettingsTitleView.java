@@ -4,15 +4,15 @@ import android.app.Activity;
 import android.taskninja.R;
 import android.taskninja.task.Task;
 import android.taskninja.task.TaskString;
+import android.taskninja.tools.MSG;
+import android.taskninja.tools.OnActionListener;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.ToggleButton;
 
-public class TaskSettingsTitleView extends LinearLayout {
+public class TaskSettingsTitleView extends LinearLayout implements OnActionListener<MSG> {
 	
 	private Activity mActivity;
 	private Task mTask;
@@ -72,28 +72,27 @@ public class TaskSettingsTitleView extends LinearLayout {
 		mTitleEdit = new EditText(getContext());
 		mTitleEdit.setHint("Title");
 		mTitleEdit.setText(mTask.getString(TaskString.title));
-		mTitleEdit.addTextChangedListener(new TextWatcher() {
-			@Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
-			@Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-			@Override
-			public void afterTextChanged(Editable s) {
-				mTask.put(TaskString.title, s.toString());	
-			}
-		});
 		mHiddenView.addView(mTitleEdit);
 		
 		mNotesEdit = new EditText(getContext());
 		mNotesEdit.setHint("Notes");
 		mNotesEdit.setText(mTask.getString(TaskString.notes));
-		mNotesEdit.addTextChangedListener(new TextWatcher() {
-			@Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
-			@Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-			@Override
-			public void afterTextChanged(Editable s) {
-				mTask.put(TaskString.notes, s.toString());	
-			}
-		});
 		mHiddenView.addView(mNotesEdit);
+	}
+
+	@Override
+	public void onAction(MSG action) {
+		switch(action){
+		case SAVE:
+			mTask.put(TaskString.title, mTitleEdit.getText().toString());
+			mTask.put(TaskString.notes, mNotesEdit.getText().toString());
+			break;
+		case CANCEL:
+			mTitleEdit.setText(mTask.getString(TaskString.title));
+			mNotesEdit.setText(mTask.getString(TaskString.notes));
+			break;
+		}
+		
 	}
 
 

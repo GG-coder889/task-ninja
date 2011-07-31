@@ -2,14 +2,9 @@ package android.taskninja.app;
 
 import android.app.Application;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.taskninja.dbmodel.Db_Model;
 import android.taskninja.task.Task;
 import android.taskninja.taskgroup.TaskGroup;
-import android.taskninja.tools.Background;
-import android.taskninja.tools.BackgroundManager;
-import android.taskninja.tools.Color;
-import android.taskninja.tools.ColorManager;
 
 public class App extends Application {
 	

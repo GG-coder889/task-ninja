@@ -4,8 +4,6 @@ import java.util.LinkedHashSet;
 
 import android.content.Context;
 import android.taskninja.R;
-import android.taskninja.app.App;
-import android.taskninja.tools.Background;
 import android.taskninja.tools.OnActionListener;
 import android.view.View;
 import android.widget.AdapterView;

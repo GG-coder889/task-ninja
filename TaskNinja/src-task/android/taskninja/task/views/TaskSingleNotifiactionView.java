@@ -5,13 +5,14 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.taskninja.R;
 import android.taskninja.alarm.TaskAlarm;
 import android.taskninja.dbmodel.Db_Listener;
 import android.taskninja.task.Task;
 import android.taskninja.task.TaskBool;
 import android.taskninja.task.TaskLong;
+import android.taskninja.tools.MSG;
+import android.taskninja.tools.OnActionListener;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
@@ -25,7 +26,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.ToggleButton;
 
-public class TaskSingleNotifiactionView extends LinearLayout implements OnClickListener {
+public class TaskSingleNotifiactionView extends LinearLayout implements OnClickListener, OnActionListener<MSG> {
 	
 	private static final String TAG = "TaskSingleNotifiactionView";
 	
@@ -35,6 +36,7 @@ public class TaskSingleNotifiactionView extends LinearLayout implements OnClickL
 	private Calendar mDate = Calendar.getInstance();
 	private LinearLayout mHiddenView;
 	private Button mDateButton;
+	private ToggleButton mNotificationButton;
 	
 	public static TaskSingleNotifiactionView getInstance(Activity activity, Task task) {
 		Log.d(TAG, "getInstance");
@@ -60,6 +62,7 @@ public class TaskSingleNotifiactionView extends LinearLayout implements OnClickL
 		setupHiddenView();
 		addDateChooser();
 		setDbListener();
+		updateCal();
 	}
 	
 	private void setDbListener() {
@@ -69,13 +72,7 @@ public class TaskSingleNotifiactionView extends LinearLayout implements OnClickL
 			@Override
 			public void onChange(Enum key) {
 				if (key.equals(TaskLong.SingleNotificationTime)){
-					Long time = mTask.getLong(TaskLong.SingleNotificationTime);
-					
-					if (time != null){
-						mDate.setTimeInMillis(time);
-						mSecondaryText.setText(getSingleText());
-						mDateButton.setText(getSingleText());
-					}
+					updateCal();
 				}
 			}
 		});
@@ -104,34 +101,11 @@ public class TaskSingleNotifiactionView extends LinearLayout implements OnClickL
 		primaryText.setText("Single Notification");
 		
 		mSecondaryText = (TextView) findViewById(R.id.secondaryText);
-		Long time = mTask.getLong(TaskLong.SingleNotificationTime);
 		
-		if (time != null){
-			mDate.setTimeInMillis(time);
-			mSecondaryText.setText(getSingleText());
-		}
-		
-		ToggleButton toggleButton = (ToggleButton) findViewById(R.id.headerToggleButton);
-		toggleButton.setVisibility(VISIBLE);
-		toggleButton.setChecked(mTask.getBool(TaskBool.HasSingleNotification));
-		toggleButton.setOnClickListener(this);
-		toggleButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				Log.d(TAG, "onCheckedChanged");
-				
-				if (!(mTask.getBool(TaskBool.HasSingleNotification) == isChecked)){
-					mTask.put(TaskBool.HasSingleNotification, isChecked);
-					if (isChecked){
-						TaskAlarm.setSingleNotification(mTask);
-					}else {
-						
-					}
-					
-					
-				}
-			}
-		});
+		mNotificationButton = (ToggleButton) findViewById(R.id.headerToggleButton);
+		mNotificationButton.setVisibility(VISIBLE);
+		mNotificationButton.setChecked(mTask.getBool(TaskBool.SingleNotification));
+		mNotificationButton.setOnClickListener(this);
 	}
 	
 	@Override
@@ -162,16 +136,6 @@ public class TaskSingleNotifiactionView extends LinearLayout implements OnClickL
 		mDateButton = new Button(mActivity);
 		mDateButton.setOnClickListener(this);
 		mHiddenView.addView(mDateButton);
-		
-		Long time = mTask.getLong(TaskLong.SingleNotificationTime);
-		
-		if (time != null){
-			mDate.setTimeInMillis(time);
-			mSecondaryText.setText(getSingleText());
-			mDateButton.setText(getSingleText());
-		} else {
-			mDateButton.setText("Set The Notification Date");
-		}
 	}
 	
 	// Single Alert Time Picker
@@ -182,15 +146,7 @@ public class TaskSingleNotifiactionView extends LinearLayout implements OnClickL
 				
 				mDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
 				mDate.set(Calendar.MINUTE, minute);
-				
-				if (mDate.getTimeInMillis() > System.currentTimeMillis()){
-					mTask.put(TaskLong.SingleNotificationTime, mDate.getTimeInMillis());
-					TaskAlarm.setSingleNotification(mTask);
-					Log.d(TAG, "alarmTime set to "+getSingleText());
-				} else {
-					Log.d(TAG, "set alarm time denied because it was before the current time");
-				}
-				
+				mDateButton.setText(getSingleText());
 			}
 		};
 
@@ -217,31 +173,54 @@ public class TaskSingleNotifiactionView extends LinearLayout implements OnClickL
                 | DateUtils.FORMAT_SHOW_YEAR);
 		return singleText;
 	}
-	
-//	private void addDayButtons() {
-//		// TODO Auto-generated method stub
-//		
-//	}
-	
+    
+    private void updateCal(){
+		Long time = mTask.getLong(TaskLong.SingleNotificationTime);
+		
+		if (time != null){
+			mDate.setTimeInMillis(time);
+			mSecondaryText.setText(getSingleText());
+			mSecondaryText.setVisibility(VISIBLE);
+			mDateButton.setText(getSingleText());
+		} else {
+			mDateButton.setText("Set The Notification Date");
+			mSecondaryText.setText(null);
+			mSecondaryText.setVisibility(GONE);
+		}
+    }
 
-// What was I thinking; I don't this for single notifications
-//	private class DayToggleButton extends ToggleButton implements OnClickListener {
-//		
-//		Task_Bool mKey;
-//
-//		public DayToggleButton(Context context, Task_Bool key) {
-//			super(context);
-//			
-//			setOnClickListener(this);
-//		}
-//
-//		@Override
-//		public void onClick(View v) {
-//			if (this.equals(v)){
-//				mTask.put(mKey, this.isChecked());
-//			}
-//		}
-//	}
+	@Override
+	public void onAction(MSG action) {
+		switch (action) {
+		case SAVE:
+			
+			if (mDate.getTimeInMillis() > System.currentTimeMillis()){
+				mTask.put(TaskLong.SingleNotificationTime, mDate.getTimeInMillis());
+			}
+			
+			mTask.put(TaskBool.SingleNotification, mNotificationButton.isChecked());
+			
+			Long time = mTask.getLong(TaskLong.SingleNotificationTime);
+			
+			if ( mTask.getBool(TaskBool.SingleNotification)  
+					&& time != null
+					&& time > System.currentTimeMillis()){
+				TaskAlarm.setSingleNotification(mTask);
+			}
+			
+			updateCal();
+			break;
+			
+		case CANCEL:
+			updateCal();
+			break;
+
+		default:
+			break;
+		}
+		
+	}
+	
 
 	
 
