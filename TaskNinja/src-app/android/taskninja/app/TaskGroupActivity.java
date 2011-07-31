@@ -33,7 +33,7 @@ public class TaskGroupActivity extends AbsractBaseActivity implements OnActionLi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.taskgroup);
+        setContentView(R.layout.root_2frame);
         
         String id = getIntent().getStringExtra(Db_Model.BuiltIn.ID.name());
         TaskGroup group = TaskGroup.get(id);

@@ -22,10 +22,10 @@ public class SettingsList extends ListView implements android.widget.AdapterView
 	private SettingsList(Context context) {
 		super(context);
 		
-		setAdapter(new ArrayAdapter<Settings>(getContext(), R.layout.text_list_item, mActions));
-		setOnItemClickListener(this);
-		
-		setBackgroundResource(android.R.drawable.screen_background_dark_transparent);
+//		setAdapter(new ArrayAdapter<Settings>(getContext(), R.layout.text_list_item, mActions));
+//		setOnItemClickListener(this);
+//		
+//		setBackgroundResource(android.R.drawable.screen_background_dark_transparent);
 		
 	}
 	

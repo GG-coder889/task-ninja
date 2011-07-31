@@ -14,10 +14,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class NewGroupDialog extends DialogFragment implements OnClickListener {
+public class TaskGroupNewDialog extends DialogFragment implements OnClickListener {
 
-    public static NewGroupDialog getInstance() {
-    	return new NewGroupDialog();
+    public static TaskGroupNewDialog getInstance() {
+    	return new TaskGroupNewDialog();
     }   
     
     @Override
@@ -28,7 +28,7 @@ public class NewGroupDialog extends DialogFragment implements OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
     	getDialog().setTitle("Make A New Group");
-    	getDialog().setContentView(R.layout.new_group_dialog);
+    	getDialog().setContentView(R.layout.taskgroup_dialog_new);
     	getDialog().findViewById(R.id.cancelButton).setOnClickListener(this);
     	getDialog().findViewById(R.id.saveButton).setOnClickListener(this);
     	

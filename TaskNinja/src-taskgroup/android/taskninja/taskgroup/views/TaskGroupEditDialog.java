@@ -15,16 +15,16 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class EditGroupDialog extends DialogFragment implements OnClickListener {
+public class TaskGroupEditDialog extends DialogFragment implements OnClickListener {
 	
 	private EditText mTitleEditText;
 	private TaskGroup mGroup;
 	
-	public static EditGroupDialog getInstance(TaskGroup group) {
-    	return new EditGroupDialog(group);
+	public static TaskGroupEditDialog getInstance(TaskGroup group) {
+    	return new TaskGroupEditDialog(group);
     }
 	
-	private EditGroupDialog(TaskGroup group){
+	private TaskGroupEditDialog(TaskGroup group){
 		super();
 		mGroup = group;
 	}
