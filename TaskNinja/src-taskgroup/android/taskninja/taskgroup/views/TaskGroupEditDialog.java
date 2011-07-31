@@ -68,13 +68,14 @@ public class TaskGroupEditDialog extends DialogFragment implements OnClickListen
 	private void onDelete() {
 		mGroup.delete();
 		startActivity(new Intent(getActivity(), TaskGroupActivity.class));
+		this.dismiss();
 	}
 
 	private void onSave() {
 		String title = mTitleEditText.getText().toString();
 		mGroup.put(TaskGroup_String.title, title);
 		Intent i = new Intent(getActivity(), TaskGroupActivity.class);
-		i.putExtra(Db_Model.BuiltIn.ID.name(), mGroup.getId());
+		i.putExtra(TaskGroupActivity.ExtraChoices.TaskGroupId.name(), mGroup.getId());
 		startActivity(i);
 		this.dismiss();
 	}

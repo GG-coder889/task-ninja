@@ -1,41 +1,31 @@
 package android.taskninja.taskgroup.views;
 
-import java.util.LinkedHashSet;
-
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.taskninja.R;
 import android.taskninja.task.Task;
 import android.taskninja.taskgroup.TaskGroup;
 import android.taskninja.tools.OnActionListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
-public class TaskGroupFragment extends Fragment {
-	
-	private LinkedHashSet<OnActionListener<Task>> mActionListeners = new LinkedHashSet<OnActionListener<Task>>();
+public class TaskGroupFragment extends Fragment implements OnActionListener<Task> {
 	
 	private TaskGroup mGroup;
-	
+	OnActionListener<Task> mTaskListener;
 	private TaskGroupHeaderView mHeaderView;
 	private TaskGroupListView mListView;
 	private TaskGroupFooterView mFooterView;
 	
-	public static TaskGroupFragment getInstance(TaskGroup group){
-		return new TaskGroupFragment(group);
+	public static TaskGroupFragment getInstance(TaskGroup group, OnActionListener<Task> taskListener ){
+		return new TaskGroupFragment(group, taskListener);
 	}
 	
-	public TaskGroupFragment(TaskGroup group){
+	private TaskGroupFragment(TaskGroup group, OnActionListener<Task> taskListener ){
 		super();
 		mGroup = group;
+		mTaskListener = taskListener;
 	}
 	
 	@Override
@@ -43,7 +33,7 @@ public class TaskGroupFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		
 		mHeaderView = TaskGroupHeaderView.getInstance(getActivity(), mGroup);
-		mListView = TaskGroupListView.getInstance(getActivity(), mGroup);
+		mListView = TaskGroupListView.getInstance(getActivity(), mGroup, this);
 		mFooterView = TaskGroupFooterView.getInstance(getActivity(), mGroup);
 
 	}
@@ -60,11 +50,9 @@ public class TaskGroupFragment extends Fragment {
 		return getView();
 	}
 
-	public void addOnActionListener(OnActionListener<Task> listener){
-		mActionListeners.add(listener);
-	}
-	
-	public void removeOnActionListener(OnActionListener<Task> listener){
-		mActionListeners.remove(listener);
+	@Override
+	public void onAction(Task action) {
+		mTaskListener.onAction(action);
+		
 	}
 }

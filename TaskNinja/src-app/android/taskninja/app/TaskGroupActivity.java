@@ -52,8 +52,7 @@ public class TaskGroupActivity extends AbsractBaseActivity implements OnActionLi
         	
         mFragMan = getFragmentManager();
         
-        mGroupFrag = new TaskGroupFragment(group);
-        mGroupFrag.addOnActionListener(this);
+        mGroupFrag = TaskGroupFragment.getInstance(group, this);
         
         mFragMan.beginTransaction().add(R.id.leftRoot, mGroupFrag).commit();
     }

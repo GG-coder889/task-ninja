@@ -7,7 +7,11 @@
   android:background="@android:drawable/screen_background_dark_transparent"
   android:layout_margin="5dp">
   
-  
+	<CheckBox 
+		android:id="@+id/completeButton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"/>
+		
   	<LinearLayout 
   		android:orientation="vertical"
   		android:layout_height="wrap_content"
@@ -17,7 +21,7 @@
   		android:layout_gravity="center_vertical"
   		android:paddingTop="5dp"
   		android:paddingBottom="5dp"
-  		android:paddingRight="5dp"
+  		android:paddingRight="10dp"
   		android:paddingLeft="10dp">
   		
 		<TextView 
@@ -32,13 +36,10 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:textColor="@android:color/secondary_text_dark"
-			android:padding="2dp"/> 
+			android:paddingLeft="10dp"/> 
   	
   	</LinearLayout>
 	
-	<CheckBox 
-		android:id="@+id/completeButton"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"/>
+	
     
 </LinearLayout>

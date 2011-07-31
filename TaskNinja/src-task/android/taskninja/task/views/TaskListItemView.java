@@ -1,7 +1,9 @@
 package android.taskninja.task.views;
 
 import android.app.Activity;
+import android.taskninja.dbmodel.Db_Listener;
 import android.taskninja.task.Task;
+import android.taskninja.task.TaskString;
 import android.taskninja.tools.OnActionListener;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,18 +33,36 @@ public class TaskListItemView extends LinearLayout implements OnClickListener {
 		mPrimaryText = (TextView) findViewById(android.taskninja.R.id.primaryText);
 		mPrimaryText.setText(mTask.toString());
 		mSecondaryText = (TextView) findViewById(android.taskninja.R.id.secondaryText);
+		mSecondaryText.setText(mTask.getString(TaskString.notes));
 		mCompleteButton = (CheckBox) findViewById(android.taskninja.R.id.completeButton);
 		
 		setOnClickListener(this);
 		
+		mTask.addListener(new Db_Listener() {
+			@Override
+			public void onChange(Enum key) {
+				if (key.equals(TaskString.title)){
+					mPrimaryText.setText(mTask.toString());
+				}
+				if (key.equals(TaskString.notes)){
+					String text = mTask.getString(TaskString.notes);
+					if (text == null || text.equals("")){
+						mSecondaryText.setText(text);
+						mSecondaryText.setVisibility(GONE);
+					} else {
+						mSecondaryText.setText(text);
+						mSecondaryText.setVisibility(VISIBLE);
+					}
+					
+				}
+			}
+		});
+		
 	}
+	
 
 	@Override
 	public void onClick(View arg0) {
-		// TODO Auto-generated method stub
-		
+		mListener.onAction(mTask);
 	}
-
-
-
 }
