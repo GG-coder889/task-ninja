@@ -24,7 +24,7 @@ public class RSModelTest extends AndroidTestCase {
 	
 	@Override
 	public void tearDown(){
-		assertTrue(mContext.getSharedPreferences("TestModel", 4).edit().clear().commit());		
+		assertTrue(mContext.getSharedPreferences(TestModel.class.getSimpleName(), 4).edit().clear().commit());		
 	}
 	
 	public void testId() {

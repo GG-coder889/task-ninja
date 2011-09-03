@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
+@SuppressWarnings("rawtypes")
 public abstract class RSController
 	<MODEL extends RSModel,
 	INTEGER extends Enum<INTEGER>,
@@ -27,7 +28,7 @@ public abstract class RSController
 	private String mLocalTag;
 	
 	private SharedPreferences db;
-	private Context mContext;
+//	private Context mContext;
 	private String mModelName;
 	
 	public RSController (Class<MODEL> modelClass, Context context) {
