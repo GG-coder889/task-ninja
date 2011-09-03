@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.rocksolidmobility.android.rsmodel.RSModel;
 import com.rocksolidmobility.taskninja.android.alarm.AlarmBool;
 import com.rocksolidmobility.taskninja.android.alarm.AlarmLong;
-import com.rocksolidmobility.taskninja.android.alarm.TaskAlarm;
-import com.rocksolidmobility.taskninja.android.dbmodel.Db_Model;
+import com.rocksolidmobility.taskninja.android.alarm.TnAlarm;
 import com.rocksolidmobility.taskninja.android.task.Task;
 
 public class NotificationService extends Service {
@@ -22,10 +22,10 @@ public class NotificationService extends Service {
 	public void onStart(Intent intent, int startId) {
 		Log.d(TAG, "onStart");
 		
-		String id = intent.getStringExtra(Db_Model.BuiltIn.ID.name());
+		String id = intent.getStringExtra(RSModel.BuiltIn.ID.name());
 		
 		if (id != null){
-			TaskAlarm alarm = TaskAlarm.get(id);
+			TnAlarm alarm = TnAlarm.get(id);
 			if (alarm != null){
 				if (alarm.isValid()){
 					makeNotification(alarm);
@@ -42,7 +42,7 @@ public class NotificationService extends Service {
 		stopSelf();
 	}
 
-	private void makeNotification(TaskAlarm alarm) {
+	private void makeNotification(TnAlarm alarm) {
 		Log.d(TAG, "makeNotification");
 		
 		Task task = alarm.getTask();
@@ -67,7 +67,7 @@ public class NotificationService extends Service {
 		}
 	}
 	
-	private void reset(TaskAlarm alarm) {
+	private void reset(TnAlarm alarm) {
 		Log.d(TAG, "reset");
 		
 		Long recurring = alarm.getLong(AlarmLong.RecurringTime);

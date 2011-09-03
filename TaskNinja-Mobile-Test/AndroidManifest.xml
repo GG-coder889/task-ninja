@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.rocksolidmobility.taskninja.android.test"
-      android:versionCode="1"
-      android:versionName="1.0">
+<manifest 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.rocksolidmobility.taskninja.android.test"
+    android:versionCode="1"
+    android:versionName="1.0">
+      
     <uses-sdk android:minSdkVersion="7" />
-    <instrumentation android:targetPackage="com.rocksolidmobility.taskninja.android" android:name="android.test.InstrumentationTestRunner" />
-    <application android:icon="@drawable/icon" android:label="@string/app_name">
+    
+    <instrumentation 
+    	android:targetPackage="com.rocksolidmobility.taskninja.android" 
+    	android:name="android.test.InstrumentationTestRunner" />
+    	
+    <application 
+    	android:icon="@drawable/icon" 
+    	android:label="@string/app_name">
 
-    <uses-library android:name="android.test.runner" />
+    	<uses-library android:name="android.test.runner" />
     </application>
+    
 </manifest>

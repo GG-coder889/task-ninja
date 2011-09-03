@@ -6,12 +6,12 @@ import org.json.JSONObject;
 
 import android.content.Context;
 
+import com.rocksolidmobility.android.rsmodel.RSController;
+import com.rocksolidmobility.android.rsmodel.RSModel;
 import com.rocksolidmobility.taskninja.android.App;
-import com.rocksolidmobility.taskninja.android.dbmodel.Db_Controller;
-import com.rocksolidmobility.taskninja.android.dbmodel.Db_Model;
 
 
-public class Task extends Db_Model<Task, TaskInteger, TaskLong, TaskString, TaskBool>  {
+public class Task extends RSModel<Task, TaskInteger, TaskLong, TaskString, TaskBool>  {
 	
 	private static final String TAG = "Task";
 	
@@ -39,13 +39,13 @@ public class Task extends Db_Model<Task, TaskInteger, TaskLong, TaskString, Task
 	// ----------------------------------------------------------------------------------------------------
 	//  Static Methods
 	// ----------------------------------------------------------------------------------------------------
-	public static Task get(String id){
-		return controller().get(id);
+	public static Task get(String id) {
+		return staticGetController().get(id);
 	}
 
 	public static LinkedHashSet<Task> getAll() {
 		LinkedHashSet<Task> tasks = new LinkedHashSet<Task>();
-		for (Task task: controller().getAll()) {
+		for (Task task: staticGetController().getAll()) {
 			tasks.add(task);
 		}
 		return tasks;
@@ -55,26 +55,22 @@ public class Task extends Db_Model<Task, TaskInteger, TaskLong, TaskString, Task
 	
 	
 	// ----------------------------------------------------------------------------------------------------
-	//  DbModel Interface Configuration
+	//  RSModel Interface Configuration
 	// ----------------------------------------------------------------------------------------------------
-	private static Db_Controller<Task, TaskInteger, TaskLong, TaskString, TaskBool> mController;
+	private static RSController<Task, TaskInteger, TaskLong, TaskString, TaskBool> mController;
 	
 	@Override
-	protected Db_Controller <Task, TaskInteger, TaskLong, TaskString, TaskBool> getController() {
-		return controller();
+	protected RSController <Task, TaskInteger, TaskLong, TaskString, TaskBool> instanceGetController() {
+		return staticGetController();
 	}
 	
-	private static Db_Controller<Task, TaskInteger, TaskLong, TaskString, TaskBool> controller(){
+	private static RSController<Task, TaskInteger, TaskLong, TaskString, TaskBool> staticGetController(){
 		if (mController == null){
 			try {
-				mController = new LocalController(Task.class, App.getContext());
-			} catch (Exception e1){
-				try {
-					mController = new LocalController(Task.class, mContext);
-				}catch (Exception e2){
-					e2.printStackTrace();
-					return null;
-				}
+				mController = new LocalController(Task.class, mContext);
+			}catch (Exception e2){
+				e2.printStackTrace();
+				return null;
 			}
 		}
 		return mController;
@@ -84,7 +80,7 @@ public class Task extends Db_Model<Task, TaskInteger, TaskLong, TaskString, Task
 		super(JSONObject);
 	}
 	
-	private static class LocalController extends Db_Controller<Task, TaskInteger, TaskLong, TaskString, TaskBool> {
+	private static class LocalController extends RSController<Task, TaskInteger, TaskLong, TaskString, TaskBool> {
 			
 		protected LocalController(Class<Task> dbModel, Context context) {
 			super(dbModel, context);

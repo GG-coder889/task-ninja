@@ -11,14 +11,14 @@ import org.json.JSONObject;
 
 import android.content.Context;
 
+import com.rocksolidmobility.android.rsmodel.RSController;
+import com.rocksolidmobility.android.rsmodel.RSModel;
+import com.rocksolidmobility.android.rsmodel.RSNullEnum;
 import com.rocksolidmobility.taskninja.android.App;
-import com.rocksolidmobility.taskninja.android.dbmodel.Db_Controller;
-import com.rocksolidmobility.taskninja.android.dbmodel.Db_Model;
-import com.rocksolidmobility.taskninja.android.dbmodel.Db_NullEnum;
 import com.rocksolidmobility.taskninja.android.task.Task;
 
 public class TaskCollection 
-	extends Db_Model <TaskCollection, Db_NullEnum, Db_NullEnum, TaskCollection_String, Db_NullEnum>
+	extends RSModel <TaskCollection, RSNullEnum, RSNullEnum, TaskCollectionString, RSNullEnum>
 	implements List<Task> 
 	{
 		
@@ -33,7 +33,7 @@ public class TaskCollection
 			}
 			buffer.append(task.getId());
 		}
-		put(TaskCollection_String.ITEM_IDS, buffer.toString());
+		put(TaskCollectionString.ITEM_IDS, buffer.toString());
 	}
 	
 	// ----------------------------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ public class TaskCollection
 	}
 	
 	private TaskCollection() {
-		String itemIds = getString(TaskCollection_String.ITEM_IDS);
+		String itemIds = getString(TaskCollectionString.ITEM_IDS);
 		if (itemIds != null){
 			String[] split = itemIds.split(",");
 			for (String id: split){
@@ -63,11 +63,11 @@ public class TaskCollection
 	//  Static Methods
 	// ----------------------------------------------------------------------------------------------------
 	public static TaskCollection get(String id) {
-		return controller().get(id);
+		return staticGetController().get(id);
 	}
 		
 	public static LinkedHashSet<TaskCollection> getAll() {
-		return controller().getAll();
+		return staticGetController().getAll();
 	}
 	// ----------------------------------------------------------------------------------------------------
 		
@@ -76,14 +76,14 @@ public class TaskCollection
 	// ----------------------------------------------------------------------------------------------------
 	//  DbModel Interface Configuration
 	// ----------------------------------------------------------------------------------------------------
-	private static Db_Controller<TaskCollection, Db_NullEnum, Db_NullEnum, TaskCollection_String, Db_NullEnum> mController;
+	private static RSController<TaskCollection, RSNullEnum, RSNullEnum, TaskCollectionString, RSNullEnum> mController;
 	
 	@Override
-	protected Db_Controller <TaskCollection, Db_NullEnum, Db_NullEnum, TaskCollection_String, Db_NullEnum> getController() {
-		return controller();
+	protected RSController <TaskCollection, RSNullEnum, RSNullEnum, TaskCollectionString, RSNullEnum> instanceGetController() {
+		return staticGetController();
 	}
 	
-	private static Db_Controller<TaskCollection, Db_NullEnum, Db_NullEnum, TaskCollection_String, Db_NullEnum> controller(){
+	private static RSController<TaskCollection, RSNullEnum, RSNullEnum, TaskCollectionString, RSNullEnum> staticGetController(){
 		if (mController == null){
 			try {
 				mController = new LocalController(TaskCollection.class, App.getContext());
@@ -103,7 +103,7 @@ public class TaskCollection
 		super(json);
 	}
 
-	private static class LocalController extends Db_Controller<TaskCollection, Db_NullEnum, Db_NullEnum, TaskCollection_String, Db_NullEnum> {
+	private static class LocalController extends RSController<TaskCollection, RSNullEnum, RSNullEnum, TaskCollectionString, RSNullEnum> {
 		
 		public static Context mContext;
 			

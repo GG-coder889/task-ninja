@@ -3,7 +3,7 @@ package com.rocksolidmobility.taskninja.android;
 import android.app.Application;
 import android.content.Context;
 
-import com.rocksolidmobility.taskninja.android.dbmodel.Db_Model;
+import com.rocksolidmobility.android.rsmodel.RSModel;
 
 
 public class App extends Application {
@@ -14,7 +14,7 @@ public class App extends Application {
 	public void onCreate() {
 		super.onCreate();
 		mApp = this;
-		Db_Model.setContext(this);
+		RSModel.setContext(this);
 	}
 
 	public static Context getContext() {

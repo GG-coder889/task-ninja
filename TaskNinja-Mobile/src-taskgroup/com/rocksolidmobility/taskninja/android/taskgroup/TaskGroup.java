@@ -8,27 +8,27 @@ import java.util.ListIterator;
 
 import org.json.JSONObject;
 
-import com.rocksolidmobility.taskninja.android.dbmodel.Db_Controller;
-import com.rocksolidmobility.taskninja.android.dbmodel.Db_Model;
-import com.rocksolidmobility.taskninja.android.dbmodel.Db_NullEnum;
+import com.rocksolidmobility.android.rsmodel.RSController;
+import com.rocksolidmobility.android.rsmodel.RSModel;
+import com.rocksolidmobility.android.rsmodel.RSNullEnum;
 import com.rocksolidmobility.taskninja.android.task.Task;
 import com.rocksolidmobility.taskninja.android.taskcollection.TaskCollection;
 
 import android.content.Context;
 
 public class TaskGroup 
-	extends Db_Model<TaskGroup, Db_NullEnum, Db_NullEnum, TaskGroup_String, Db_NullEnum>
+	extends RSModel<TaskGroup, RSNullEnum, RSNullEnum, TaskGroupString, RSNullEnum>
 	implements List<Task> {
 
 	private TaskCollection mCollection;
 	
 	@Override
 	public String toString(){
-		return getString(TaskGroup_String.title);
+		return getString(TaskGroupString.title);
 	}
 		
 	// ----------------------------------------------------------------------------------------------------
-	//  Constructor/Builder
+	//  Constructor & Builder
 	// ----------------------------------------------------------------------------------------------------
 	public static TaskGroup getInstance(String title){
 		return new TaskGroup(title);
@@ -36,11 +36,11 @@ public class TaskGroup
 	
 	private TaskGroup(String title){
 		super();
-		put(TaskGroup_String.title, title);
-		mCollection = TaskCollection.get(getString(TaskGroup_String.COLLECTION_ID));
+		put(TaskGroupString.title, title);
+		mCollection = TaskCollection.get(getString(TaskGroupString.COLLECTION_ID));
 		if (mCollection == null){
 			mCollection = TaskCollection.getInstance();
-			put(TaskGroup_String.COLLECTION_ID, mCollection.getId());
+			put(TaskGroupString.COLLECTION_ID, mCollection.getId());
 		}
 	}
 	// ----------------------------------------------------------------------------------------------------
@@ -51,16 +51,16 @@ public class TaskGroup
 	//  Static Methods
 	// ----------------------------------------------------------------------------------------------------
 	public static TaskGroup get(String id){
-		return controller().get(id);
+		return staticGetController().get(id);
 	}
 	
 	public static LinkedHashSet<TaskGroup> getAll() {
-		LinkedHashSet<TaskGroup> all = controller().getAll();
+		LinkedHashSet<TaskGroup> all = staticGetController().getAll();
 		if (all.size() == 0) {
 			all.add(TaskGroup.getInstance("Default"));
 		}
 		
-		return controller().getAll();
+		return staticGetController().getAll();
 	}
 	// ----------------------------------------------------------------------------------------------------
 	
@@ -68,16 +68,18 @@ public class TaskGroup
 	
 	
 	// ----------------------------------------------------------------------------------------------------
-	//  DbModel Interface Configuration
+	//  RSModel Interface Configuration
 	// ----------------------------------------------------------------------------------------------------
-	private static Db_Controller<TaskGroup, Db_NullEnum, Db_NullEnum, TaskGroup_String, Db_NullEnum> mController;
+	private static RSController<TaskGroup, RSNullEnum, RSNullEnum, TaskGroupString, RSNullEnum> mController;
 	
 	@Override
-	protected Db_Controller <TaskGroup, Db_NullEnum, Db_NullEnum, TaskGroup_String, Db_NullEnum> getController() {
-		return controller();
+	protected RSController<TaskGroup, RSNullEnum, RSNullEnum, TaskGroupString, RSNullEnum> 
+	instanceGetController() {
+		return staticGetController();
 	}
 	
-	private static Db_Controller<TaskGroup, Db_NullEnum, Db_NullEnum, TaskGroup_String, Db_NullEnum> controller(){
+	private static RSController<TaskGroup, RSNullEnum, RSNullEnum, TaskGroupString, RSNullEnum> 
+	staticGetController(){
 		if (mController == null){
 			try {
 				mController = new LocalController(TaskGroup.class, mContext);
@@ -91,15 +93,15 @@ public class TaskGroup
 	
 	public TaskGroup(JSONObject json) {
 		super(json);
-		mCollection = TaskCollection.get(getString(TaskGroup_String.COLLECTION_ID));
+		mCollection = TaskCollection.get(getString(TaskGroupString.COLLECTION_ID));
 		if (mCollection == null){
 			mCollection = TaskCollection.getInstance();
-			put(TaskGroup_String.COLLECTION_ID, mCollection.getId());
+			put(TaskGroupString.COLLECTION_ID, mCollection.getId());
 		}
 		
 	}
 
-	private static class LocalController extends Db_Controller<TaskGroup, Db_NullEnum, Db_NullEnum, TaskGroup_String, Db_NullEnum> {
+	private static class LocalController extends RSController<TaskGroup, RSNullEnum, RSNullEnum, TaskGroupString, RSNullEnum> {
 			
 		protected LocalController(Class<TaskGroup> dbModel, Context context) {
 			super(dbModel, context);
@@ -108,7 +110,6 @@ public class TaskGroup
 		@Override
 		protected TaskGroup getInstance(JSONObject json) {
 			return new TaskGroup(json);
-			
 		}
 
 	}
@@ -118,7 +119,7 @@ public class TaskGroup
 	
 	
 	// ----------------------------------------------------------------------------------------------------
-	//  List Methods
+	//  List Interface Methods
 	// ----------------------------------------------------------------------------------------------------
 	@Override
 	public boolean add(Task task) {
