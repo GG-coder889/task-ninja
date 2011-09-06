@@ -13,7 +13,7 @@ public class DatabaseHelperTest extends AndroidTestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		DatabaseHelper.setContext(getContext());
+//		DatabaseHelper.setContext(getContext());
 	}
 	
 	public void testGetInstace(){
@@ -28,8 +28,8 @@ public class DatabaseHelperTest extends AndroidTestCase {
 	}
 	
 	public void testGetListDao() throws SQLException{
-		Dao dao1 = DatabaseHelper.getListDao();
-		Dao dao2 = DatabaseHelper.getListDao();
+		Dao<NinjaList, Integer> dao1 = DatabaseHelper.getListDao();
+		Dao<NinjaList, Integer> dao2 = DatabaseHelper.getListDao();
 		assertSame(dao1, dao2);
 	}
 
